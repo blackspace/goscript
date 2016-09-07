@@ -13,12 +13,13 @@ var ResultExpr ast.Expr
 
 %union {
     Expr ast.Expr
+    String string
 }
 
 %type <Expr> expr top
 
 %token <Expr> NUMBER
-%token  IF
+%token <String> WORD
 
 %right '='
 %left '+' '-'
@@ -35,6 +36,10 @@ top :  expr
 
 
 expr : NUMBER
+    | WORD '=' expr
+    {
+        $$=$3
+    }
     | expr '+' expr
     {
         $$=&ast.AddExpr{$1,$3}
@@ -50,8 +55,7 @@ expr : NUMBER
     |expr '/' expr
     {
         $$=&ast.DivExpr{$1,$3}
-    }
-    ;
+    };
 %%
 
 

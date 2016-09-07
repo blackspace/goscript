@@ -44,20 +44,20 @@ func (n * DivPattern)BuildFun(prefix string,r *bufio.Reader) (v interface{},pre 
 
 func init() {
 
-	var addRegexp=regexp.MustCompile(`\+`)
+	var addRegexp=regexp.MustCompile(`^\+$`)
 
 	Patterns=append(Patterns,&AddPattern{PatternBase{Regexp:addRegexp}})
 
 
-	var subRegexp=regexp.MustCompile(`-`)
+	var subRegexp=regexp.MustCompile(`^-$`)
 
 	Patterns=append(Patterns,&SubPattern{PatternBase{Regexp:subRegexp}})
 
-	var multiRegexp=regexp.MustCompile(`\*`)
+	var multiRegexp=regexp.MustCompile(`^\*$`)
 
 	Patterns=append(Patterns,&MultiPattern{PatternBase{Regexp:multiRegexp}})
 
-	var divRegexp=regexp.MustCompile(`/`)
+	var divRegexp=regexp.MustCompile(`^/$`)
 
 	Patterns=append(Patterns,&DivPattern{PatternBase{Regexp:divRegexp}})
 }

@@ -18,31 +18,26 @@ type Lexer struct {
 
 func (l *Lexer)Lex(lval * yySymType) int {
 	defer func() {l.Buf=""}()
-	var r rune
 
 	if l.HasPreRune {
 		l.Buf = l.Buf + string(l.PreRune)
 		l.HasPreRune=false
 		l.PreRune=0
 	} else {
-		c, _, err := l.Reader.ReadRune()
-
-		r=c
+		r, _, err := l.Reader.ReadRune()
 
 		if err == io.EOF {
 			return 0
 		}
+
+		l.Buf = l.Buf + string(r)
 	}
 
-	l.Buf = l.Buf + string(r)
-
-	log.Println(l.Buf)
-
 	if p := pattern.FindPattern(l.Buf); p != nil {
-		v, p, h := p.BuildFun(l.Buf, l.Reader)
+		v, pr, h := p.BuildFun(l.Buf, l.Reader)
 
 		if h {
-			l.PreRune = p
+			l.PreRune = pr
 			l.HasPreRune=true
 		}
 

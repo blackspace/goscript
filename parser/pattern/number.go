@@ -12,7 +12,7 @@ type NumberPattern struct {
 	PatternBase
 }
 
-func (n * NumberPattern)BuildFun(prefix string,r *bufio.Reader) (v interface{},pre rune,has_prerune bool) {
+func (n * NumberPattern)BuildFun(prefix string,r *bufio.Reader) (v interface{},pre_rune rune,has_prerune bool) {
 	s:=prefix
 	for {
 		r,_,err:=r.ReadRune()
@@ -26,7 +26,6 @@ func (n * NumberPattern)BuildFun(prefix string,r *bufio.Reader) (v interface{},p
 				s=s[:len(s)-1]
 				i,_:=strconv.Atoi(s)
 				return &ast.Number{Int:int64(i)},r,true
-				break
 			}
 		} else if err==io.EOF{
 			i,_:=strconv.Atoi(s)

@@ -12,12 +12,12 @@ type Pattern interface {
 
 type PatternBase struct {
 	* regexp.Regexp
-	Buf bufio.Reader
 }
 
 func (p PatternBase)Match(s string) bool {
 	return p.MatchString(s)
 }
+
 
 var Patterns = make([]Pattern,0,256)
 

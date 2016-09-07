@@ -2,6 +2,7 @@ package vm
 
 import (
 	"testing"
+	"regexp"
 )
 
 func TestExecuteSigleDigitNumber(t * testing.T) {
@@ -200,4 +201,44 @@ func TestExecuteDivExpress(t * testing.T) {
 	}
 }
 
+
+func TestExecuteArithmetic(t * testing.T) {
+	var vm = NewVM()
+
+	val,err :=vm.Execute("1+1/1+1*1")
+
+	if err!=nil {
+		t.Error(err)
+	}
+
+	if val.IsValid() {
+		if val.Int()!=3 {
+			t.Fail()
+		}
+	} else {
+		t.Fail()
+	}
+
+	val,err =vm.Execute("10+1000/10-10+1*10+1")
+
+	if err!=nil {
+		t.Error(err)
+	}
+
+	if val.IsValid() {
+		if val.Int()!=111 {
+			t.Fail()
+		}
+	} else {
+		t.Fail()
+	}
+}
+
+func TestRegexpr(t * testing.T) {
+	r:=regexp.MustCompile(`^\+$`)
+
+	if !r.MatchString("+") {
+		t.Fail()
+	}
+}
 
