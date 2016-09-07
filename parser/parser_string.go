@@ -4,10 +4,11 @@ import (
 	"goscript/ast"
 	"strings"
 	"log"
+	"bufio"
 )
 
 func ParseString(src string) (ast.Expr,error)  {
-	r:=strings.NewReader(src)
+	r:=bufio.NewReader(strings.NewReader(src))
 
 	l:= Lexer{Reader:r}
 	yyParse(&l)

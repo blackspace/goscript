@@ -18,6 +18,7 @@ var ResultExpr ast.Expr
 %type <Expr> expr top
 
 %token <Expr> NUMBER
+%token  IF
 
 %right '='
 %left '+' '-'
@@ -28,7 +29,6 @@ var ResultExpr ast.Expr
 
 top :  expr
     {
-
     	ResultExpr = $1
 
     };
@@ -38,9 +38,20 @@ expr : NUMBER
     | expr '+' expr
     {
         $$=&ast.AddExpr{$1,$3}
-    };
-
-
+    }
+    |expr '-' expr
+    {
+        $$=&ast.SubExpr{$1,$3}
+    }
+    |expr '*' expr
+    {
+        $$=&ast.MultiExpr{$1,$3}
+    }
+    |expr '/' expr
+    {
+        $$=&ast.DivExpr{$1,$3}
+    }
+    ;
 %%
 
 

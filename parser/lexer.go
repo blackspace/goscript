@@ -3,22 +3,64 @@ package parser
 import (
 	"log"
 	"io"
+	"bufio"
+	"goscript/parser/pattern"
 	"goscript/ast"
 )
 
 type Lexer struct {
-	Reader io.Reader
+	Reader  *bufio.Reader
+	Buf string
+	PreRune rune
+	HasPreRune bool
+
 }
 
 func (l *Lexer)Lex(lval * yySymType) int {
-	buf :=make([]byte,1)
-	if c,err:=l.Reader.Read(buf);err==nil {
-		log.Println(c)
-		lval.Expr=&ast.Number{1}
-		return NUMBER
-	} else if err==io.EOF {
-		return 0
+	defer func() {l.Buf=""}()
+	var r rune
+
+	if l.HasPreRune {
+		l.Buf = l.Buf + string(l.PreRune)
+		l.HasPreRune=false
+		l.PreRune=0
+	} else {
+		c, _, err := l.Reader.ReadRune()
+
+		r=c
+
+		if err == io.EOF {
+			return 0
+		}
 	}
+
+	l.Buf = l.Buf + string(r)
+
+	log.Println(l.Buf)
+
+	if p := pattern.FindPattern(l.Buf); p != nil {
+		v, p, h := p.BuildFun(l.Buf, l.Reader)
+
+		if h {
+			l.PreRune = p
+			l.HasPreRune=true
+		}
+
+		switch i := v.(type) {
+		case ast.Expr:
+			lval.Expr = i
+			return NUMBER
+		case rune:
+			return int(i)
+
+		}
+
+
+	} else {
+
+		log.Fatal("No Pattern to be matched")
+	}
+
 	return 0
 
 }
