@@ -1,4 +1,4 @@
-package pattern
+package parser
 
 import (
 	"bufio"
@@ -8,14 +8,20 @@ import (
 type Pattern interface {
 	BuildFun(prefix string,r *bufio.Reader) (interface{},rune,bool)
 	Match(s string) bool
+	GetToken() int
 }
 
 type PatternBase struct {
 	* regexp.Regexp
+	Token int
 }
 
 func (p PatternBase)Match(s string) bool {
 	return p.MatchString(s)
+}
+
+func (p PatternBase)GetToken() int {
+	return p.Token
 }
 
 

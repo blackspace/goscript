@@ -1,4 +1,4 @@
-package pattern
+package parser
 
 import (
 	"bufio"
@@ -37,6 +37,6 @@ func (n * WordPattern)BuildFun(prefix string,r *bufio.Reader) (v interface{},pre
 func init() {
 	var wordRegexp=regexp.MustCompile(`^[a-z]\w.$`)
 
-	Patterns=append(Patterns,&NumberPattern{PatternBase{Regexp:wordRegexp}})
+	Patterns=append(Patterns,&NumberPattern{PatternBase{Regexp:wordRegexp,Token:WORD}})
 }
 

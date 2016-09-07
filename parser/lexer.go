@@ -4,7 +4,6 @@ import (
 	"log"
 	"io"
 	"bufio"
-	"goscript/parser/pattern"
 	"goscript/ast"
 )
 
@@ -33,7 +32,7 @@ func (l *Lexer)Lex(lval * yySymType) int {
 		l.Buf = l.Buf + string(r)
 	}
 
-	if p := pattern.FindPattern(l.Buf); p != nil {
+	if p := FindPattern(l.Buf); p != nil {
 		v, pr, h := p.BuildFun(l.Buf, l.Reader)
 
 		if h {
@@ -44,9 +43,12 @@ func (l *Lexer)Lex(lval * yySymType) int {
 		switch i := v.(type) {
 		case ast.Expr:
 			lval.Expr = i
-			return NUMBER
+			return p.GetToken()
 		case rune:
 			return int(i)
+		case string:
+			lval.String=i
+			return p.GetToken()
 
 		}
 

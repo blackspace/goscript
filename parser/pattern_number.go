@@ -1,4 +1,4 @@
-package pattern
+package parser
 
 import (
 	"bufio"
@@ -41,6 +41,6 @@ func (n * NumberPattern)BuildFun(prefix string,r *bufio.Reader) (v interface{},p
 func init() {
 	var numberRegexp=regexp.MustCompile(`^[0-9]+$`)
 
-	Patterns=append(Patterns,&NumberPattern{PatternBase{Regexp:numberRegexp}})
+	Patterns=append(Patterns,&NumberPattern{PatternBase{Regexp:numberRegexp,Token:NUMBER}})
 }
 
