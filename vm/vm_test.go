@@ -287,13 +287,15 @@ func TestMultiExprExpr(t * testing.T) {
 a=1
 
 
-a+3
+a=a+3
 
 5
+
+a+2
 `
 	if val,err :=vm.Execute(s); err!=nil {
 		t.Error(err)
-	} else if val.IsValid() &&val.Int()!=5 {
+	} else if val.IsValid() &&val.Int()!=6 {
 		t.Fail()
 
 	}
