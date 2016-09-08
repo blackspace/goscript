@@ -2,9 +2,11 @@ package ast
 
 import "reflect"
 
-type String string
+type String struct {
+	S string
+}
 
 func (s * String)Eval() reflect.Value {
-	return reflect.ValueOf(*s)
+	return reflect.ValueOf(s.S)
 }
 

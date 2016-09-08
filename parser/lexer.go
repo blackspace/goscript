@@ -47,6 +47,9 @@ t:
 		case BOOL:
 			lval.Expr = v.(*ast.Bool)
 			return BOOL
+		case STRING:
+			lval.Expr = v.(*ast.String)
+			return STRING
 		case '+', '-','*','/','=':
 			return int(v.(rune))
 		case AND:
