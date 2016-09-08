@@ -281,6 +281,22 @@ func TestBlankspace(t * testing.T) {
 
 
 func TestMultiExprExpr(t * testing.T) {
+	var vm = NewVM()
+
+	s:=`
+a=1
+
+
+a+3
+
+5
+`
+	if val,err :=vm.Execute(s); err!=nil {
+		t.Error(err)
+	} else if val.IsValid() &&val.Int()!=5 {
+		t.Fail()
+
+	}
 
 }
 

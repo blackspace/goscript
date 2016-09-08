@@ -20,7 +20,7 @@ var ParseResult []ast.Expr
 %type <Expres> expres
 
 %token <Expr> NUMBER VARIABLE
-%token BLANKSPACE
+%token BLANKSPACE LFCR
 
 
 %right '='

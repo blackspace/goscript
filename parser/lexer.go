@@ -32,6 +32,7 @@ t:
 		l.Buf = l.Buf + string(r)
 	}
 
+	log.Println("The buf of lexer:",l.Buf,"  ",[]byte(l.Buf))
 
 	if p := FindPattern(l.Buf); p != nil {
 		v, pr, h := p.BuildFun(l.Buf, l.Reader)
@@ -52,6 +53,9 @@ t:
 			lval.Expr = v.(*ast.VarExpr)
 			return VARIABLE
 		case BLANKSPACE:
+			l.Buf=""
+			goto t
+		case LFCR:
 			l.Buf=""
 			goto t
 		}
