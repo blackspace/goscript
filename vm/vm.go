@@ -13,9 +13,13 @@ func NewVM() *VM {
 	return &VM{}
 }
 
-func (v * VM)Execute(src string) (reflect.Value,error) {
-	expr,_ :=parser.ParseString(src)
+func (v * VM)Execute(src string) (result reflect.Value,err error) {
+	expres,_ :=parser.ParseString(src)
 
-	return expr.Eval(),nil
+	for _,e:= range expres {
+		result=e.Eval()
+	}
+
+	return
 }
 

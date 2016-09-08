@@ -2,7 +2,6 @@ package vm
 
 import (
 	"testing"
-	"regexp"
 )
 
 func TestExecuteSigleDigitNumber(t * testing.T) {
@@ -234,11 +233,54 @@ func TestExecuteArithmetic(t * testing.T) {
 	}
 }
 
-func TestRegexpr(t * testing.T) {
-	r:=regexp.MustCompile(`^\+$`)
+func TestAsignExpr(t * testing.T) {
+	var vm = NewVM()
 
-	if !r.MatchString("+") {
+	if val,err :=vm.Execute("a=1"); err!=nil {
+		t.Error(err)
+	} else if val.IsValid() &&val.Int()!=1 {
 		t.Fail()
+
 	}
+
+	if val,err :=vm.Execute("a=1+1*1+1/1"); err!=nil {
+		t.Error(err)
+	} else if val.IsValid() &&val.Int()!=3 {
+		t.Fail()
+
+	}
+
+	if val,err :=vm.Execute("b=3"); err!=nil {
+		t.Error(err)
+	} else if val.IsValid() &&val.Int()!=3 {
+		t.Fail()
+
+	}
+
+	if val,err :=vm.Execute("b+3"); err!=nil {
+		t.Error(err)
+	} else if val.IsValid() &&val.Int()!=6 {
+		t.Fail()
+
+	}
+
+}
+
+
+func TestBlankspace(t * testing.T) {
+	var vm = NewVM()
+
+	if val,err :=vm.Execute("3   +   3"); err!=nil {
+		t.Error(err)
+	} else if val.IsValid() &&val.Int()!=6 {
+		t.Fail()
+
+	}
+
+}
+
+
+func TestMultiExprExpr(t * testing.T) {
+
 }
 

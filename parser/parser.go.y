@@ -6,20 +6,22 @@ import (
     "goscript/ast"
 )
 
-var ResultExpr ast.Expr
+var ParseResult []ast.Expr
 
 %}
 
 
 %union {
     Expr ast.Expr
-    String string
+    Expres []ast.Expr
 }
 
-%type <Expr> expr top
+%type <Expr> expr
+%type <Expres> expres
 
-%token <Expr> NUMBER
-%token <String> WORD
+%token <Expr> NUMBER VARIABLE
+%token BLANKSPACE
+
 
 %right '='
 %left '+' '-'
@@ -28,17 +30,23 @@ var ResultExpr ast.Expr
 
 %%
 
-top :  expr
+expres :expr
     {
-    	ResultExpr = $1
-
+        $$=[]ast.Expr{$1}
+        ParseResult=append(ParseResult,$$...)
+    }
+    |expres expr
+    {
+        $$=append($1,$2)
+        ParseResult=$$
     };
 
 
 expr : NUMBER
-    | WORD '=' expr
+    |VARIABLE
+    |VARIABLE '=' expr
     {
-        $$=$3
+        $$=&ast.AssignExpr{$1,$3}
     }
     | expr '+' expr
     {

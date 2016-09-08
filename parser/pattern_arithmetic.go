@@ -46,20 +46,20 @@ func init() {
 
 	var addRegexp=regexp.MustCompile(`^\+$`)
 
-	Patterns=append(Patterns,&AddPattern{PatternBase{Regexp:addRegexp}})
+	Patterns=append(Patterns,&AddPattern{PatternBase{Regexp:addRegexp,Token:'+'}})
 
 
 	var subRegexp=regexp.MustCompile(`^-$`)
 
-	Patterns=append(Patterns,&SubPattern{PatternBase{Regexp:subRegexp}})
+	Patterns=append(Patterns,&SubPattern{PatternBase{Regexp:subRegexp,Token:'-'}})
 
 	var multiRegexp=regexp.MustCompile(`^\*$`)
 
-	Patterns=append(Patterns,&MultiPattern{PatternBase{Regexp:multiRegexp}})
+	Patterns=append(Patterns,&MultiPattern{PatternBase{Regexp:multiRegexp,Token:'*'}})
 
 	var divRegexp=regexp.MustCompile(`^/$`)
 
-	Patterns=append(Patterns,&DivPattern{PatternBase{Regexp:divRegexp}})
+	Patterns=append(Patterns,&DivPattern{PatternBase{Regexp:divRegexp,Token:'/'}})
 }
 
 

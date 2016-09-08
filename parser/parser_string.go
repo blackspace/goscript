@@ -7,16 +7,16 @@ import (
 	"bufio"
 )
 
-func ParseString(src string) (ast.Expr,error)  {
+func ParseString(src string) ([]ast.Expr,error)  {
 	r:=bufio.NewReader(strings.NewReader(src))
 
 	l:= Lexer{Reader:r}
 	yyParse(&l)
 
-	if  ResultExpr!=nil {
-		return ResultExpr,nil
+	if  ParseResult!=nil {
+		return ParseResult,nil
 	} else {
-		log.Fatal("Express is nil")
+		log.Fatal("Parse result is empty")
 		return nil,nil
 	}
 

@@ -17,7 +17,7 @@ type Lexer struct {
 
 func (l *Lexer)Lex(lval * yySymType) int {
 	defer func() {l.Buf=""}()
-
+t:
 	if l.HasPreRune {
 		l.Buf = l.Buf + string(l.PreRune)
 		l.HasPreRune=false
@@ -32,6 +32,7 @@ func (l *Lexer)Lex(lval * yySymType) int {
 		l.Buf = l.Buf + string(r)
 	}
 
+
 	if p := FindPattern(l.Buf); p != nil {
 		v, pr, h := p.BuildFun(l.Buf, l.Reader)
 
@@ -40,18 +41,20 @@ func (l *Lexer)Lex(lval * yySymType) int {
 			l.HasPreRune=true
 		}
 
-		switch i := v.(type) {
-		case ast.Expr:
-			lval.Expr = i
-			return p.GetToken()
-		case rune:
-			return int(i)
-		case string:
-			lval.String=i
-			return p.GetToken()
 
+		switch t:=p.GetToken();t {
+		case NUMBER:
+			lval.Expr = v.(*ast.Number)
+			return NUMBER
+		case '+', '-','*','/','=':
+			return int(v.(rune))
+		case VARIABLE:
+			lval.Expr = v.(*ast.VarExpr)
+			return VARIABLE
+		case BLANKSPACE:
+			l.Buf=""
+			goto t
 		}
-
 
 	} else {
 
