@@ -32,8 +32,6 @@ t:
 		l.Buf = l.Buf + string(r)
 	}
 
-	log.Println("The buf of lexer:",l.Buf,"  ",[]byte(l.Buf))
-
 	if p := FindPattern(l.Buf); p != nil {
 		v, pr, h := p.BuildFun(l.Buf, l.Reader)
 
@@ -42,16 +40,32 @@ t:
 			l.HasPreRune=true
 		}
 
-
 		switch t:=p.GetToken();t {
 		case NUMBER:
 			lval.Expr = v.(*ast.Number)
 			return NUMBER
+		case BOOL:
+			lval.Expr = v.(*ast.Bool)
+			return BOOL
 		case '+', '-','*','/','=':
 			return int(v.(rune))
-		case VARIABLE:
-			lval.Expr = v.(*ast.VarExpr)
-			return VARIABLE
+		case AND:
+			return AND
+		case OR:
+			return OR
+		case WORD:
+			w :=v.(string)
+			switch t,v:=ParseWord(w);t {
+			case VARIABLE:
+				lval.Expr=v.(*ast.VarExpr)
+				return t
+			case BOOL:
+				lval.Expr=v.(*ast.Bool)
+				return t
+			default:
+				return t
+
+			}
 		case BLANKSPACE:
 			l.Buf=""
 			goto t
@@ -62,7 +76,7 @@ t:
 
 	} else {
 
-		log.Fatal("No Pattern to be matched")
+		goto t
 	}
 
 	return 0

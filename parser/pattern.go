@@ -3,6 +3,7 @@ package parser
 import (
 	"bufio"
 	"regexp"
+	"log"
 )
 
 type Pattern interface {
@@ -30,6 +31,7 @@ var Patterns = make([]Pattern,0,256)
 
 func FindPattern(s string) Pattern {
 	for _,e:=range Patterns {
+		log.Println(e,s)
 		if e.Match(s) {
 			return e
 		}
