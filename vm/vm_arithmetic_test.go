@@ -2,7 +2,7 @@ package vm
 
 import "testing"
 
-func TestExecuteAddExpress(t * testing.T) {
+func TestExecuteAddExpress(t *testing.T) {
 	var vm = NewVM()
 
 	val,err :=vm.Execute("1+1")
@@ -65,7 +65,7 @@ func TestExecuteAddExpress(t * testing.T) {
 
 }
 
-func TestExecuteSubExpress(t * testing.T) {
+func TestExecuteSubExpress(t *testing.T) {
 	var vm = NewVM()
 
 	val,err :=vm.Execute("1-1")
@@ -97,7 +97,7 @@ func TestExecuteSubExpress(t * testing.T) {
 	}
 }
 
-func TestExecuteMultiExpress(t * testing.T) {
+func TestExecuteMultiExpress(t *testing.T) {
 	var vm = NewVM()
 
 	val,err :=vm.Execute("1*1")
@@ -129,7 +129,7 @@ func TestExecuteMultiExpress(t * testing.T) {
 	}
 }
 
-func TestExecuteDivExpress(t * testing.T) {
+func TestExecuteDivExpress(t *testing.T) {
 	var vm = NewVM()
 
 	val,err :=vm.Execute("1/1")
@@ -162,7 +162,7 @@ func TestExecuteDivExpress(t * testing.T) {
 }
 
 
-func TestExecuteArithmetic(t * testing.T) {
+func TestExecuteArithmetic(t *testing.T) {
 	var vm = NewVM()
 
 	val,err :=vm.Execute("1+1/1+1*1")

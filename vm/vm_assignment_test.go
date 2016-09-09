@@ -2,7 +2,7 @@ package vm
 
 import "testing"
 
-func TestAsignExpr(t * testing.T) {
+func TestAsignExpr(t *testing.T) {
 	var vm = NewVM()
 
 	if val,err :=vm.Execute("a=1"); err!=nil {

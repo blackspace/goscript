@@ -2,7 +2,7 @@ package vm
 
 import "testing"
 
-func TestBlankspace(t * testing.T) {
+func TestBlankspace(t *testing.T) {
 	var vm = NewVM()
 
 	if val,err :=vm.Execute("3   +   3"); err!=nil {
@@ -15,7 +15,7 @@ func TestBlankspace(t * testing.T) {
 }
 
 
-func TestMultiExprExpr(t * testing.T) {
+func TestMultiExprExpr(t *testing.T) {
 	var vm = NewVM()
 
 	s:=`

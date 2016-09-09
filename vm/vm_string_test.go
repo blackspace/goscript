@@ -2,7 +2,7 @@ package vm
 
 import "testing"
 
-func TestString(t * testing.T) {
+func TestString(t *testing.T) {
 	var vm = NewVM()
 
 	val,err :=vm.Execute(`"123"`)
@@ -20,7 +20,7 @@ func TestString(t * testing.T) {
 	}
 }
 
-func TestStringConcate(t * testing.T) {
+func TestStringConcate(t *testing.T) {
 	var vm = NewVM()
 
 	val,err :=vm.Execute(`"12a3"+"123"`)

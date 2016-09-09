@@ -2,7 +2,7 @@ package vm
 
 import "testing"
 
-func TestBool(t * testing.T) {
+func TestBool(t *testing.T) {
 	var vm = NewVM()
 
 	val,err :=vm.Execute("true")
@@ -34,7 +34,7 @@ func TestBool(t * testing.T) {
 	}
 }
 
-func TestBoolExpress(t * testing.T) {
+func TestBoolExpress(t *testing.T) {
 	var vm = NewVM()
 
 	val,err :=vm.Execute("true&&false")
