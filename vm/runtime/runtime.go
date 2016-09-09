@@ -17,8 +17,9 @@ func (r *Runtime)AddSymbols(n string,v reflect.Value) {
 }
 
 
-var Symbols = make(map[string]reflect.Value)
-
-func AddSymbols(n string,v reflect.Value) {
-	Symbols[n]=v
+func (r*Runtime)GetSymbolValue(n string) (v reflect.Value,ok bool) {
+	v,ok=r.Symbols[n]
+	return
 }
+
+
