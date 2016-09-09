@@ -7,7 +7,7 @@ import (
 func TestBlankspace(t *testing.T) {
 	var vm = NewVM()
 
-	if val,err :=vm.Execute("3   +   3"); err!=nil {
+	if val,err :=vm.Run("3   +   3"); err!=nil {
 		t.Error(err)
 	} else if val.IsValid() &&val.Int()!=6 {
 		t.Fail()
@@ -30,7 +30,7 @@ a=a+3
 
 a+2
 `
-	if val,err :=vm.Execute(s); err!=nil {
+	if val,err :=vm.Run(s); err!=nil {
 		t.Error(err)
 	} else if val.IsValid() &&val.Int()!=6 {
 		t.Fail()

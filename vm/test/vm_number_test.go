@@ -8,7 +8,7 @@ import (
 func TestExecuteSigleDigitNumber(t *testing.T) {
 	var vm = NewVM()
 
-	val,err :=vm.Execute("1")
+	val,err :=vm.Run("1")
 
 	if err!=nil {
 		t.Error(err)
@@ -27,7 +27,7 @@ func TestExecuteSigleDigitNumber(t *testing.T) {
 func TestExecuteMultiDigitNumber(t *testing.T) {
 	var vm = NewVM()
 
-	val,err :=vm.Execute("123")
+	val,err :=vm.Run("123")
 
 	if err!=nil {
 		t.Error(err)

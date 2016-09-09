@@ -8,7 +8,7 @@ import (
 func TestBool(t *testing.T) {
 	var vm = NewVM()
 
-	val,err :=vm.Execute("true")
+	val,err :=vm.Run("true")
 
 	if err!=nil {
 		t.Error(err)
@@ -22,7 +22,7 @@ func TestBool(t *testing.T) {
 		t.Fail()
 	}
 
-	val,err =vm.Execute("false")
+	val,err =vm.Run("false")
 
 	if err!=nil {
 		t.Error(err)
@@ -40,7 +40,7 @@ func TestBool(t *testing.T) {
 func TestBoolExpress(t *testing.T) {
 	var vm = NewVM()
 
-	val,err :=vm.Execute("true&&false")
+	val,err :=vm.Run("true&&false")
 
 	if err!=nil {
 		t.Error(err)
@@ -54,7 +54,7 @@ func TestBoolExpress(t *testing.T) {
 		t.Fail()
 	}
 
-	val,err =vm.Execute("false||true")
+	val,err =vm.Run("false||true")
 
 	if err!=nil {
 		t.Error(err)
@@ -68,7 +68,7 @@ func TestBoolExpress(t *testing.T) {
 		t.Fail()
 	}
 
-	val,err =vm.Execute("true&&false||true")
+	val,err =vm.Run("true&&false||true")
 
 	if err!=nil {
 		t.Error(err)

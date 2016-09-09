@@ -2,10 +2,11 @@ package ast
 
 import (
 	"reflect"
+	"goscript/vm/runtime"
 )
 
 type Expr interface {
-      	Eval() reflect.Value
+      	Eval(r *runtime.Runtime) reflect.Value
 }
 
 

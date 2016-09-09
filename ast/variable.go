@@ -9,12 +9,11 @@ type VarExpr struct {
 	Name string
 }
 
-func (s * VarExpr)Eval() reflect.Value {
-	if v,ok:=runtime.Symbols[s.Name];ok {
-
+func (s * VarExpr)Eval(r *runtime.Runtime) reflect.Value {
+	if v,ok:=r.Symbols[s.Name];ok {
 		return v
 	} else {
-		runtime.Symbols[s.Name]=reflect.Value{}
+		r.Symbols[s.Name]=reflect.Value{}
 		return runtime.Symbols[s.Name]
 	}
 

@@ -1,6 +1,9 @@
 package ast
 
-import "reflect"
+import (
+	"reflect"
+	"goscript/vm/runtime"
+)
 
 type ORExpr struct {
 	Expr1 Expr
@@ -8,9 +11,9 @@ type ORExpr struct {
 }
 
 
-func (e * ORExpr)Eval() reflect.Value{
-	v1 :=e.Expr1.Eval()
-	v2 :=e.Expr2.Eval()
+func (e * ORExpr)Eval(r *runtime.Runtime) reflect.Value{
+	v1 :=e.Expr1.Eval(r)
+	v2 :=e.Expr2.Eval(r)
 	return  reflect.ValueOf(v1.Bool()||v2.Bool())
 }
 
@@ -21,9 +24,9 @@ type ANDExpr struct {
 }
 
 
-func (e * ANDExpr)Eval() reflect.Value{
-	v1 :=e.Expr1.Eval()
-	v2 :=e.Expr2.Eval()
+func (e * ANDExpr)Eval(r *runtime.Runtime) reflect.Value{
+	v1 :=e.Expr1.Eval(r)
+	v2 :=e.Expr2.Eval(r)
 	return  reflect.ValueOf(v1.Bool()&&v2.Bool())
 }
 

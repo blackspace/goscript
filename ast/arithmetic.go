@@ -4,6 +4,7 @@ import (
 	"reflect"
 	"log"
 	"strconv"
+	"goscript/vm/runtime"
 )
 
 type AddExpr struct {
@@ -11,9 +12,9 @@ type AddExpr struct {
 	Expr2 Expr
 }
 
-func (a  * AddExpr)Eval() (v reflect.Value){
-	v1 :=a.Expr1.Eval()
-	v2 :=a.Expr2.Eval()
+func (a  * AddExpr)Eval(r *runtime.Runtime) (v reflect.Value){
+	v1 :=a.Expr1.Eval(r)
+	v2 :=a.Expr2.Eval(r)
 
 	t1:=v1.Type().Kind()
 	t2:=v2.Type().Kind()
@@ -50,9 +51,9 @@ type SubExpr struct {
 }
 
 
-func (s * SubExpr)Eval() reflect.Value{
-	v1 :=s.Expr1.Eval()
-	v2 :=s.Expr2.Eval()
+func (s * SubExpr)Eval(r *runtime.Runtime) reflect.Value{
+	v1 :=s.Expr1.Eval(r)
+	v2 :=s.Expr2.Eval(r)
 	return  reflect.ValueOf(v1.Int()-v2.Int())
 }
 
@@ -62,9 +63,9 @@ type MultiExpr struct {
 }
 
 
-func (s * MultiExpr)Eval() reflect.Value{
-	v1 :=s.Expr1.Eval()
-	v2 :=s.Expr2.Eval()
+func (s * MultiExpr)Eval(r *runtime.Runtime) reflect.Value{
+	v1 :=s.Expr1.Eval(r)
+	v2 :=s.Expr2.Eval(r)
 	return  reflect.ValueOf(v1.Int()*v2.Int())
 }
 
@@ -75,8 +76,8 @@ type DivExpr struct {
 }
 
 
-func (s * DivExpr)Eval() reflect.Value{
-	v1 :=s.Expr1.Eval()
-	v2 :=s.Expr2.Eval()
+func (s * DivExpr)Eval(r *runtime.Runtime) reflect.Value{
+	v1 :=s.Expr1.Eval(r)
+	v2 :=s.Expr2.Eval(r)
 	return  reflect.ValueOf(v1.Int()/v2.Int())
 }

@@ -8,7 +8,7 @@ import (
 func TestExecuteAddExpress(t *testing.T) {
 	var vm = NewVM()
 
-	val,err :=vm.Execute("1+1")
+	val,err :=vm.Run("1+1")
 
 	if err!=nil {
 		t.Error(err)
@@ -23,7 +23,7 @@ func TestExecuteAddExpress(t *testing.T) {
 	}
 
 
-	val,err =vm.Execute("1+1+1")
+	val,err =vm.Run("1+1+1")
 
 	if err!=nil {
 		t.Error(err)
@@ -38,7 +38,7 @@ func TestExecuteAddExpress(t *testing.T) {
 	}
 
 
-	val,err =vm.Execute("1+123+456")
+	val,err =vm.Run("1+123+456")
 
 	if err!=nil {
 		t.Error(err)
@@ -52,7 +52,7 @@ func TestExecuteAddExpress(t *testing.T) {
 		t.Fail()
 	}
 
-	val,err =vm.Execute("1+123+456+0")
+	val,err =vm.Run("1+123+456+0")
 
 	if err!=nil {
 		t.Error(err)
@@ -71,7 +71,7 @@ func TestExecuteAddExpress(t *testing.T) {
 func TestExecuteSubExpress(t *testing.T) {
 	var vm = NewVM()
 
-	val,err :=vm.Execute("1-1")
+	val,err :=vm.Run("1-1")
 
 	if err!=nil {
 		t.Error(err)
@@ -85,7 +85,7 @@ func TestExecuteSubExpress(t *testing.T) {
 		t.Fail()
 	}
 
-	val,err =vm.Execute("123-23-1")
+	val,err =vm.Run("123-23-1")
 
 	if err!=nil {
 		t.Error(err)
@@ -103,7 +103,7 @@ func TestExecuteSubExpress(t *testing.T) {
 func TestExecuteMultiExpress(t *testing.T) {
 	var vm = NewVM()
 
-	val,err :=vm.Execute("1*1")
+	val,err :=vm.Run("1*1")
 
 	if err!=nil {
 		t.Error(err)
@@ -117,7 +117,7 @@ func TestExecuteMultiExpress(t *testing.T) {
 		t.Fail()
 	}
 
-	val,err =vm.Execute("1000*10")
+	val,err =vm.Run("1000*10")
 
 	if err!=nil {
 		t.Error(err)
@@ -135,7 +135,7 @@ func TestExecuteMultiExpress(t *testing.T) {
 func TestExecuteDivExpress(t *testing.T) {
 	var vm = NewVM()
 
-	val,err :=vm.Execute("1/1")
+	val,err :=vm.Run("1/1")
 
 	if err!=nil {
 		t.Error(err)
@@ -149,7 +149,7 @@ func TestExecuteDivExpress(t *testing.T) {
 		t.Fail()
 	}
 
-	val,err =vm.Execute("1000/10")
+	val,err =vm.Run("1000/10")
 
 	if err!=nil {
 		t.Error(err)
@@ -168,7 +168,7 @@ func TestExecuteDivExpress(t *testing.T) {
 func TestExecuteArithmetic(t *testing.T) {
 	var vm = NewVM()
 
-	val,err :=vm.Execute("1+1/1+1*1")
+	val,err :=vm.Run("1+1/1+1*1")
 
 	if err!=nil {
 		t.Error(err)
@@ -182,7 +182,7 @@ func TestExecuteArithmetic(t *testing.T) {
 		t.Fail()
 	}
 
-	val,err =vm.Execute("10+1000/10-10+1*10+1")
+	val,err =vm.Run("10+1000/10-10+1*10+1")
 
 	if err!=nil {
 		t.Error(err)
