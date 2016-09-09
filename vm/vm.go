@@ -8,7 +8,7 @@ import (
 )
 
 type VM struct {
-	*runtime.Runtime
+	Runtime	*runtime.Runtime
 }
 
 func NewVM() *VM {
@@ -16,7 +16,7 @@ func NewVM() *VM {
 }
 
 func (v * VM)Run(src string) (result reflect.Value,err error) {
-	exprs,_ :=parser.ParseString(src)
+	exprs,err :=parser.ParseString(src)
 
 	for _,e:= range exprs {
 		result=v.Eval(e)
