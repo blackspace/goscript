@@ -62,7 +62,7 @@ const yyEofCode = 1
 const yyErrCode = 2
 const yyInitialStackSize = 16
 
-//line parser/parser.go.y:92
+//line parser/parser.go.y:81
 
 //line yacctab:1
 var yyExca = [...]int{
@@ -71,52 +71,52 @@ var yyExca = [...]int{
 	-2, 0,
 }
 
-const yyNprod = 19
+const yyNprod = 16
 const yyPrivate = 57344
 
 var yyTokenNames []string
 var yyStates []string
 
-const yyLast = 34
+const yyLast = 39
 
 var yyAct = [...]int{
 
-	12, 13, 14, 15, 3, 14, 15, 18, 6, 19,
-	10, 4, 16, 17, 7, 21, 1, 20, 22, 23,
-	24, 9, 5, 2, 28, 11, 0, 27, 25, 26,
-	7, 8, 9, 10,
+	10, 11, 14, 15, 3, 12, 13, 14, 15, 12,
+	13, 14, 15, 16, 1, 17, 19, 20, 21, 22,
+	23, 2, 4, 9, 6, 8, 5, 7, 6, 18,
+	5, 7, 0, 0, 0, 0, 0, 0, 24,
 }
 var yyPact = [...]int{
 
-	26, 26, -1000, -19, -2, -1000, -12, -1000, -9, -1000,
-	-1000, -1000, 10, 10, 10, 10, 15, 15, 3, 10,
-	-16, -1000, -16, -1000, -1000, -1000, -1000, -1000, -19,
+	20, 20, -1000, -14, -1000, -1000, -1000, -1000, -5, -1000,
+	24, 24, 24, 24, 24, 24, 20, -10, -1000, -10,
+	-19, -19, -1000, -1000, -1000,
 }
 var yyPgo = [...]int{
 
-	0, 23, 4, 11, 22, 8, 16,
+	0, 21, 22, 4, 14,
 }
 var yyR1 = [...]int{
 
-	0, 6, 6, 1, 1, 1, 1, 3, 3, 3,
-	4, 2, 2, 2, 2, 2, 2, 5, 5,
+	0, 4, 4, 1, 1, 2, 3, 3, 3, 3,
+	3, 3, 3, 3, 3, 3,
 }
 var yyR2 = [...]int{
 
-	0, 1, 2, 1, 1, 1, 1, 1, 3, 3,
-	3, 1, 1, 3, 3, 3, 3, 1, 3,
+	0, 1, 2, 1, 1, 3, 1, 1, 1, 1,
+	3, 3, 3, 3, 3, 3,
 }
 var yyChk = [...]int{
 
-	-1000, -6, -1, -2, -3, -4, -5, 4, 5, 6,
-	7, -1, 19, 20, 21, 22, 14, 15, 19, 18,
-	-2, 5, -2, -2, -2, -3, -3, -5, -2,
+	-1000, -4, -1, -3, -2, 6, 4, 7, 5, -1,
+	14, 15, 19, 20, 21, 22, 18, -3, 5, -3,
+	-3, -3, -3, -3, -1,
 }
 var yyDef = [...]int{
 
-	0, -2, 1, 3, 4, 5, 6, 11, 12, 7,
-	17, 2, 0, 0, 0, 0, 0, 0, 0, 0,
-	13, 12, 14, 15, 16, 8, 9, 18, 10,
+	0, -2, 1, 3, 4, 6, 7, 8, 9, 2,
+	0, 0, 0, 0, 0, 0, 0, 10, 9, 11,
+	12, 13, 14, 15, 5,
 }
 var yyTok1 = [...]int{
 
@@ -488,53 +488,47 @@ yydefault:
 			yyVAL.Expres = append(yyDollar[1].Expres, yyDollar[2].Expr)
 			ParseResult = yyVAL.Expres
 		}
-	case 8:
+	case 5:
 		yyDollar = yyS[yypt-3 : yypt+1]
-		//line parser/parser.go.y:55
-		{
-			yyVAL.Expr = &ast.ANDExpr{yyDollar[1].Expr, yyDollar[3].Expr}
-		}
-	case 9:
-		yyDollar = yyS[yypt-3 : yypt+1]
-		//line parser/parser.go.y:59
-		{
-			yyVAL.Expr = &ast.ORExpr{yyDollar[1].Expr, yyDollar[3].Expr}
-		}
-	case 10:
-		yyDollar = yyS[yypt-3 : yypt+1]
-		//line parser/parser.go.y:64
+		//line parser/parser.go.y:52
 		{
 			yyVAL.Expr = &ast.AssignExpr{yyDollar[1].Expr, yyDollar[3].Expr}
 		}
-	case 13:
+	case 10:
 		yyDollar = yyS[yypt-3 : yypt+1]
-		//line parser/parser.go.y:71
+		//line parser/parser.go.y:58
+		{
+			yyVAL.Expr = &ast.ANDExpr{yyDollar[1].Expr, yyDollar[3].Expr}
+		}
+	case 11:
+		yyDollar = yyS[yypt-3 : yypt+1]
+		//line parser/parser.go.y:62
+		{
+			yyVAL.Expr = &ast.ORExpr{yyDollar[1].Expr, yyDollar[3].Expr}
+		}
+	case 12:
+		yyDollar = yyS[yypt-3 : yypt+1]
+		//line parser/parser.go.y:66
 		{
 			yyVAL.Expr = &ast.AddExpr{yyDollar[1].Expr, yyDollar[3].Expr}
 		}
-	case 14:
+	case 13:
 		yyDollar = yyS[yypt-3 : yypt+1]
-		//line parser/parser.go.y:75
+		//line parser/parser.go.y:70
 		{
 			yyVAL.Expr = &ast.SubExpr{yyDollar[1].Expr, yyDollar[3].Expr}
 		}
-	case 15:
+	case 14:
 		yyDollar = yyS[yypt-3 : yypt+1]
-		//line parser/parser.go.y:79
+		//line parser/parser.go.y:74
 		{
 			yyVAL.Expr = &ast.MultiExpr{yyDollar[1].Expr, yyDollar[3].Expr}
 		}
-	case 16:
+	case 15:
 		yyDollar = yyS[yypt-3 : yypt+1]
-		//line parser/parser.go.y:83
+		//line parser/parser.go.y:78
 		{
 			yyVAL.Expr = &ast.DivExpr{yyDollar[1].Expr, yyDollar[3].Expr}
-		}
-	case 18:
-		yyDollar = yyS[yypt-3 : yypt+1]
-		//line parser/parser.go.y:89
-		{
-			yyVAL.Expr = &ast.StringConcateExpr{yyDollar[1].Expr, yyDollar[3].Expr}
 		}
 	}
 	goto yystack /* stack new state and value */

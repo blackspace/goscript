@@ -16,7 +16,7 @@ var ParseResult []ast.Expr
     Expres []ast.Expr
 }
 
-%type <Expr> expr arithmetic_expr logical_expr assign_expr string_expr
+%type <Expr> expr assign_expr simple_expr
 %type <Expres> exprs
 
 %token <Expr> NUMBER VARIABLE BOOL STRING
@@ -45,50 +45,39 @@ exprs :expr
     };
 
 
-expr : arithmetic_expr
-    |logical_expr
-    |assign_expr
-    |string_expr;
+expr : simple_expr
+    |assign_expr;
 
-logical_expr: BOOL
-    |logical_expr AND logical_expr
-    {
-        $$=&ast.ANDExpr{$1,$3}
-    }
-    |logical_expr OR logical_expr
-    {
-        $$=&ast.ORExpr{$1,$3}
-    };
-
-assign_expr: VARIABLE '=' arithmetic_expr
+assign_expr: VARIABLE '=' expr
     {
         $$=&ast.AssignExpr{$1,$3}
     }
 
-arithmetic_expr : NUMBER
-    |VARIABLE
-    | arithmetic_expr '+' arithmetic_expr
+simple_expr: BOOL|NUMBER|STRING |VARIABLE
+    |simple_expr AND simple_expr
+    {
+        $$=&ast.ANDExpr{$1,$3}
+    }
+    |simple_expr OR simple_expr
+    {
+        $$=&ast.ORExpr{$1,$3}
+    }
+    | simple_expr '+' simple_expr
     {
         $$=&ast.AddExpr{$1,$3}
     }
-    |arithmetic_expr '-' arithmetic_expr
+    |simple_expr '-' simple_expr
     {
         $$=&ast.SubExpr{$1,$3}
     }
-    |arithmetic_expr '*' arithmetic_expr
+    |simple_expr '*' simple_expr
     {
         $$=&ast.MultiExpr{$1,$3}
     }
-    |arithmetic_expr '/' arithmetic_expr
+    |simple_expr '/' simple_expr
     {
         $$=&ast.DivExpr{$1,$3}
     };
-
-string_expr: STRING
-    |string_expr '+' string_expr
-    {
-        $$=&ast.StringConcateExpr{$1,$3}
-    }
 %%
 
 

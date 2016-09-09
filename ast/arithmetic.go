@@ -1,16 +1,47 @@
 package ast
 
-import "reflect"
+import (
+	"reflect"
+	"log"
+	"strconv"
+)
 
 type AddExpr struct {
 	Expr1 Expr
 	Expr2 Expr
 }
 
-func (a  * AddExpr)Eval() reflect.Value{
+func (a  * AddExpr)Eval() (v reflect.Value){
 	v1 :=a.Expr1.Eval()
 	v2 :=a.Expr2.Eval()
-	return reflect.ValueOf(v1.Int()+v2.Int())
+
+	t1:=v1.Type().Kind()
+	t2:=v2.Type().Kind()
+
+	log.Println(t1,t2)
+
+
+
+	switch t1 {
+	case reflect.String:
+		switch t2 {
+		case reflect.String:
+			return reflect.ValueOf(v1.String()+v2.String())
+		case reflect.Int64:
+			s2:=strconv.FormatInt(v2.Int(),10)
+			return reflect.ValueOf(v1.String()+s2)
+		}
+	case reflect.Int64:
+		switch t2 {
+		case reflect.String:
+			s1:=strconv.FormatInt(v1.Int(),10)
+			return reflect.ValueOf(s1+v2.String())
+		case reflect.Int64:
+			return reflect.ValueOf(v1.Int()+v2.Int())
+		}
+	}
+
+	return
 }
 
 type SubExpr struct {
