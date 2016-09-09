@@ -52,6 +52,8 @@ t:
 			return STRING
 		case '+', '-','*','/','=':
 			return int(v.(rune))
+		case '{','}':
+			return int(v.(rune))
 		case AND:
 			return AND
 		case OR:
@@ -65,6 +67,8 @@ t:
 			case BOOL:
 				lval.Expr=v.(*ast.Bool)
 				return t
+			case IF:
+				return IF
 			default:
 				return t
 

@@ -39,3 +39,7 @@ func FindPattern(s string) Pattern {
 	return nil
 }
 
+func RegistPattern(p Pattern) {
+	Patterns = append(Patterns, p)
+}
+

@@ -47,6 +47,10 @@ func ParseWord(w string) (Token int,v interface{}) {
 		return BOOL,&ast.Bool{Bool:true}
 	case "false":
 		return BOOL,&ast.Bool{Bool:false}
+	case "if":
+		return IF,nil
+	case "else":
+		return ELSE,nil
 	}
 	return VARIABLE,&ast.VarExpr{Name:w}
 }
