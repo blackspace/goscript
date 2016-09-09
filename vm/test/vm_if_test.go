@@ -1,7 +1,8 @@
-package vm
+package test
 
 import (
 	"testing"
+	. "goscript/vm"
 )
 
 func TestIf(t *testing.T) {

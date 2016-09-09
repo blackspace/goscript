@@ -1,7 +1,9 @@
-package vm
+package test
 
-import "testing"
-
+import (
+	"testing"
+	. "goscript/vm"
+)
 func TestBlankspace(t *testing.T) {
 	var vm = NewVM()
 
