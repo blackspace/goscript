@@ -3,6 +3,7 @@ package ast
 import (
 	"reflect"
 	"goscript/vm/runtime"
+	"errors"
 )
 
 type VarExpr struct {
@@ -10,11 +11,10 @@ type VarExpr struct {
 }
 
 func (s * VarExpr)Eval(r *runtime.Runtime) reflect.Value {
-	if v,ok:=r.Symbols[s.Name];ok {
+	if v,ok:=r.GetSymbolValue(s.Name);ok {
 		return v
 	} else {
-		r.Symbols[s.Name]=reflect.Value{}
-		return runtime.Symbols[s.Name]
+		panic(errors.New("The "+s.Name+" varible is not existing"))
 	}
 
 }
