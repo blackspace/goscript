@@ -16,7 +16,7 @@ var ParseResult []ast.Expr
     Exprs []ast.Expr
 }
 
-%type <Expr> expr assign_expr simple_expr if_expr
+%type <Expr> expr assign_expr simple_expr if_expr for_expr stmt_expr
 %type <Exprs> exprs top
 
 %token <Expr> NUMBER VARIABLE BOOL STRING
@@ -50,8 +50,18 @@ exprs :expr
 
 
 expr : simple_expr
-    |assign_expr
-    |if_expr;
+    |stmt_expr
+    |assign_expr;
+
+
+stmt_expr: if_expr
+    |for_expr;
+
+for_expr : FOR expr ';' expr ';' expr '{' exprs '}'
+    {
+        $$=&ast.ForExpr{}
+    }
+
 
 if_expr : IF simple_expr '{' exprs '}'
     {

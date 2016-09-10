@@ -16,7 +16,7 @@ func (a * AssignExpr)Eval(r *runtime.Runtime) reflect.Value{
 
 	n:=a.Expr1.(*VarExpr).Name
 
-	r.AddSymbols(n,v)
+	r.Symbols.Set(n,v)
 
 	return  v
 }

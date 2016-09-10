@@ -17,11 +17,11 @@ func (e *SubfixDoubleAddExpr)Eval(r *runtime.Runtime) (v reflect.Value) {
 
 	log.Println(name)
 
-	if v,ok:=r.GetSymbolValue(name);ok{
+	if v,ok:=r.Symbols.Get(name);ok{
 		n:=v.Int()
 		n++
-		r.AddSymbols(name,reflect.ValueOf(n))
+		r.Symbols.Set(name,reflect.ValueOf(n))
 	}
-	v,_=r.GetSymbolValue(name);
+	v,_=r.Symbols.Get(name);
 	return
 }

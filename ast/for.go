@@ -6,9 +6,9 @@ import (
 )
 
 type ForExpr struct {
-	Expr0 []Expr
-	Expr1 []Expr
-	Expr2 []Expr
+	Expr0 Expr
+	Expr1 Expr
+	Expr2 Expr
 	Expr3 []Expr
 }
 
