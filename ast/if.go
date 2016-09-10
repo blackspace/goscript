@@ -7,8 +7,8 @@ import  (
 
 type IFExpr struct {
 	Expr0 Expr
-	Expr1 []Expr
-	Expr2 []Expr
+	Expr1 Expr
+	Expr2 Expr
 }
 
 
@@ -16,13 +16,9 @@ func (e * IFExpr)Eval(r *runtime.Runtime) (v reflect.Value){
 	v0 :=e.Expr0.Eval(r)
 
 	if v0.Bool() {
-		for _,e:=range e.Expr1 {
-			v=e.Eval(r)
-		}
+		v=e.Expr1.Eval(r)
 	} else {
-		for _,e:=range e.Expr2 {
-			v =e.Eval(r)
-		}
+		v=e.Expr2.Eval(r)
 	}
 
 	return

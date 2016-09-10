@@ -16,8 +16,8 @@ var ParseResult []ast.Expr
     Exprs []ast.Expr
 }
 
-%type <Expr> expr assign_expr simple_expr if_expr for_expr stmt_expr
-%type <Exprs> exprs top
+%type <Expr> expr assign_expr simple_expr if_expr for_expr stmt_expr block_expr
+%type <Exprs> exprs  top
 
 %token <Expr> NUMBER VARIABLE BOOL STRING
 %token BLANKSPACE LFCR WORD IF FOR SWITCH FUNCTION CLASS DOUBLEADD DOUBLESUB
@@ -54,22 +54,27 @@ expr : simple_expr
     |assign_expr;
 
 
+block_expr : '{' exprs '}'
+    {
+        $$=&ast.BlockExpr{$2}
+    }
+
 stmt_expr: if_expr
     |for_expr;
 
-for_expr : FOR expr ';' expr ';' expr '{' exprs '}'
+for_expr : FOR expr ';' expr ';' expr block_expr
     {
         $$=&ast.ForExpr{}
     }
 
 
-if_expr : IF simple_expr '{' exprs '}'
+if_expr : IF simple_expr block_expr
     {
-        $$=&ast.IFExpr{$2,$4,nil}
+        $$=&ast.IFExpr{$2,$3,nil}
     }
-    |if_expr ELSE '{' exprs '}'
+    |if_expr ELSE block_expr
     {
-        ($1.(*ast.IFExpr)).Expr2=$4
+        ($1.(*ast.IFExpr)).Expr2=$3
 
         $$=$1
     };
