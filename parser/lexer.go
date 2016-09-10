@@ -50,7 +50,36 @@ t:
 		case STRING:
 			lval.Expr = v.(*ast.String)
 			return STRING
-		case '+', '-','*','/','=':
+		case '+':
+			r, _, err := l.Reader.ReadRune()
+
+			if err == io.EOF {
+				return '+'
+			}
+
+			if r=='+' {
+				return DOUBLEADD
+			} else {
+				l.HasPreRune=true
+				l.PreRune=r
+				l.Buf=""
+				return '+'
+			}
+		case '-':
+			r, _, err := l.Reader.ReadRune()
+
+			if err == io.EOF {
+				return '-'
+			}
+
+			if r=='-' {
+				return DOUBLESUB
+			} else {
+				l.HasPreRune=true
+				l.PreRune=r
+				return '-'
+			}
+		case '*','/','=':
 			return int(v.(rune))
 		case '{','}':
 			return int(v.(rune))

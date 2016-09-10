@@ -20,7 +20,7 @@ var ParseResult []ast.Expr
 %type <Exprs> exprs top
 
 %token <Expr> NUMBER VARIABLE BOOL STRING
-%token BLANKSPACE LFCR WORD IF FOR SWITCH FUNCTION CLASS
+%token BLANKSPACE LFCR WORD IF FOR SWITCH FUNCTION CLASS DOUBLEADD DOUBLESUB
 
 %right ELSE
 
@@ -68,6 +68,14 @@ assign_expr: VARIABLE '=' expr
     {
         $$=&ast.AssignExpr{$1,$3}
     }
+    |VARIABLE DOUBLEADD
+    {
+        $$=&ast.SubfixDoubleAddExpr{$1}
+    }
+    |VARIABLE DOUBLESUB
+    {
+           $$=&ast.SubfixDoubleSubExpr{$1}
+    };
 
 
 simple_expr: BOOL|NUMBER|STRING |VARIABLE

@@ -28,15 +28,14 @@ func (p PatternBase)GetToken() int {
 var Patterns = make([]Pattern,0,256)
 
 
-func FindPattern(s string) Pattern {
+func FindPattern(s string) (result Pattern) {
 	for _,e:=range Patterns {
-
 		if e.Match(s) {
-			return e
+			result=e
 		}
 	}
 
-	return nil
+	return result
 }
 
 func RegistPattern(p Pattern) {

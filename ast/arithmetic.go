@@ -2,7 +2,6 @@ package ast
 
 import (
 	"reflect"
-	"log"
 	"strconv"
 	"goscript/vm/runtime"
 )
@@ -12,16 +11,12 @@ type AddExpr struct {
 	Expr2 Expr
 }
 
-func (a  * AddExpr)Eval(r *runtime.Runtime) (v reflect.Value){
+func (a  * AddExpr)Eval(r *runtime.Runtime) reflect.Value{
 	v1 :=a.Expr1.Eval(r)
 	v2 :=a.Expr2.Eval(r)
 
 	t1:=v1.Type().Kind()
 	t2:=v2.Type().Kind()
-
-	log.Println(t1,t2)
-
-
 
 	switch t1 {
 	case reflect.String:
@@ -42,7 +37,7 @@ func (a  * AddExpr)Eval(r *runtime.Runtime) (v reflect.Value){
 		}
 	}
 
-	return
+	return reflect.Value{}
 }
 
 type SubExpr struct {
