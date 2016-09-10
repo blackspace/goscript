@@ -83,6 +83,36 @@ t:
 			return int(v.(rune))
 		case '{','}':
 			return int(v.(rune))
+		case ';':
+			return int(v.(rune))
+		case '>':
+			r, _, err := l.Reader.ReadRune()
+
+			if err == io.EOF {
+				return '>'
+			}
+
+			if r=='=' {
+				return GREATEREQUAL
+			} else {
+				l.HasPreRune=true
+				l.PreRune=r
+				return '>'
+			}
+		case '<':
+			r, _, err := l.Reader.ReadRune()
+
+			if err == io.EOF {
+				return '<'
+			}
+
+			if r=='=' {
+				return LESSEQUAL
+			} else {
+				l.HasPreRune=true
+				l.PreRune=r
+				return '<'
+			}
 		case AND:
 			return AND
 		case OR:
@@ -98,6 +128,8 @@ t:
 				return t
 			case IF:
 				return IF
+			case FOR:
+				return FOR
 			default:
 				return t
 
