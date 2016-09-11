@@ -130,6 +130,8 @@ t:
 				return IF
 			case FOR:
 				return FOR
+			case BREAK:
+				return BREAK
 			default:
 				return t
 

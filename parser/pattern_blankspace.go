@@ -35,7 +35,7 @@ func (n * BlankSpacePattern)BuildFun(prefix string,r *bufio.Reader) (v interface
 
 func init() {
 
-	var blankSpaceRegexp = regexp.MustCompile(`^ +$`)
+	var blankSpaceRegexp = regexp.MustCompile(`^( |\t)+$`)
 
 	Patterns=append(Patterns,&BlankSpacePattern{PatternBase{Regexp:blankSpaceRegexp,Token:BLANKSPACE}})
 

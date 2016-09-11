@@ -53,6 +53,8 @@ func ParseWord(w string) (Token int,v interface{}) {
 		return ELSE,nil
 	case "for":
 		return FOR,nil
+	case "break":
+		return BREAK,nil
 	}
 	return VARIABLE,&ast.VarExpr{Name:w}
 }

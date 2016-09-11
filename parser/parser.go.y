@@ -19,7 +19,7 @@ var ParseResult []ast.Expr
 %type <Expr> expr assign_expr simple_expr if_expr for_expr stmt_expr block_expr increment_decrement_expr func_expr
 %type <Exprs> exprs  top
 
-%token <Expr> NUMBER VARIABLE BOOL STRING
+%token <Expr> NUMBER VARIABLE BOOL STRING BREAK
 %token BLANKSPACE LFCR WORD IF FOR SWITCH FUNCTION CLASS DOUBLEADD DOUBLESUB
 
 %nonassoc '>' GREATEREQUAL '<' LESSEQUAL
@@ -50,11 +50,16 @@ exprs :expr
     };
 
 
-expr : simple_expr
+expr : BREAK
+    {
+        $$=&ast.BreakExpr{}
+    }
+    |simple_expr
     |stmt_expr
     |assign_expr
     |increment_decrement_expr
-    |func_expr;
+    |func_expr
+    |block_expr;
 
 
 block_expr : '{' exprs '}'
