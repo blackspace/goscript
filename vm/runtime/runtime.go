@@ -28,34 +28,39 @@ func (r *Runtime)EndScope(s *Scope) {
 }
 
 func (r *Runtime)GetVarible(n string) (v reflect.Value,ok bool) {
-	for sn:=r.scopes.LastNode();;sn=sn.Pre {
-
-		if v,ok=sn.Element.(*Scope).Get(n);ok {
-			return v,ok
+	e:=r.scopes.FindByLambda(func (e interface{}) bool {
+		if _,ok=e.(*Scope).Get(n);ok {
+			return true
 		}
+		return false
+	})
 
+	s:=e.(*Scope)
 
-		if sn==r.scopes.Root  {
-			break
-		}
-	}
+	v,ok=s.Get(n)
 
 	return
 }
 
 func (r *Runtime)SetVarible(n string,v reflect.Value) {
-	for sn:=r.scopes.LastNode();;sn=sn.Pre {
 
-		if _,ok:=sn.Element.(*Scope).Get(n);ok {
-			sn.Element.(*Scope).Set(n,v)
-			return
+	e:=r.scopes.FindByLambda(func (e interface{}) bool {
+		if _,ok:=e.(*Scope).Get(n);ok {
+			return true
 		}
+		return false
+	})
 
-		if sn==r.scopes.Root  {
-			break
-		}
+
+
+	//If it didn't find the varible to set in the scope list,must set a new varible in the last scope
+	if e==nil {
+		r.scopes.LastNode().Element.(*Scope).Set(n, v)
+	} else {
+		s:=e.(*Scope)
+		s.Set(n,v)
 	}
 
-	r.scopes.LastNode().Element.(*Scope).Set(n, v)
+
 	return
 }

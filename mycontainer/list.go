@@ -1,22 +1,19 @@
 package mycontainer
 
-import (
-	"log"
-)
 
 type List struct {
-	Root *Node
+	Root *_Node
 	EqualFun func (interface{},interface{}) bool
 }
 
-type Node struct {
-	Pre *Node
-	Next *Node
+type _Node struct {
+	pre     *_Node
+	next    *_Node
 	Element interface{}
 }
 
-func NewNode() *Node {
-	return &Node{}
+func NewNode() *_Node {
+	return &_Node{}
 }
 
 func (l *List)Len() int {
@@ -27,48 +24,55 @@ func (l *List)Len() int {
 	}
 	for {
 		i++
-		if n.Next==nil {
+		if n.next ==nil {
 			return i
 		}
-		n=n.Next
+		n=n.next
 
 	}
 }
 
-func (l *List)ToString() {
-	for n:=l.Root;;n=n.Next {
-		log.Println("n:",n)
+func (l *List)FindByLambda(lambda func (e interface{}) bool) (e interface{}) {
 
-		if n.Next==nil {
-			break
+	if l.Len()==0 {
+		return
+	}
+
+	for n:=l.LastNode();;n=n.pre {
+		if lambda(n.Element) {
+			e=n.Element
+			return e
+		}
+
+		if n.pre==nil {
+			return nil
 		}
 	}
+	return nil
 }
 
-func (l * List)LastNode() (n *Node) {
+func (l * List)LastNode() (n *_Node) {
 	n=l.Root
 	for {
 		if n==nil  {
 			return n
-		} else if n.Next==nil {
+		} else if n.next ==nil {
 			return n
 		}
-		n=n.Next
+		n=n.next
 	}
 
 	return
 }
 
-func (l *List)FindNode(e interface{}) (n *Node) {
-	for ln:=l.Root;;ln=ln.Next {
-
-		l.ToString()
+func (l *List)_FindNode(e interface{}) (n *_Node) {
+	for ln:=l.Root;;ln=ln.next {
 
 		if l.EqualFun(ln.Element,e) {
 			return ln
 		}
 
-		if ln.Next==nil {
+		if ln.next ==nil {
 			break
 		}
 
@@ -78,27 +82,29 @@ func (l *List)FindNode(e interface{}) (n *Node) {
 
 func (l *List)Add(e interface{}) {
 	n :=NewNode()
-	n.Element=e
+	n.Element =e
 	if l.Root ==nil {
 		l.Root = n
 	} else {
-		n.Pre=l.LastNode()
-		l.LastNode().Next=n
+		n.pre =l.LastNode()
+		l.LastNode().next =n
 	}
 }
 
 func (l *List)Remove(e interface{}) {
-	n:=l.FindNode(e)
+	n:=l._FindNode(e)
 
 	if n==nil {
-
+		return
 	}
 
-	if n.Pre!=nil {
-		n.Pre.Next = n.Next
+	if n.pre !=nil {
+		n.pre.next = n.next
+	} else {
+		l.Root=n.next
 	}
 
-	if n.Next!=nil {
-		n.Next.Pre=n.Pre
+	if n.next !=nil {
+		n.next.pre =n.pre
 	}
 }
