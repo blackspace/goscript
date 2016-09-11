@@ -15,4 +15,43 @@ func TestScope(t *testing.T) {
 			t.Fail()
 		}
 	}
+
+	v,err:=vm.Run(`
+	a=1
+
+	{
+		a=2
+		a++
+	}
+
+
+	`)
+
+
+	if err==nil {
+		if v.Int()!=3 {
+			t.Fail()
+		}
+	}
+
+
+
+	v,err=vm.Run(`
+	a=1
+
+	{
+		b=2
+		b++
+	}
+
+
+	`)
+
+
+	if err==nil {
+		if v.Int()!=3 {
+			t.Fail()
+		}
+	}
+
 }

@@ -2,86 +2,40 @@ package runtime
 
 import (
 	"reflect"
+	. "goscript/mycontainer"
 )
 
 type Runtime struct {
-	scopeListHead *_ScopeNode
+	scopes List
 }
-
-type _ScopeNode struct {
-	pre *_ScopeNode
-	next *_ScopeNode
-	*Scope
-}
-
-func _NewScopeNode() *_ScopeNode {
-	return &_ScopeNode{Scope:NewScope()}
-}
-
 
 func NewRuntime() (r *Runtime) {
-	return &Runtime{}
+	return &Runtime{scopes:List{EqualFun:func(e1 interface{},e2 interface{}) bool {
+		return e1.(*Scope)==e2.(*Scope)
+	}}}
 }
-
-func (r *Runtime)_LastScopeNode() (sn *_ScopeNode) {
-	sn=r.scopeListHead
-	for {
-		if sn==nil  {
-			return sn
-		} else if sn.next==nil {
-			return sn
-		}
-		sn=sn.next
-	}
-
-	return
-}
-
-func (r *Runtime)_FindScopeNode(s *Scope) (sn *_ScopeNode) {
-	for sn=r.scopeListHead;sn.next!=nil;sn=sn.next {
-		if sn.Scope==s {
-			return
-		}
-	}
-	return
-}
-
 
 
 func (r *Runtime)BeginScope() (s *Scope){
-	sn:= _NewScopeNode()
-
-	if r.scopeListHead ==nil {
-		r.scopeListHead =sn
-	} else {
-		sn.pre=r._LastScopeNode()
-		r._LastScopeNode().next=sn
-	}
-
-	return sn.Scope
+	ls := NewScope()
+	r.scopes.Add(ls)
+	return ls
 }
 
 
 func (r *Runtime)EndScope(s *Scope) {
-	n:=r._FindScopeNode(s)
-
-	if n.pre!=nil {
-		n.pre.next = n.next
-	}
-
-	if n.next!=nil {
-		n.next.pre=n.pre
-	}
+	r.scopes.Remove(s)
 }
 
 func (r *Runtime)GetVarible(n string) (v reflect.Value,ok bool) {
-	for sn:=r._LastScopeNode();;sn=sn.pre {
+	for sn:=r.scopes.LastNode();;sn=sn.Pre {
 
-		if v,ok=sn.Get(n);ok {
+		if v,ok=sn.Element.(*Scope).Get(n);ok {
 			return v,ok
 		}
 
-		if sn.pre==nil  {
+
+		if sn==r.scopes.Root  {
 			break
 		}
 	}
@@ -90,18 +44,18 @@ func (r *Runtime)GetVarible(n string) (v reflect.Value,ok bool) {
 }
 
 func (r *Runtime)SetVarible(n string,v reflect.Value) {
-	for sn:=r._LastScopeNode();;sn=sn.pre {
+	for sn:=r.scopes.LastNode();;sn=sn.Pre {
 
-		if _,ok:=sn.Get(n);ok {
-			sn.Set(n,v)
+		if _,ok:=sn.Element.(*Scope).Get(n);ok {
+			sn.Element.(*Scope).Set(n,v)
 			return
 		}
 
-		if sn.pre==nil  {
+		if sn==r.scopes.Root  {
 			break
 		}
 	}
 
-	r._LastScopeNode().Set(n, v)
+	r.scopes.LastNode().Element.(*Scope).Set(n, v)
 	return
 }
