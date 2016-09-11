@@ -5,17 +5,17 @@ import (
 )
 
 type Runtime struct {
-	ScopeListHead *ScopeNode
+	scopeListHead *_ScopeNode
 }
 
-type ScopeNode struct {
-	pre *ScopeNode
-	next *ScopeNode
+type _ScopeNode struct {
+	pre *_ScopeNode
+	next *_ScopeNode
 	*Scope
 }
 
-func NewScopeNode() *ScopeNode {
-	return &ScopeNode{Scope:NewScope()}
+func _NewScopeNode() *_ScopeNode {
+	return &_ScopeNode{Scope:NewScope()}
 }
 
 
@@ -23,8 +23,8 @@ func NewRuntime() (r *Runtime) {
 	return &Runtime{}
 }
 
-func (r *Runtime)LastScopeNode() (sn *ScopeNode) {
-	sn=r.ScopeListHead
+func (r *Runtime)_LastScopeNode() (sn *_ScopeNode) {
+	sn=r.scopeListHead
 	for {
 		if sn==nil  {
 			return sn
@@ -37,8 +37,8 @@ func (r *Runtime)LastScopeNode() (sn *ScopeNode) {
 	return
 }
 
-func (r *Runtime)FindScopeNode(s *Scope) (sn *ScopeNode) {
-	for sn=r.ScopeListHead;sn.next!=nil;sn=sn.next {
+func (r *Runtime)_FindScopeNode(s *Scope) (sn *_ScopeNode) {
+	for sn=r.scopeListHead;sn.next!=nil;sn=sn.next {
 		if sn.Scope==s {
 			return
 		}
@@ -49,13 +49,13 @@ func (r *Runtime)FindScopeNode(s *Scope) (sn *ScopeNode) {
 
 
 func (r *Runtime)BeginScope() (s *Scope){
-	sn:=NewScopeNode()
+	sn:= _NewScopeNode()
 
-	if r.ScopeListHead==nil {
-		r.ScopeListHead=sn
+	if r.scopeListHead ==nil {
+		r.scopeListHead =sn
 	} else {
-		sn.pre=r.LastScopeNode()
-		r.LastScopeNode().next=sn
+		sn.pre=r._LastScopeNode()
+		r._LastScopeNode().next=sn
 	}
 
 	return sn.Scope
@@ -63,7 +63,7 @@ func (r *Runtime)BeginScope() (s *Scope){
 
 
 func (r *Runtime)EndScope(s *Scope) {
-	n:=r.FindScopeNode(s)
+	n:=r._FindScopeNode(s)
 
 	if n.pre!=nil {
 		n.pre.next = n.next
@@ -75,7 +75,7 @@ func (r *Runtime)EndScope(s *Scope) {
 }
 
 func (r *Runtime)GetVarible(n string) (v reflect.Value,ok bool) {
-	for sn:=r.LastScopeNode();;sn=sn.pre {
+	for sn:=r._LastScopeNode();;sn=sn.pre {
 
 		if v,ok=sn.Get(n);ok {
 			return v,ok
@@ -90,7 +90,7 @@ func (r *Runtime)GetVarible(n string) (v reflect.Value,ok bool) {
 }
 
 func (r *Runtime)SetVarible(n string,v reflect.Value) {
-	for sn:=r.LastScopeNode();;sn=sn.pre {
+	for sn:=r._LastScopeNode();;sn=sn.pre {
 
 		if _,ok:=sn.Get(n);ok {
 			sn.Set(n,v)
@@ -102,6 +102,6 @@ func (r *Runtime)SetVarible(n string,v reflect.Value) {
 		}
 	}
 
-	r.LastScopeNode().Set(n, v)
+	r._LastScopeNode().Set(n, v)
 	return
 }
