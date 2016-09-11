@@ -20,8 +20,8 @@ func TestIf(t *testing.T) {
 func TestIfElse(t *testing.T) {
 	vm:=NewVM()
 
-	if v,err:=vm.Run(`if true&&false { 1 } else { 2 }`);err==nil {
-		if v.Int()!=2 {
+	if v,err:=vm.Run(`if true&&true { a=1 a++ a++ } `);err==nil {
+		if v.Int()!=3 {
 			t.Fail()
 		}
 	}

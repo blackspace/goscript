@@ -14,11 +14,11 @@ func (e *SubfixDoubleSubExpr)Eval(r *runtime.Runtime) (v reflect.Value) {
 
 	name :=e.Expr0.(*VarExpr).Name
 
-	if v,ok:=r.Symbols.Get(name);ok{
+	if v,ok:=r.GetVarible(name);ok{
 		n:=v.Int()
 		n--
-		r.Symbols.Set(name,reflect.ValueOf(n))
+		r.SetVarible(name,reflect.ValueOf(n))
 	}
-	v,_=r.Symbols.Get(name);
+	v,_=r.GetVarible(name);
 	return
 }

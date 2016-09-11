@@ -10,8 +10,10 @@ type VM struct {
 	Runtime	*runtime.Runtime
 }
 
-func NewVM() *VM {
-	return &VM{Runtime:runtime.NewRuntime()}
+func NewVM() (v *VM) {
+	v=&VM{Runtime:runtime.NewRuntime()}
+	v.Runtime.BeginScope()
+	return
 }
 
 func (v * VM)Run(src string) (result reflect.Value,err error) {

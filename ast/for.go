@@ -18,6 +18,7 @@ func (e *ForExpr)Eval(r *runtime.Runtime) (v reflect.Value) {
 	f2:=e.Expr1
 	f3:=e.Expr2
 
+	s:=r.BeginScope()
 
 	if f1!=nil {
 		f1.Eval(r)
@@ -30,15 +31,17 @@ func (e *ForExpr)Eval(r *runtime.Runtime) (v reflect.Value) {
 			}
 		}
 
-		if e.Expr3!=nil {
-			v=e.Expr3.Eval(r)
-		}
+
+		v=e.Expr3.Eval(r)
+
 
 		if f3!=nil {
 			f3.Eval(r)
 		}
 
 	}
+
+	r.EndScope(s)
 
 	return
 

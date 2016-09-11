@@ -6,12 +6,9 @@ import (
 )
 
 type FuncExpr struct {
-
 }
 
-
 func (b * FuncExpr)Eval(r *runtime.Runtime) (v reflect.Value){
-
 	return  v
 }
 

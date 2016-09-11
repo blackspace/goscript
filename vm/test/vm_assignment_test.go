@@ -22,6 +22,7 @@ func TestAsignExpr(t *testing.T) {
 
 	}
 
+
 	if val,err :=vm.Run("b=3"); err!=nil {
 		t.Error(err)
 	} else if val.IsValid() &&val.Int()!=3 {
