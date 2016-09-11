@@ -62,14 +62,14 @@ func (l *List)Len() int {
 	}
 }
 
-func (l *List)FindByLambda(lambda func (e interface{}) bool) (e interface{}) {
+func (l *List)FindByLambda(P func (e interface{}) bool) (e interface{}) {
 
 	if l.Len()==0 {
 		return
 	}
 
 	for n:=l._LastNode();;n=n.pre {
-		if lambda(n.element) {
+		if P(n.element) {
 			e=n.element
 			return e
 		}
