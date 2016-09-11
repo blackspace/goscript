@@ -9,12 +9,42 @@ type List struct {
 type _Node struct {
 	pre     *_Node
 	next    *_Node
-	Element interface{}
+	element interface{}
 }
 
-func NewNode() *_Node {
+func _NewNode() *_Node {
 	return &_Node{}
 }
+
+func (l *List)_FindNode(e interface{}) (n *_Node) {
+	for ln:=l.Root;;ln=ln.next {
+
+		if l.EqualFun(ln.element,e) {
+			return ln
+		}
+
+		if ln.next ==nil {
+			break
+		}
+
+	}
+	return
+}
+
+func (l * List)_LastNode() (n *_Node) {
+	n=l.Root
+	for {
+		if n==nil  {
+			return n
+		} else if n.next ==nil {
+			return n
+		}
+		n=n.next
+	}
+
+	return
+}
+
 
 func (l *List)Len() int {
 	i:=0
@@ -38,9 +68,9 @@ func (l *List)FindByLambda(lambda func (e interface{}) bool) (e interface{}) {
 		return
 	}
 
-	for n:=l.LastNode();;n=n.pre {
-		if lambda(n.Element) {
-			e=n.Element
+	for n:=l._LastNode();;n=n.pre {
+		if lambda(n.element) {
+			e=n.element
 			return e
 		}
 
@@ -51,43 +81,32 @@ func (l *List)FindByLambda(lambda func (e interface{}) bool) (e interface{}) {
 	return nil
 }
 
-func (l * List)LastNode() (n *_Node) {
-	n=l.Root
+
+
+func (l * List)Last() (e interface{}) {
+	n:=l.Root
 	for {
 		if n==nil  {
-			return n
+			return n.element
 		} else if n.next ==nil {
-			return n
+			return n.element
 		}
 		n=n.next
 	}
 
-	return
+	return n.element
 }
 
-func (l *List)_FindNode(e interface{}) (n *_Node) {
-	for ln:=l.Root;;ln=ln.next {
 
-		if l.EqualFun(ln.Element,e) {
-			return ln
-		}
-
-		if ln.next ==nil {
-			break
-		}
-
-	}
-	return
-}
 
 func (l *List)Add(e interface{}) {
-	n :=NewNode()
-	n.Element =e
+	n := _NewNode()
+	n.element =e
 	if l.Root ==nil {
 		l.Root = n
 	} else {
-		n.pre =l.LastNode()
-		l.LastNode().next =n
+		n.pre =l._LastNode()
+		l._LastNode().next =n
 	}
 }
 
@@ -108,3 +127,5 @@ func (l *List)Remove(e interface{}) {
 		n.next.pre =n.pre
 	}
 }
+
+

@@ -55,7 +55,7 @@ func (r *Runtime)SetVarible(n string,v reflect.Value) {
 
 	//If it didn't find the varible to set in the scope list,must set a new varible in the last scope
 	if e==nil {
-		r.scopes.LastNode().Element.(*Scope).Set(n, v)
+		r.scopes.Last().(*Scope).Set(n, v)
 	} else {
 		s:=e.(*Scope)
 		s.Set(n,v)
