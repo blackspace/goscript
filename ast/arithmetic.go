@@ -11,33 +11,34 @@ type AddExpr struct {
 	Expr2 Expr
 }
 
-func (a  * AddExpr)Eval(r *runtime.Runtime) reflect.Value{
-	v1 :=a.Expr1.Eval(r)
-	v2 :=a.Expr2.Eval(r)
+func (a  * AddExpr)Eval(r *runtime.Runtime) (v reflect.Value,status int){
+	v1,_ :=a.Expr1.Eval(r)
+	v2,_ :=a.Expr2.Eval(r)
 
 	t1:=v1.Type().Kind()
 	t2:=v2.Type().Kind()
+
 
 	switch t1 {
 	case reflect.String:
 		switch t2 {
 		case reflect.String:
-			return reflect.ValueOf(v1.String()+v2.String())
+			return reflect.ValueOf(v1.String()+v2.String()),0
 		case reflect.Int64:
 			s2:=strconv.FormatInt(v2.Int(),10)
-			return reflect.ValueOf(v1.String()+s2)
+			return reflect.ValueOf(v1.String()+s2),0
 		}
 	case reflect.Int64:
 		switch t2 {
 		case reflect.String:
 			s1:=strconv.FormatInt(v1.Int(),10)
-			return reflect.ValueOf(s1+v2.String())
+			return reflect.ValueOf(s1+v2.String()),0
 		case reflect.Int64:
-			return reflect.ValueOf(v1.Int()+v2.Int())
+			return reflect.ValueOf(v1.Int()+v2.Int()),0
 		}
 	}
 
-	return reflect.Value{}
+	return
 }
 
 type SubExpr struct {
@@ -46,10 +47,10 @@ type SubExpr struct {
 }
 
 
-func (s * SubExpr)Eval(r *runtime.Runtime) reflect.Value{
-	v1 :=s.Expr1.Eval(r)
-	v2 :=s.Expr2.Eval(r)
-	return  reflect.ValueOf(v1.Int()-v2.Int())
+func (s * SubExpr)Eval(r *runtime.Runtime) (reflect.Value,int){
+	v1,_ :=s.Expr1.Eval(r)
+	v2,_ :=s.Expr2.Eval(r)
+	return  reflect.ValueOf(v1.Int()-v2.Int()),0
 }
 
 type MultiExpr struct {
@@ -58,10 +59,10 @@ type MultiExpr struct {
 }
 
 
-func (s * MultiExpr)Eval(r *runtime.Runtime) reflect.Value{
-	v1 :=s.Expr1.Eval(r)
-	v2 :=s.Expr2.Eval(r)
-	return  reflect.ValueOf(v1.Int()*v2.Int())
+func (s * MultiExpr)Eval(r *runtime.Runtime) (reflect.Value,int){
+	v1,_ :=s.Expr1.Eval(r)
+	v2,_ :=s.Expr2.Eval(r)
+	return  reflect.ValueOf(v1.Int()*v2.Int()),0
 }
 
 
@@ -71,8 +72,8 @@ type DivExpr struct {
 }
 
 
-func (s * DivExpr)Eval(r *runtime.Runtime) reflect.Value{
-	v1 :=s.Expr1.Eval(r)
-	v2 :=s.Expr2.Eval(r)
-	return  reflect.ValueOf(v1.Int()/v2.Int())
+func (s * DivExpr)Eval(r *runtime.Runtime) (reflect.Value,int){
+	v1,_ :=s.Expr1.Eval(r)
+	v2,_ :=s.Expr2.Eval(r)
+	return  reflect.ValueOf(v1.Int()/v2.Int()),0
 }

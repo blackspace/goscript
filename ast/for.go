@@ -13,7 +13,7 @@ type ForExpr struct {
 }
 
 
-func (e *ForExpr)Eval(r *runtime.Runtime) (v reflect.Value) {
+func (e *ForExpr)Eval(r *runtime.Runtime) (v reflect.Value,status int) {
 	f1:=e.Expr0
 	f2:=e.Expr1
 	f3:=e.Expr2
@@ -26,14 +26,12 @@ func (e *ForExpr)Eval(r *runtime.Runtime) (v reflect.Value) {
 
 	for  {
 		if f2!=nil {
-			if ! f2.Eval(r).Bool() {
+			if v,_:=f2.Eval(r);!v.Bool() {
 				break
 			}
 		}
 
-
-		v=e.Expr3.Eval(r)
-
+		v,_=e.Expr3.Eval(r)
 
 		if f3!=nil {
 			f3.Eval(r)
@@ -43,7 +41,7 @@ func (e *ForExpr)Eval(r *runtime.Runtime) (v reflect.Value) {
 
 	r.EndScope(s)
 
-	return
+	return v,0
 
 }
 

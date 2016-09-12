@@ -9,7 +9,7 @@ type Bool struct  {
       Bool bool
 }
 
-func (n * Bool)Eval(r *runtime.Runtime) reflect.Value {
-	return reflect.ValueOf(n.Bool)
+func (n * Bool)Eval(r *runtime.Runtime) (reflect.Value,int) {
+	return reflect.ValueOf(n.Bool),0
 }
 

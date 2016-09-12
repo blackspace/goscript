@@ -11,13 +11,14 @@ type AssignExpr struct {
 }
 
 
-func (a * AssignExpr)Eval(r *runtime.Runtime) reflect.Value{
-	v :=a.Expr2.Eval(r)
+func (a * AssignExpr)Eval(r *runtime.Runtime) (reflect.Value,int){
+	v2,_ :=a.Expr2.Eval(r)
 
-	n:=a.Expr1.(*VarExpr).Name
+	v1,_:=a.Expr1.(*VarExpr)
+	n:=v1.Name
 
-	r.SetVarible(n,v)
+	r.SetVarible(n,v2)
 
-	return  v
+	return  v2,0
 }
 

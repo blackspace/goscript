@@ -11,11 +11,11 @@ type LessThanExpr struct {
 }
 
 
-func (e * LessThanExpr)Eval(r *runtime.Runtime) reflect.Value{
-	v1:=e.Expr1.Eval(r).Int()
-	v2:=e.Expr2.Eval(r).Int()
+func (e * LessThanExpr)Eval(r *runtime.Runtime) (reflect.Value,int){
+	v1,_:=e.Expr1.Eval(r)
+	v2,_:=e.Expr2.Eval(r)
 
-	return  reflect.ValueOf(v1<v2)
+	return  reflect.ValueOf(v1.Int()<v2.Int()),0
 
 }
 
@@ -25,11 +25,11 @@ type LessEqualExpr struct {
 }
 
 
-func (e * LessEqualExpr)Eval(r *runtime.Runtime) reflect.Value{
-	v1:=e.Expr1.Eval(r).Int()
-	v2:=e.Expr2.Eval(r).Int()
+func (e * LessEqualExpr)Eval(r *runtime.Runtime) (reflect.Value,int){
+	v1,_:=e.Expr1.Eval(r)
+	v2,_:=e.Expr2.Eval(r)
 
-	return  reflect.ValueOf(v1<=v2)
+	return  reflect.ValueOf(v1.Int()<=v2.Int()),0
 
 }
 
@@ -39,11 +39,11 @@ type GreaterThanExpr struct {
 }
 
 
-func (e * GreaterThanExpr)Eval(r *runtime.Runtime) reflect.Value{
-	v1:=e.Expr1.Eval(r).Int()
-	v2:=e.Expr2.Eval(r).Int()
+func (e * GreaterThanExpr)Eval(r *runtime.Runtime) (reflect.Value,int){
+	v1,_:=e.Expr1.Eval(r)
+	v2,_:=e.Expr2.Eval(r)
 
-	return  reflect.ValueOf(v1>v2)
+	return  reflect.ValueOf(v1.Int()>v2.Int()),0
 }
 
 
@@ -53,10 +53,10 @@ type GreaterEqualExpr struct {
 }
 
 
-func (e * GreaterEqualExpr)Eval(r *runtime.Runtime) reflect.Value{
-	v1:=e.Expr1.Eval(r).Int()
-	v2:=e.Expr2.Eval(r).Int()
+func (e * GreaterEqualExpr)Eval(r *runtime.Runtime) (reflect.Value,int){
+	v1,_:=e.Expr1.Eval(r)
+	v2,_:=e.Expr2.Eval(r)
 
-	return  reflect.ValueOf(v1>=v2)
+	return  reflect.ValueOf(v1.Int()>=v2.Int()),0
 
 }

@@ -24,11 +24,15 @@ func TestIfElse(t *testing.T) {
 		if v.Int()!=3 {
 			t.Fail()
 		}
+	}else {
+		t.Fatal(err)
 	}
 
 	if v,err:=vm.Run(`if false&&false { 1 } else { 2 3 }`);err==nil {
 		if v.Int()!=3 {
 			t.Fail()
 		}
+	}else {
+		t.Fatal(err)
 	}
 }

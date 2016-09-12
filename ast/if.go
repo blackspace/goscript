@@ -12,22 +12,27 @@ type IFExpr struct {
 }
 
 
-func (e * IFExpr)Eval(r *runtime.Runtime) (v reflect.Value){
-	v0 :=e.Expr0.Eval(r)
+func (e * IFExpr)Eval(r *runtime.Runtime) (v reflect.Value,status int){
+
+	v0,_ :=e.Expr0.Eval(r)
 
 	if v0.Bool() {
 		s:=r.BeginScope()
-		v=e.Expr1.Eval(r)
+		v,_=e.Expr1.Eval(r)
 		r.EndScope(s)
 	} else {
+		if e.Expr2==nil {
+			return
+		}
+
 		s:=r.BeginScope()
-		v=e.Expr2.Eval(r)
+		v,_=e.Expr2.Eval(r)
 		r.EndScope(s)
 	}
 
 
 
-	return
+	return v,0
 }
 
 

@@ -6,7 +6,7 @@ import (
 )
 
 type Expr interface {
-      	Eval(r *runtime.Runtime) reflect.Value
+      	Eval(r *runtime.Runtime) (reflect.Value,int)
 }
 
 

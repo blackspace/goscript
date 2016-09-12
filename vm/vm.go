@@ -17,11 +17,14 @@ func NewVM() (v *VM) {
 }
 
 func (v * VM)Run(src string) (result reflect.Value,err error) {
-	exprs,err :=parser.ParseString(src)
-
-	for _,e:= range exprs {
-		result=e.Eval(v.Runtime)
+	if exprs,err :=parser.ParseString(src);err==nil {
+		for _,e:= range exprs {
+			result,_=e.Eval(v.Runtime)
+		}
+	} else {
+		return result,err
 	}
 
 	return
+
 }

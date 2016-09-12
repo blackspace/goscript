@@ -1,11 +1,6 @@
 package mycontainer
 
 
-type List struct {
-	Root *_Node
-	EqualFun func (interface{},interface{}) bool
-}
-
 type _Node struct {
 	pre     *_Node
 	next    *_Node
@@ -14,6 +9,17 @@ type _Node struct {
 
 func _NewNode() *_Node {
 	return &_Node{}
+}
+
+
+type List struct {
+	Root *_Node
+	EqualFun func (interface{},interface{}) bool
+}
+
+
+func NewList() *List {
+	return &List{}
 }
 
 func (l *List)_FindNode(e interface{}) (n *_Node) {
@@ -43,6 +49,19 @@ func (l * List)_LastNode() (n *_Node) {
 	}
 
 	return
+}
+
+
+func (l * List)_RemoveNode(n *_Node) {
+	if n.pre !=nil {
+		n.pre.next = n.next
+	} else {
+		l.Root=n.next
+	}
+
+	if n.next !=nil {
+		n.next.pre =n.pre
+	}
 }
 
 
@@ -117,15 +136,23 @@ func (l *List)Remove(e interface{}) {
 		return
 	}
 
-	if n.pre !=nil {
-		n.pre.next = n.next
-	} else {
-		l.Root=n.next
-	}
+	l._RemoveNode(n)
 
-	if n.next !=nil {
-		n.next.pre =n.pre
-	}
 }
 
+func (l *List)Push(e interface{}) {
+	l.Add(e)
+}
+
+
+func (l *List)Pop()  (e interface{}) {
+	n:=l._LastNode()
+
+	e=n.element
+
+	l._RemoveNode(n)
+
+	return
+
+}
 

@@ -12,17 +12,23 @@ type BlockExpr struct {
 }
 
 
-func (b * BlockExpr)Eval(r *runtime.Runtime) (v reflect.Value){
+func (b * BlockExpr)Eval(r *runtime.Runtime) (v reflect.Value,status int) {
 
 
 	s:=r.BeginScope()
 
 	for _,e:=range b.Exprs {
-		v=e.Eval(r)
+		if _,ok:=e.(*BreakExpr);ok {
+			return
+		}
+
+		v,_=e.Eval(r)
+
+
 	}
 
 	r.EndScope(s)
 
-	return  v
+	return  v,0
 }
 

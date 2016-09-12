@@ -8,8 +8,8 @@ import (
 type FuncExpr struct {
 }
 
-func (b * FuncExpr)Eval(r *runtime.Runtime) (v reflect.Value){
-	return  v
+func (b * FuncExpr)Eval(r *runtime.Runtime) (v reflect.Value,status int){
+	return  v,0
 }
 
 

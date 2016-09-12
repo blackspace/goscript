@@ -21,10 +21,10 @@ func TestMultiExprExpr(t *testing.T) {
 	var vm = NewVM()
 
 	s:=`
-a=1
+	a=1
 
 
-a=a+3
+	a=a+3
 
 5
 

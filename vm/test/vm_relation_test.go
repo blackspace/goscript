@@ -12,23 +12,31 @@ func TestRelation(t *testing.T) {
 		if v.Bool()!=true {
 			t.Fail()
 		}
+	}else {
+		t.Fatal(err)
 	}
 
 	if v,err:=vm.Run("2<=2");err==nil {
 		if v.Bool()!=true {
 			t.Fail()
 		}
+	}else {
+		t.Fatal(err)
 	}
 
 	if v,err:=vm.Run("3>2");err==nil {
 		if v.Bool()!=true {
 			t.Fail()
 		}
+	}else {
+		t.Fatal(err)
 	}
 
 	if v,err:=vm.Run("2<=2");err==nil {
 		if v.Bool()!=true {
 			t.Fail()
 		}
+	}else {
+		t.Fatal(err)
 	}
 }

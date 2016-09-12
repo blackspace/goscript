@@ -66,6 +66,10 @@ block_expr : '{' exprs '}'
     {
         $$=&ast.BlockExpr{$2}
     }
+    | '{' '}'
+    {
+        $$=&ast.BlockExpr{}
+    }
 
 stmt_expr: if_expr
     |for_expr;
@@ -102,6 +106,11 @@ for_expr : FOR assign_expr ';' simple_expr ';' increment_decrement_expr block_ex
     {
           $$=&ast.ForExpr{nil,nil,nil,$4}
     }
+    |FOR  assign_expr ';' ';' increment_decrement_expr  block_expr
+    {
+           $$=&ast.ForExpr{$2,nil,nil,$6}
+    };
+
 
 
 func_expr : FUNCTION '('  ')' block_expr

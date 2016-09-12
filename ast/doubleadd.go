@@ -10,7 +10,7 @@ type SubfixDoubleAddExpr struct {
 }
 
 
-func (e *SubfixDoubleAddExpr)Eval(r *runtime.Runtime) (v reflect.Value) {
+func (e *SubfixDoubleAddExpr)Eval(r *runtime.Runtime) (v reflect.Value,status int) {
 	name :=e.Expr0.(*VarExpr).Name
 
 	if v,ok:=r.GetVarible(name);ok{
@@ -19,5 +19,5 @@ func (e *SubfixDoubleAddExpr)Eval(r *runtime.Runtime) (v reflect.Value) {
 		r.SetVarible(name,reflect.ValueOf(n))
 	}
 	v,_=r.GetVarible(name);
-	return
+	return v,0
 }
