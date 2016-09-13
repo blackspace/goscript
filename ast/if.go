@@ -18,7 +18,7 @@ func (e * IFExpr)Eval(r *runtime.Runtime) (v reflect.Value,status int){
 
 	if v0.Bool() {
 		s:=r.BeginScope()
-		v,_=e.Expr1.Eval(r)
+		v,status=e.Expr1.Eval(r)
 		r.EndScope(s)
 	} else {
 		if e.Expr2==nil {
@@ -26,13 +26,12 @@ func (e * IFExpr)Eval(r *runtime.Runtime) (v reflect.Value,status int){
 		}
 
 		s:=r.BeginScope()
-		v,_=e.Expr2.Eval(r)
+		v,status=e.Expr2.Eval(r)
 		r.EndScope(s)
 	}
 
 
-
-	return v,0
+	return v,status
 }
 
 

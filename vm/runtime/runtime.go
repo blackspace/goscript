@@ -3,6 +3,7 @@ package runtime
 import (
 	"reflect"
 	. "goscript/mycontainer"
+	"errors"
 )
 
 type Runtime struct {
@@ -31,15 +32,17 @@ func (r *Runtime)GetVarible(n string) (v reflect.Value,ok bool) {
 	e:=r.scopes.FindByLambda(func (e interface{}) bool {
 		if _,ok=e.(*Scope).Get(n);ok {
 			return true
+		} else {
+			return false
 		}
-		return false
+
 	})
 
-	s:=e.(*Scope)
+	if e==nil {
+		panic(errors.New("Can't get the varible:"+n))
+	}
 
-	v,ok=s.Get(n)
-
-	return
+	return	e.(*Scope).Get(n)
 }
 
 func (r *Runtime)SetVarible(n string,v reflect.Value) {

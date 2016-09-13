@@ -12,7 +12,7 @@ type VarExpr struct {
 
 func (s * VarExpr)Eval(r *runtime.Runtime) (reflect.Value,int) {
 	if v,ok:=r.GetVarible(s.Name);ok {
-		return v,0
+		return v,OK
 	} else {
 		panic(errors.New("The "+s.Name+" varible is not existing"))
 	}

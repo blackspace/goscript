@@ -31,7 +31,11 @@ func (e *ForExpr)Eval(r *runtime.Runtime) (v reflect.Value,status int) {
 			}
 		}
 
-		v,_=e.Expr3.Eval(r)
+		v,status=e.Expr3.Eval(r)
+
+		if status==BREAK {
+			return
+		}
 
 		if f3!=nil {
 			f3.Eval(r)

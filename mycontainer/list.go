@@ -84,7 +84,7 @@ func (l *List)Len() int {
 func (l *List)FindByLambda(P func (e interface{}) bool) (e interface{}) {
 
 	if l.Len()==0 {
-		return
+		return nil
 	}
 
 	for n:=l._LastNode();;n=n.pre {

@@ -14,21 +14,24 @@ type BlockExpr struct {
 
 func (b * BlockExpr)Eval(r *runtime.Runtime) (v reflect.Value,status int) {
 
-
 	s:=r.BeginScope()
 
 	for _,e:=range b.Exprs {
-		if _,ok:=e.(*BreakExpr);ok {
-			return
+		tv,status:=e.Eval(r)
+
+		if status==BREAK {
+			if true {
+				return v,status
+			} else {
+				return reflect.ValueOf(nil),status
+			}
 		}
 
-		v,_=e.Eval(r)
-
-
+		v=tv
 	}
 
 	r.EndScope(s)
 
-	return  v,0
+	return  v,OK
 }
 
