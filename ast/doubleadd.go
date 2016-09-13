@@ -15,6 +15,7 @@ func (e *SubfixDoubleAddExpr)Eval(r *runtime.Runtime) (v reflect.Value,status in
 
 	if v,ok:=r.GetVarible(name);ok{
 		n:=v.Int()
+
 		n++
 		r.SetVarible(name,reflect.ValueOf(n))
 	}

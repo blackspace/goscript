@@ -8,11 +8,13 @@ import (
 func TestDoubleSubExpress(t *testing.T) {
 	var vm = NewVM()
 
-	val, err := vm.Run("a=1" )
+	val, err := vm.Run("a=2" )
 
 	if err != nil {
 		t.Error(err)
 	}
+
+	val, err = vm.Run("a--" )
 
 	val, err = vm.Run("a--" )
 

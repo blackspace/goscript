@@ -108,7 +108,7 @@ for_expr : FOR assign_expr ';' simple_expr ';' increment_decrement_expr block_ex
     }
     |FOR  assign_expr ';' ';' increment_decrement_expr  block_expr
     {
-           $$=&ast.ForExpr{$2,nil,nil,$6}
+           $$=&ast.ForExpr{$2,nil,$5,$6}
     };
 
 

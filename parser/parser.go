@@ -640,7 +640,7 @@ yydefault:
 		yyDollar = yyS[yypt-6 : yypt+1]
 		//line parser/parser.go.y:110
 		{
-			yyVAL.Expr = &ast.ForExpr{yyDollar[2].Expr, nil, nil, yyDollar[6].Expr}
+			yyVAL.Expr = &ast.ForExpr{yyDollar[2].Expr, nil, yyDollar[5].Expr, yyDollar[6].Expr}
 		}
 	case 23:
 		yyDollar = yyS[yypt-4 : yypt+1]
