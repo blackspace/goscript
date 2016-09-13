@@ -38,11 +38,8 @@ func TestBreakIF1(t *testing.T) {
 	vm:=vm.NewVM()
 
 	if v,err:=vm.Run("if true { 3 break }");err==nil {
-		if v.IsValid() {
-			if v.Int()!=3 {
-				t.Fail()
-			}
-
+		if v.Int()!=3 {
+			t.Fail()
 		}
 	} else {
 		t.Fail()
@@ -52,12 +49,9 @@ func TestBreakIF1(t *testing.T) {
 func TestBreakFor(t *testing.T) {
 	vm:=vm.NewVM()
 
-	if v,err:=vm.Run("for a=1;;a++ { if a>2 { break }  }");err==nil {
+	if v,err:=vm.Run("for a=1;;a++ { if a>3 { break }  }");err==nil {
 		if v.IsValid() {
-			if v.Int()!=1 {
-				t.Fail()
-			}
-
+			t.Fail()
 		}
 	} else {
 		t.Fail()

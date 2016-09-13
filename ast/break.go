@@ -9,7 +9,7 @@ type BreakExpr struct  {
 }
 
 func (n * BreakExpr)Eval(r *runtime.Runtime) (reflect.Value,int) {
-	return reflect.ValueOf(nil),BREAK
+	return reflect.Value{},BREAK
 }
 
 
