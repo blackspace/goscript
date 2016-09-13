@@ -41,21 +41,23 @@ func init() {
 	Patterns=append(Patterns,&WordPattern{PatternBase{Regexp:r,Token:WORD}})
 }
 
-func ParseWord(w string) (Token int,v interface{}) {
+func ParseWord(w string) (Token int,v interface{},ok bool) {
 	switch w {
 	case "true":
-		return BOOL,&ast.Bool{Bool:true}
+		return BOOL,&ast.Bool{Bool:true},true
 	case "false":
-		return BOOL,&ast.Bool{Bool:false}
+		return BOOL,&ast.Bool{Bool:false},true
 	case "if":
-		return IF,nil
+		return IF,nil,true
 	case "else":
-		return ELSE,nil
+		return ELSE,nil,true
 	case "for":
-		return FOR,nil
+		return FOR,nil,true
 	case "break":
-		return BREAK,nil
+		return BREAK,nil,true
+	case "func":
+		return FUNCTION,nil,true
 	}
-	return VARIABLE,&ast.VarExpr{Name:w}
+	return
 }
 

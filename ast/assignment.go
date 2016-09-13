@@ -14,7 +14,7 @@ type AssignExpr struct {
 func (a * AssignExpr)Eval(r *runtime.Runtime) (reflect.Value,int){
 	v2,_ :=a.Expr2.Eval(r)
 
-	v1,_:=a.Expr1.(*VarExpr)
+	v1,_:=a.Expr1.(*Variable)
 	n:=v1.Name
 
 	r.SetVarible(n,v2)

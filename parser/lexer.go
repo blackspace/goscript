@@ -119,23 +119,27 @@ t:
 			return OR
 		case WORD:
 			w :=v.(string)
-			switch t,v:=ParseWord(w);t {
-			case VARIABLE:
-				lval.Expr=v.(*ast.VarExpr)
-				return t
-			case BOOL:
-				lval.Expr=v.(*ast.Bool)
-				return t
-			case IF:
-				return IF
-			case FOR:
-				return FOR
-			case BREAK:
-				return BREAK
-			default:
-				return t
+			t,v,ok:=ParseWord(w)
 
+			if ok {
+				switch t {
+				case BOOL:
+					lval.Expr = v.(*ast.Bool)
+					return t
+				case IF:
+					return IF
+				case ELSE:
+					return ELSE
+				case FOR:
+					return FOR
+				case BREAK:
+					return BREAK
+				}
+			} else {
+				lval.String = w
+				return WORD
 			}
+
 		case BLANKSPACE:
 			l.Buf=""
 			goto t

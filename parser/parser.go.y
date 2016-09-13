@@ -13,14 +13,27 @@ var ParseResult []ast.Expr
 
 %union {
     Expr ast.Expr
+    Params ast.Params
     Exprs []ast.Expr
+    String string
+    Strings []string
 }
 
-%type <Expr> expr assign_expr simple_expr if_expr for_expr stmt_expr block_expr increment_decrement_expr func_expr
-%type <Exprs> exprs  top
+%type <Expr> expr assign_expr simple_expr var_expr
+%type <Expr> if_expr for_expr stmt_expr block_expr increment_decrement_expr
 
-%token <Expr> NUMBER VARIABLE BOOL STRING BREAK
-%token BLANKSPACE LFCR WORD IF FOR SWITCH FUNCTION CLASS DOUBLEADD DOUBLESUB
+
+%type <Expr> func_define_expr  func_call_expr value_expr
+%type <String> func_name param
+%type <Strings> params
+
+
+%type <Exprs> exprs  top values_expr
+
+
+%token <Expr> NUMBER BOOL STRING BREAK
+%token <String> WORD
+%token BLANKSPACE LFCR  IF FOR SWITCH FUNCTION CLASS DOUBLEADD DOUBLESUB
 
 %nonassoc '>' GREATEREQUAL '<' LESSEQUAL
 
@@ -50,17 +63,55 @@ exprs :expr
     };
 
 
-expr : BREAK
-    {
-        $$=&ast.BreakExpr{}
-    }
-    |simple_expr
+expr : simple_expr
     |stmt_expr
     |assign_expr
     |increment_decrement_expr
-    |func_expr
+    |func_define_expr
     |block_expr;
 
+func_define_expr :  FUNCTION func_name '('  ')' block_expr
+    {
+        $$=&ast.FuncDefineExpr{$2,nil,$5}
+    }
+    |FUNCTION  func_name '(' params ')' block_expr
+    {
+        $$=&ast.FuncDefineExpr{$2,$4,$6}
+    };
+
+func_call_expr : func_name '(' ')'
+    {
+        $$=&ast.FuncCallExpr{}
+    }
+    |func_name '(' values_expr ')'
+    {
+        $$=&ast.FuncCallExpr{}
+    };
+
+func_name: WORD;
+
+params: param
+    {
+        $$=append(make([]string,0),$1)
+    }
+    | params ',' param
+    {
+        $$=append($1,$3)
+    };
+
+param: WORD;
+
+values_expr: value_expr
+    {
+
+        $$=append(make([]ast.Expr,0),$1)
+    }
+    | values_expr ',' value_expr
+    {
+        $$=append($1,$3)
+    };
+
+value_expr: simple_expr;
 
 block_expr : '{' exprs '}'
     {
@@ -71,20 +122,24 @@ block_expr : '{' exprs '}'
         $$=&ast.BlockExpr{}
     }
 
-stmt_expr: if_expr
+stmt_expr: BREAK
+       {
+           $$=&ast.BreakExpr{}
+       }
+    |if_expr
     |for_expr;
 
 
-assign_expr: VARIABLE '=' expr
+assign_expr: var_expr '=' expr
     {
         $$=&ast.AssignExpr{$1,$3}
     };
 
-increment_decrement_expr: VARIABLE DOUBLEADD
+increment_decrement_expr: var_expr DOUBLEADD
     {
         $$=&ast.SubfixDoubleAddExpr{$1}
     }
-    |VARIABLE DOUBLESUB
+    |var_expr DOUBLESUB
     {
            $$=&ast.SubfixDoubleSubExpr{$1}
     };
@@ -113,11 +168,6 @@ for_expr : FOR assign_expr ';' simple_expr ';' increment_decrement_expr block_ex
 
 
 
-func_expr : FUNCTION '('  ')' block_expr
-    {
-        $$=&ast.FuncExpr{}
-    };
-
 if_expr : IF simple_expr block_expr
     {
         $$=&ast.IFExpr{$2,$3,nil}
@@ -130,7 +180,7 @@ if_expr : IF simple_expr block_expr
     };
 
 
-simple_expr: BOOL|NUMBER|STRING |VARIABLE
+simple_expr: BOOL|NUMBER|STRING | var_expr | func_call_expr
     |simple_expr AND simple_expr
     {
         $$=&ast.ANDExpr{$1,$3}
@@ -171,6 +221,13 @@ simple_expr: BOOL|NUMBER|STRING |VARIABLE
     {
         $$=&ast.LessEqualExpr{$1,$3}
     };
+
+var_expr : WORD
+    {
+        $$=&ast.Variable{$1}
+    };
+
+
 %%
 
 

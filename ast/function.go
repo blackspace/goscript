@@ -5,11 +5,25 @@ import (
 	"goscript/vm/runtime"
 )
 
-type FuncExpr struct {
+type Params []Variable
+
+type FuncDefineExpr struct {
+	Name string
+	Params []string
+	Body  Expr
 }
 
-func (b * FuncExpr)Eval(r *runtime.Runtime) (v reflect.Value,status int){
-	return  v,0
+func (f * FuncDefineExpr)Eval(r *runtime.Runtime) (v reflect.Value,status int){
+	return
+}
+
+type FuncCallExpr struct {
+	Name string
+	Params []reflect.Value
+}
+
+func (f * FuncCallExpr)Eval(r *runtime.Runtime) (v reflect.Value,status int){
+	return
 }
 
 

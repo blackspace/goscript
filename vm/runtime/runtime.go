@@ -8,6 +8,7 @@ import (
 
 type Runtime struct {
 	scopes List
+	functions List
 }
 
 func NewRuntime() (r *Runtime) {
