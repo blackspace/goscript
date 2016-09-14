@@ -20,12 +20,9 @@ func (f * FuncDefineExpr)Eval(r *runtime.Runtime) (v reflect.Value,status int){
 
 			if f.Params!=nil {
 				for i,p:=range f.Params{
-
 					if i<len(in) { // The  count of passing value to the called function less the params count
 						r.SetVarible(p,in[i])
 					}
-
-
 				}
 			}
 

@@ -8,6 +8,7 @@ import (
 const (
 	OK=iota
 	BREAK
+	RETURN
 )
 
 type Expr interface {

@@ -140,6 +140,8 @@ t:
 					return FOR
 				case BREAK:
 					return BREAK
+				case RETURN:
+					return RETURN
 				case FUNCTION:
 					return FUNCTION
 				}

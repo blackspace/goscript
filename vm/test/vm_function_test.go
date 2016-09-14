@@ -5,7 +5,7 @@ import (
 	"goscript/vm"
 )
 
-func TestSimpleFunction(t *testing.T) {
+func TestFunctionSimple(t *testing.T) {
 	vm:=vm.NewVM()
 
 	vm.Run("func a() {  a=1 a++ a++  }")
@@ -19,7 +19,7 @@ func TestSimpleFunction(t *testing.T) {
 }
 
 
-func TestHasParamsFunction(t *testing.T) {
+func TestFunctionHasParams(t *testing.T) {
 	vm:=vm.NewVM()
 
 	vm.Run("func a(a,b,c) {  b  }")
@@ -31,3 +31,29 @@ func TestHasParamsFunction(t *testing.T) {
 		t.Fail()
 	}
 }
+
+func TestFunctionBreak(t *testing.T) {
+	vm:=vm.NewVM()
+
+	vm.Run("func a(a,b,c) {  a b break c  }")
+
+	v,_:=vm.Run("a(3,4,5)")
+
+	if v.Int()!=4 {
+		t.Fail()
+	}
+}
+
+func TestFunctionReturn(t *testing.T) {
+	vm:=vm.NewVM()
+
+	vm.Run("func a(a,b,c) {  a b return c  }")
+
+	v,_:=vm.Run("a(3,4,5)")
+
+	if v.Int()!=5 {
+		t.Fail()
+	}
+}
+
+

@@ -55,6 +55,8 @@ func ParseWord(w string) (Token int,v interface{},ok bool) {
 		return FOR,nil,true
 	case "break":
 		return BREAK,nil,true
+	case "return":
+		return RETURN,nil,true
 	case "func":
 		return FUNCTION,nil,true
 	}

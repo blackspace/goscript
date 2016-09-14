@@ -19,13 +19,20 @@ func (b * BlockExpr)Eval(r *runtime.Runtime) (v reflect.Value,status int) {
 	for _,e:=range b.Exprs {
 		tv,status:=e.Eval(r)
 
-		if status==BREAK {
-			if true {
-				return v,status
-			} else {
-				return reflect.ValueOf(nil),status
+		switch status {
+		case BREAK:
+			if status==BREAK {
+				if !v.IsValid() {
+					return reflect.ValueOf(nil),status
+				} else {
+					return v,status
+				}
 			}
+		case RETURN:
+			return tv,OK
 		}
+
+
 
 		v=tv
 	}

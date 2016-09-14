@@ -31,7 +31,7 @@ var ParseResult []ast.Expr
 %type <Exprs> exprs  top values_expr
 
 
-%token <Expr> NUMBER BOOL STRING BREAK
+%token <Expr> NUMBER BOOL STRING BREAK RETURN
 %token <String> WORD
 %token BLANKSPACE LFCR  IF FOR SWITCH FUNCTION CLASS DOUBLEADD DOUBLESUB
 
@@ -126,6 +126,10 @@ stmt_expr: BREAK
        {
            $$=&ast.BreakExpr{}
        }
+    |RETURN simple_expr
+    {
+        $$=&ast.ReturnExpr{$2}
+    }
     |if_expr
     |for_expr;
 
