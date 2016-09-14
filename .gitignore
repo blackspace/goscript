@@ -1,3 +1,4 @@
 goscript.iml
 .idea
 *.out
+.vscode
