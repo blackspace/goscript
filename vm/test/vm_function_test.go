@@ -56,4 +56,20 @@ func TestFunctionReturn(t *testing.T) {
 	}
 }
 
+func TestFunctionEmbedCall(t *testing.T) {
+	vm:=vm.NewVM()
+
+	vm.Run("func a(a,b,c) {  a b return c  }")
+
+
+	vm.Run("func b() { a(3,4,5)+1 }")
+
+	v,_:=vm.Run("b()")
+
+	if v.Int()!=6 {
+		t.Fail()
+	}
+}
+
+
 
