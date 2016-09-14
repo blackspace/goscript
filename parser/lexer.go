@@ -80,11 +80,17 @@ t:
 				return '-'
 			}
 		case '*','/','=':
-			return int(v.(rune))
+			return p.GetToken()
 		case '{','}':
-			return int(v.(rune))
+			return p.GetToken()
+		case '(',')':
+			return p.GetToken()
+		case '[',']':
+			return p.GetToken()
 		case ';':
-			return int(v.(rune))
+			return p.GetToken()
+		case ',':
+			return p.GetToken()
 		case '>':
 			r, _, err := l.Reader.ReadRune()
 
@@ -134,6 +140,8 @@ t:
 					return FOR
 				case BREAK:
 					return BREAK
+				case FUNCTION:
+					return FUNCTION
 				}
 			} else {
 				lval.String = w

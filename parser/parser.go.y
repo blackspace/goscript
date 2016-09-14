@@ -81,11 +81,11 @@ func_define_expr :  FUNCTION func_name '('  ')' block_expr
 
 func_call_expr : func_name '(' ')'
     {
-        $$=&ast.FuncCallExpr{}
+        $$=&ast.FuncCallExpr{Name:$1}
     }
     |func_name '(' values_expr ')'
     {
-        $$=&ast.FuncCallExpr{}
+        $$=&ast.FuncCallExpr{$1,$3}
     };
 
 func_name: WORD;

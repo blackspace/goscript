@@ -610,13 +610,13 @@ yydefault:
 		yyDollar = yyS[yypt-3 : yypt+1]
 		//line parser/parser.go.y:83
 		{
-			yyVAL.Expr = &ast.FuncCallExpr{}
+			yyVAL.Expr = &ast.FuncCallExpr{Name: yyDollar[1].String}
 		}
 	case 13:
 		yyDollar = yyS[yypt-4 : yypt+1]
 		//line parser/parser.go.y:87
 		{
-			yyVAL.Expr = &ast.FuncCallExpr{}
+			yyVAL.Expr = &ast.FuncCallExpr{yyDollar[1].String, yyDollar[3].Exprs}
 		}
 	case 15:
 		yyDollar = yyS[yypt-1 : yypt+1]

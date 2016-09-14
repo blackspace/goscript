@@ -68,3 +68,38 @@ func (r *Runtime)SetVarible(n string,v reflect.Value) {
 
 	return
 }
+
+
+type functionNode struct {
+	name string
+	function interface{}
+}
+
+func (r*Runtime)SetFunction(n string,f interface{}){
+	F:=reflect.ValueOf(f)
+
+	if F.Kind()==reflect.Func {
+		r.functions.Add(functionNode{n,f})
+
+	} else {
+		panic(errors.New("The SetFunction() need a value of function"))
+	}
+}
+
+
+func (r*Runtime)GetFunction(n string) interface{}  {
+	elm:=r.functions.FindByLambda(func(e interface{}) bool {
+		if e.(functionNode).name==n {
+			return true
+		}
+		return false
+	})
+
+
+	if elm==nil {
+		panic(errors.New("Can't Find the "+n+" function"))
+	}
+
+	return elm.(functionNode).function
+}
+
