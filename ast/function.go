@@ -17,7 +17,7 @@ type FuncDefineExpr struct {
 
 type _Function func(in []reflect.Value) (reflect.Value,int)
 
-func (f * FuncDefineExpr)Eval(r *runtime.Runtime) (v reflect.Value,status int){
+func (f * FuncDefineExpr)Eval(r *runtime.Runtime) (reflect.Value,int){
 	r.SetFunction(f.Name,func(f * FuncDefineExpr) _Function {
 		return func(in []reflect.Value) (reflect.Value,int) {
 			s:=r.BeginScope()
@@ -38,7 +38,7 @@ func (f * FuncDefineExpr)Eval(r *runtime.Runtime) (v reflect.Value,status int){
 		}
 	}(f))
 
-	return
+	return reflect.Value{},OK
 }
 
 type FuncCallExpr struct {

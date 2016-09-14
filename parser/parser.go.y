@@ -24,7 +24,9 @@ var ParseResult []ast.Expr
 
 
 %type <Expr> func_define_expr  func_call_expr value_expr
-%type <String> func_name param
+%type <Expr> class_expr method_call_expr member_set_expr
+%type <String> func_name class_name method_name member_name
+%type <String> param
 %type <Strings> params
 
 
@@ -33,7 +35,7 @@ var ParseResult []ast.Expr
 
 %token <Expr> NUMBER BOOL STRING BREAK RETURN
 %token <String> WORD
-%token BLANKSPACE LFCR  IF FOR SWITCH FUNCTION CLASS DOUBLEADD DOUBLESUB
+%token BLANKSPACE LFCR  IF FOR SWITCH FUNCTION CLASS DOUBLEADD DOUBLESUB CLASS
 
 %nonassoc '>' GREATEREQUAL '<' LESSEQUAL
 
@@ -66,9 +68,26 @@ exprs :expr
 expr : simple_expr
     |stmt_expr
     |assign_expr
+    |member_set_expr
     |increment_decrement_expr
     |func_define_expr
-    |block_expr;
+    |block_expr
+    |class_expr;
+
+class_expr : CLASS class_name '{' exprs '}'
+    {
+        $$=&ast.Class{}
+    };
+
+method_call_expr: var_expr '.' method_name '(' ')'
+     |var_expr '.' method_name '(' values_expr ')'
+
+
+member_set_expr: var_expr '.' member_name '=' expr
+
+class_name: WORD;
+method_name: WORD;
+member_name: WORD;
 
 func_define_expr :  FUNCTION func_name '('  ')' block_expr
     {
@@ -184,7 +203,7 @@ if_expr : IF simple_expr block_expr
     };
 
 
-simple_expr: BOOL|NUMBER|STRING | var_expr | func_call_expr
+simple_expr: BOOL|NUMBER|STRING | var_expr | func_call_expr | method_call_expr
     |simple_expr AND simple_expr
     {
         $$=&ast.ANDExpr{$1,$3}
