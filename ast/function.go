@@ -13,9 +13,13 @@ type FuncDefineExpr struct {
 	Body  Expr
 }
 
+
+
+type _Function func(in []reflect.Value) (reflect.Value,int)
+
 func (f * FuncDefineExpr)Eval(r *runtime.Runtime) (v reflect.Value,status int){
-	r.SetFunction(f.Name,func(f * FuncDefineExpr) interface{} {
-		return func(in []reflect.Value) (interface{},int) {
+	r.SetFunction(f.Name,func(f * FuncDefineExpr) _Function {
+		return func(in []reflect.Value) (reflect.Value,int) {
 			s:=r.BeginScope()
 
 			if f.Params!=nil {
@@ -43,19 +47,16 @@ type FuncCallExpr struct {
 }
 
 func (f * FuncCallExpr)Eval(r *runtime.Runtime) (v reflect.Value,status int){
-	F:=reflect.ValueOf(r.GetFunction(f.Name))
-
+	F:=r.GetFunction(f.Name).(_Function)
 
 
 	if f.Params==nil {
 
-		vs:=make([]reflect.Value,0,10)
+		in:=make([]reflect.Value,0,10)
 
-		in :=[]reflect.Value{reflect.ValueOf(vs)}
+		v,status=F(in)
 
-		result:=F.Call(in)
-
-		return result[0].Interface().(reflect.Value),int(result[1].Int())
+		return
 	} else {
 
 		vs:=make([]reflect.Value,0,10)
@@ -65,11 +66,9 @@ func (f * FuncCallExpr)Eval(r *runtime.Runtime) (v reflect.Value,status int){
 			vs=append(vs,v)
 		}
 
-		in :=[]reflect.Value{reflect.ValueOf(vs)}
+		v,status=F(vs)
 
-		result:=F.Call(in)
-
-		return result[0].Interface().(reflect.Value),int(result[1].Int())
+		return
 
 	}
 
