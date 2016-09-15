@@ -24,18 +24,21 @@ var ParseResult []ast.Expr
 
 
 %type <Expr> func_define_expr  func_call_expr value_expr
-%type <Expr> class_expr method_call_expr member_set_expr
-%type <String> func_name class_name method_name member_name
+%type <Expr> class_expr inclass_expr inmethod_expr
+%type <Expr> method_call_expr attribute_set_expr method_define_expr attribute_define_expr
+%type <String> func_name class_name method_name attribute_name
 %type <String> param
 %type <Strings> params
 
 
-%type <Exprs> exprs  top values_expr
+%type <Exprs> exprs  top
+%type <Exprs> values_expr inclass_exprs inmethod_exprs
 
 
 %token <Expr> NUMBER BOOL STRING BREAK RETURN
 %token <String> WORD
-%token BLANKSPACE LFCR  IF FOR SWITCH FUNCTION CLASS DOUBLEADD DOUBLESUB CLASS
+%token BLANKSPACE LFCR  IF FOR SWITCH DOUBLEADD DOUBLESUB DOUBLEAT
+%token FUNCTION CLASS DEF END DO
 
 %nonassoc '>' GREATEREQUAL '<' LESSEQUAL
 
@@ -46,7 +49,6 @@ var ParseResult []ast.Expr
 %right '='
 %left '+' '-'
 %left '*' '/'
-
 
 %%
 
@@ -65,31 +67,76 @@ exprs :expr
     };
 
 
+class_expr : CLASS class_name '{'  inclass_exprs '}'
+    {
+        $$=&ast.Class{}
+    };
+
+inclass_expr: simple_expr|stmt_expr|assign_expr|attribute_set_expr
+            |increment_decrement_expr|func_define_expr |block_expr
+            |class_expr | method_define_expr
+
+inclass_exprs: inclass_expr
+    {
+       $$=append(make([]ast.Expr,0),$1)
+    }
+    |inclass_exprs inclass_expr
+    {
+       $$=append($1,$2)
+    };
+
+method_define_expr: DEF method_name '(' ')' '{' inmethod_exprs '}'
+    {
+        $$=&ast.Method{}
+    };
+    |DEF method_name '(' params ')' '{' inmethod_exprs '}'
+    {
+        $$=&ast.Method{}
+    };
+
+inmethod_expr:simple_expr|stmt_expr|assign_expr|attribute_set_expr
+        |increment_decrement_expr |block_expr | attribute_define_expr;
+
+inmethod_exprs:inmethod_expr
+        {
+            $$=append(make([]ast.Expr,0),$1)
+        }
+        |inmethod_exprs inmethod_expr
+        {
+            $$=append($1,$2)
+        };
+
+attribute_define_expr: '@' attribute_name '=' expr
+      {
+          $$=&ast.Attribute{}
+      }
+      | DOUBLEAT attribute_name '=' expr
+      {
+          $$=&ast.ClassAttribute{}
+      };
+
+
+method_call_expr:  var_expr '.' method_name '('   ')'
+      | var_expr '.' method_name '(' values_expr  ')';
+attribute_set_expr: var_expr '.' attribute_name '=' expr;
+
+class_name: WORD;
+method_name: WORD;
+attribute_name: WORD;
+
+
+////////////////////////////////////////////////////////////////////////////////////////
+
 expr : simple_expr
     |stmt_expr
     |assign_expr
-    |member_set_expr
+    |attribute_set_expr
     |increment_decrement_expr
     |func_define_expr
     |block_expr
     |class_expr;
 
-class_expr : CLASS class_name '{' exprs '}'
-    {
-        $$=&ast.Class{}
-    };
-
-method_call_expr: var_expr '.' method_name '(' ')'
-     |var_expr '.' method_name '(' values_expr ')'
-
-
-member_set_expr: var_expr '.' member_name '=' expr
-
-class_name: WORD;
-method_name: WORD;
-member_name: WORD;
-
-func_define_expr :  FUNCTION func_name '('  ')' block_expr
+func_define_expr : FUNCTION  func_name '(' ')' block_expr
     {
         $$=&ast.FuncDefineExpr{$2,nil,$5}
     }
@@ -100,7 +147,7 @@ func_define_expr :  FUNCTION func_name '('  ')' block_expr
 
 func_call_expr : func_name '(' ')'
     {
-        $$=&ast.FuncCallExpr{Name:$1}
+        $$=&ast.FuncCallExpr{$1,nil}
     }
     |func_name '(' values_expr ')'
     {
@@ -118,7 +165,7 @@ params: param
         $$=append($1,$3)
     };
 
-param: WORD;
+param:WORD;
 
 values_expr: value_expr
     {

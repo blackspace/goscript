@@ -59,7 +59,14 @@ func ParseWord(w string) (Token int,v interface{},ok bool) {
 		return RETURN,nil,true
 	case "func":
 		return FUNCTION,nil,true
+	case "def":
+		return DEF,nil,true
+	case "end":
+		return END,nil,true
+	case "do":
+		return DO,nil,true
 	}
+
 	return
 }
 

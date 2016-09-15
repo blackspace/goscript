@@ -91,6 +91,20 @@ t:
 			return p.GetToken()
 		case ',':
 			return p.GetToken()
+		case '@':
+			r, _, err := l.Reader.ReadRune()
+
+			if err == io.EOF {
+				return '@'
+			}
+
+			if r=='@' {
+				return DOUBLEADD
+			} else {
+				l.HasPreRune=true
+				l.PreRune=r
+				return '@'
+			}
 		case '>':
 			r, _, err := l.Reader.ReadRune()
 
@@ -131,7 +145,7 @@ t:
 				switch t {
 				case BOOL:
 					lval.Expr = v.(*ast.Bool)
-					return t
+					return BOOL
 				case IF:
 					return IF
 				case ELSE:
@@ -144,6 +158,9 @@ t:
 					return RETURN
 				case FUNCTION:
 					return FUNCTION
+				case CLASS:
+					return CLASS
+
 				}
 			} else {
 				lval.String = w
