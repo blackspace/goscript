@@ -1,7 +1,7 @@
 package ast
 
 import (
-	"goscript/vm/runtime"
+	"goscript/runtime"
 	"reflect"
 )
 

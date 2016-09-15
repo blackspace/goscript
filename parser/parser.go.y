@@ -229,8 +229,6 @@ for_expr : FOR assign_expr ';' simple_expr ';' increment_decrement_expr block_ex
            $$=&ast.ForExpr{$2,nil,$5,$6}
     };
 
-
-
 if_expr : IF simple_expr block_expr
     {
         $$=&ast.IFExpr{$2,$3,nil}
@@ -241,7 +239,6 @@ if_expr : IF simple_expr block_expr
 
         $$=$1
     };
-
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 

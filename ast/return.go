@@ -2,7 +2,7 @@ package ast
 
 import (
 	"reflect"
-	"goscript/vm/runtime"
+	"goscript/runtime"
 )
 
 type ReturnExpr struct  {

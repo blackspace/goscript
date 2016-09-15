@@ -3,7 +3,7 @@ package ast
 import (
 	"reflect"
 	"strconv"
-	"goscript/vm/runtime"
+	"goscript/runtime"
 )
 
 type AddExpr struct {

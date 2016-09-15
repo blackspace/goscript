@@ -3,7 +3,7 @@ package vm
 import (
 	"goscript/parser"
 	"reflect"
-	"goscript/vm/runtime"
+	"goscript/runtime"
 )
 
 type VM struct {
