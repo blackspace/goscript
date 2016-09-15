@@ -8,14 +8,18 @@ import (
 
 type Runtime struct {
 	scopes List
-	Functions
+
+	functions map[string]Function
+
 }
 
 func NewRuntime() (r *Runtime) {
 	return &Runtime{scopes:List{EqualFun:func(e1 interface{},e2 interface{}) bool {
 		return e1.(*Scope)==e2.(*Scope)
 	}},
-	Functions: MakeFunctions()}
+
+	functions:make(map[string]Function)}
+
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -70,4 +74,19 @@ func (r *Runtime)SetVarible(n string,v reflect.Value) {
 
 	return
 }
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+func (r*Runtime)SetFunction(n string,f Function){
+		r.functions[n]=f
+
+}
+
+
+func (r*Runtime)GetFunction(n string) Function  {
+	f:=r.functions[n]
+	return f
+}
+
 

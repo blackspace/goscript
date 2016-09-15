@@ -14,10 +14,6 @@ type FuncDefineExpr struct {
 }
 
 
-<<<<<<< HEAD
-
-=======
->>>>>>> temp
 func (f * FuncDefineExpr)Eval(r *runtime.Runtime) (reflect.Value,int){
 	r.SetFunction(f.Name,func(f * FuncDefineExpr) runtime.Function {
 		return func(in []reflect.Value) (reflect.Value,int) {
@@ -49,7 +45,6 @@ type FuncCallExpr struct {
 
 func (f * FuncCallExpr)Eval(r *runtime.Runtime) (v reflect.Value,status int){
 	F:=r.GetFunction(f.Name)
-
 
 
 	if f.Params==nil {
