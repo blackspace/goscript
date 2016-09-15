@@ -19,7 +19,7 @@ var ParseResult []ast.Expr
     Strings []string
 }
 
-%type <Expr> expr assign_expr simple_expr associate_expr var_expr
+%type <Expr> expr assign_expr simple_expr var_expr
 %type <Expr> if_expr for_expr stmt_expr block_expr increment_decrement_expr
 
 
@@ -73,7 +73,7 @@ class_expr : CLASS class_name '{'  inclass_exprs '}'
         $$=&ast.Class{}
     };
 
-inclass_expr: associate_expr|stmt_expr|assign_expr|attribute_set_expr
+inclass_expr: simple_expr|stmt_expr|assign_expr|attribute_set_expr
             |increment_decrement_expr|func_define_expr |block_expr
             |class_expr | method_define_expr
 
@@ -95,7 +95,7 @@ method_define_expr: DEF method_name '(' ')' '{' inmethod_exprs '}'
         $$=&ast.Method{}
     };
 
-inmethod_expr:associate_expr|stmt_expr|assign_expr|attribute_set_expr
+inmethod_expr:simple_expr|stmt_expr|assign_expr|attribute_set_expr
         |increment_decrement_expr |block_expr | attribute_define_expr;
 
 inmethod_exprs:inmethod_expr
@@ -128,7 +128,7 @@ attribute_name: WORD;
 
 ////////////////////////////////////////////////////////////////////////////////////////
 
-expr : associate_expr
+expr : simple_expr
     |stmt_expr
     |assign_expr
     |attribute_set_expr
@@ -178,14 +178,14 @@ values_expr: value_expr
         $$=append($1,$3)
     };
 
-value_expr: associate_expr;
+value_expr: simple_expr;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 stmt_expr: BREAK
        {
            $$=&ast.BreakExpr{}
        }
-    |RETURN associate_expr
+    |RETURN simple_expr
     {
         $$=&ast.ReturnExpr{$2}
     }
@@ -208,11 +208,11 @@ increment_decrement_expr: var_expr DOUBLEADD
     };
 
 
-for_expr : FOR assign_expr ';' associate_expr ';' increment_decrement_expr block_expr
+for_expr : FOR assign_expr ';' simple_expr ';' increment_decrement_expr block_expr
     {
         $$=&ast.ForExpr{$2,$4,$6,$7}
     }
-    |FOR  ';' associate_expr ';' increment_decrement_expr block_expr
+    |FOR  ';' simple_expr ';' increment_decrement_expr block_expr
     {
              $$=&ast.ForExpr{nil,$3,$5,$6}
     }
@@ -231,7 +231,7 @@ for_expr : FOR assign_expr ';' associate_expr ';' increment_decrement_expr block
 
 
 
-if_expr : IF associate_expr block_expr
+if_expr : IF simple_expr block_expr
     {
         $$=&ast.IFExpr{$2,$3,nil}
     }
@@ -245,49 +245,47 @@ if_expr : IF associate_expr block_expr
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-associate_expr: simple_expr
-    |associate_expr AND associate_expr
+simple_expr: BOOL|NUMBER|STRING | var_expr | func_call_expr | method_call_expr
+    |simple_expr AND simple_expr
     {
         $$=&ast.ANDExpr{$1,$3}
     }
-    |associate_expr OR associate_expr
+    |simple_expr OR simple_expr
     {
         $$=&ast.ORExpr{$1,$3}
     }
-    | associate_expr '+' associate_expr
+    | simple_expr '+' simple_expr
     {
         $$=&ast.AddExpr{$1,$3}
     }
-    |associate_expr '-' associate_expr
+    |simple_expr '-' simple_expr
     {
         $$=&ast.SubExpr{$1,$3}
     }
-    |associate_expr '*' associate_expr
+    |simple_expr '*' simple_expr
     {
         $$=&ast.MultiExpr{$1,$3}
     }
-    |associate_expr '/' associate_expr
+    |simple_expr '/' simple_expr
     {
         $$=&ast.DivExpr{$1,$3}
     }
-    |associate_expr '>' associate_expr
+    |simple_expr '>' simple_expr
     {
         $$=&ast.GreaterThanExpr{$1,$3}
     }
-    |associate_expr GREATEREQUAL associate_expr
+    |simple_expr GREATEREQUAL simple_expr
     {
         $$=&ast.GreaterEqualExpr{$1,$3}
     }
-    |associate_expr '<' associate_expr
+    |simple_expr '<' simple_expr
     {
         $$=&ast.LessThanExpr{$1,$3}
     }
-    |associate_expr LESSEQUAL associate_expr
+    |simple_expr LESSEQUAL simple_expr
     {
         $$=&ast.LessEqualExpr{$1,$3}
     };
-
-simple_expr : BOOL|NUMBER|STRING | var_expr | func_call_expr | method_call_expr
 
 block_expr : '{' exprs '}'
     {
