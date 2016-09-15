@@ -8,14 +8,14 @@ import (
 
 type Runtime struct {
 	scopes List
-	functions map[string]interface{}
+	functions map[string]Function
 }
 
 func NewRuntime() (r *Runtime) {
 	return &Runtime{scopes:List{EqualFun:func(e1 interface{},e2 interface{}) bool {
 		return e1.(*Scope)==e2.(*Scope)
 	}},
-	functions:make(map[string]interface{})}
+	functions:make(map[string]Function)}
 }
 
 
@@ -71,19 +71,13 @@ func (r *Runtime)SetVarible(n string,v reflect.Value) {
 }
 
 
-func (r*Runtime)SetFunction(n string,f interface{}){
-	F:=reflect.ValueOf(f)
-
-	if F.Kind()==reflect.Func {
+func (r*Runtime)SetFunction(n string,f Function){
 		r.functions[n]=f
 
-	} else {
-		panic(errors.New("The SetFunction() need a value of function"))
-	}
 }
 
 
-func (r*Runtime)GetFunction(n string) interface{}  {
+func (r*Runtime)GetFunction(n string) Function  {
 	f:=r.functions[n]
 	return f
 }

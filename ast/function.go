@@ -44,7 +44,7 @@ type FuncCallExpr struct {
 }
 
 func (f * FuncCallExpr)Eval(r *runtime.Runtime) (v reflect.Value,status int){
-	F:=r.GetFunction(f.Name).(runtime.Function)
+	F:=r.GetFunction(f.Name)
 
 
 	if f.Params==nil {
