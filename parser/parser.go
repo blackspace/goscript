@@ -95,7 +95,7 @@ const yyEofCode = 1
 const yyErrCode = 2
 const yyInitialStackSize = 16
 
-//line parser/parser.go.y:303
+//line parser/parser.go.y:306
 
 //line yacctab:1
 var yyExca = [...]int{
@@ -110,25 +110,25 @@ var yyExca = [...]int{
 	24, 0,
 	25, 0,
 	26, 0,
-	-2, 77,
+	-2, 75,
 	-1, 67,
 	23, 0,
 	24, 0,
 	25, 0,
 	26, 0,
-	-2, 78,
+	-2, 76,
 	-1, 68,
 	23, 0,
 	24, 0,
 	25, 0,
 	26, 0,
-	-2, 79,
+	-2, 77,
 	-1, 69,
 	23, 0,
 	24, 0,
 	25, 0,
 	26, 0,
-	-2, 80,
+	-2, 78,
 	-1, 74,
 	37, 33,
 	-2, 34,
@@ -223,10 +223,10 @@ var yyR1 = [...]int{
 	16, 16, 16, 16, 16, 31, 31, 20, 20, 17,
 	17, 18, 22, 23, 24, 1, 1, 1, 1, 1,
 	1, 1, 1, 11, 11, 12, 12, 21, 26, 26,
-	25, 29, 29, 13, 9, 9, 8, 8, 8, 8,
-	2, 10, 10, 7, 7, 7, 7, 7, 6, 6,
-	4, 4, 4, 4, 4, 4, 4, 4, 4, 4,
-	4, 3, 3, 3, 3, 3, 3, 5,
+	25, 29, 29, 13, 8, 8, 8, 8, 2, 10,
+	10, 7, 7, 7, 7, 7, 6, 6, 4, 4,
+	4, 4, 4, 4, 4, 4, 4, 4, 4, 3,
+	3, 3, 3, 3, 3, 9, 9, 5,
 }
 var yyR2 = [...]int{
 
@@ -235,10 +235,10 @@ var yyR2 = [...]int{
 	1, 1, 1, 1, 1, 1, 2, 4, 4, 5,
 	6, 5, 1, 1, 1, 1, 1, 1, 1, 1,
 	1, 1, 1, 5, 6, 3, 4, 1, 1, 3,
-	1, 1, 3, 1, 3, 2, 1, 2, 1, 1,
-	3, 2, 2, 7, 6, 5, 4, 6, 3, 3,
-	1, 3, 3, 3, 3, 3, 3, 3, 3, 3,
-	3, 1, 1, 1, 1, 1, 1, 1,
+	1, 1, 3, 1, 1, 2, 1, 1, 3, 2,
+	2, 7, 6, 5, 4, 6, 3, 3, 1, 3,
+	3, 3, 3, 3, 3, 3, 3, 3, 3, 1,
+	1, 1, 1, 1, 1, 3, 2, 1,
 }
 var yyChk = [...]int{
 
@@ -263,19 +263,19 @@ var yyChk = [...]int{
 var yyDef = [...]int{
 
 	0, -2, 1, 2, 35, 36, 37, 38, 39, 40,
-	41, 42, 70, 56, 0, 58, 59, 84, 0, 0,
-	0, 81, 82, 83, 85, 86, 0, 0, -2, 0,
+	41, 42, 68, 54, 0, 56, 57, 82, 0, 0,
+	0, 79, 80, 81, 83, 84, 0, 0, -2, 0,
 	3, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-	0, 57, 84, 0, 0, 0, 61, 62, 0, 47,
-	0, 55, 0, 32, 0, 0, 0, 0, 87, 0,
-	71, 72, 73, 74, 75, 76, -2, -2, -2, -2,
-	0, 69, 0, 0, -2, 60, 0, 54, 0, 68,
+	0, 55, 82, 0, 0, 0, 59, 60, 0, 47,
+	0, 86, 0, 32, 0, 0, 0, 0, 87, 0,
+	69, 70, 71, 72, 73, 74, -2, -2, -2, -2,
+	0, 67, 0, 0, -2, 58, 0, 85, 0, 66,
 	0, 0, 0, 45, 0, 51, 53, 33, 0, 0,
 	0, 0, 48, 50, 0, 14, 5, 6, 7, 8,
 	9, 10, 11, 12, 13, 0, 0, 0, 0, 0,
-	66, 0, 46, 0, 29, 0, 31, 43, 0, 0,
-	4, 15, 0, 0, 0, 0, 65, 52, 30, 44,
-	49, 0, 0, 67, 64, 0, 0, 63, 0, 0,
+	64, 0, 46, 0, 29, 0, 31, 43, 0, 0,
+	4, 15, 0, 0, 0, 0, 63, 52, 30, 44,
+	49, 0, 0, 65, 62, 0, 0, 61, 0, 0,
 	0, 25, 18, 19, 20, 21, 22, 23, 24, 0,
 	0, 0, 16, 26, 0, 34, 0, 0, 0, 0,
 	17, 27, 28,
@@ -765,154 +765,154 @@ yydefault:
 			yyVAL.Exprs = append(yyDollar[1].Exprs, yyDollar[3].Expr)
 		}
 	case 54:
-		yyDollar = yyS[yypt-3 : yypt+1]
-		//line parser/parser.go.y:183
-		{
-			yyVAL.Expr = &ast.BlockExpr{yyDollar[2].Exprs}
-		}
-	case 55:
-		yyDollar = yyS[yypt-2 : yypt+1]
-		//line parser/parser.go.y:187
-		{
-			yyVAL.Expr = &ast.BlockExpr{}
-		}
-	case 56:
 		yyDollar = yyS[yypt-1 : yypt+1]
-		//line parser/parser.go.y:192
+		//line parser/parser.go.y:184
 		{
 			yyVAL.Expr = &ast.BreakExpr{}
 		}
-	case 57:
+	case 55:
 		yyDollar = yyS[yypt-2 : yypt+1]
-		//line parser/parser.go.y:196
+		//line parser/parser.go.y:188
 		{
 			yyVAL.Expr = &ast.ReturnExpr{yyDollar[2].Expr}
 		}
-	case 60:
+	case 58:
 		yyDollar = yyS[yypt-3 : yypt+1]
-		//line parser/parser.go.y:204
+		//line parser/parser.go.y:196
 		{
 			yyVAL.Expr = &ast.AssignExpr{yyDollar[1].Expr, yyDollar[3].Expr}
 		}
-	case 61:
+	case 59:
 		yyDollar = yyS[yypt-2 : yypt+1]
-		//line parser/parser.go.y:209
+		//line parser/parser.go.y:201
 		{
 			yyVAL.Expr = &ast.SubfixDoubleAddExpr{yyDollar[1].Expr}
 		}
-	case 62:
+	case 60:
 		yyDollar = yyS[yypt-2 : yypt+1]
-		//line parser/parser.go.y:213
+		//line parser/parser.go.y:205
 		{
 			yyVAL.Expr = &ast.SubfixDoubleSubExpr{yyDollar[1].Expr}
 		}
-	case 63:
+	case 61:
 		yyDollar = yyS[yypt-7 : yypt+1]
-		//line parser/parser.go.y:219
+		//line parser/parser.go.y:211
 		{
 			yyVAL.Expr = &ast.ForExpr{yyDollar[2].Expr, yyDollar[4].Expr, yyDollar[6].Expr, yyDollar[7].Expr}
 		}
-	case 64:
+	case 62:
 		yyDollar = yyS[yypt-6 : yypt+1]
-		//line parser/parser.go.y:223
+		//line parser/parser.go.y:215
 		{
 			yyVAL.Expr = &ast.ForExpr{nil, yyDollar[3].Expr, yyDollar[5].Expr, yyDollar[6].Expr}
 		}
-	case 65:
+	case 63:
 		yyDollar = yyS[yypt-5 : yypt+1]
-		//line parser/parser.go.y:227
+		//line parser/parser.go.y:219
 		{
 			yyVAL.Expr = &ast.ForExpr{nil, nil, yyDollar[4].Expr, yyDollar[5].Expr}
 		}
-	case 66:
+	case 64:
 		yyDollar = yyS[yypt-4 : yypt+1]
-		//line parser/parser.go.y:231
+		//line parser/parser.go.y:223
 		{
 			yyVAL.Expr = &ast.ForExpr{nil, nil, nil, yyDollar[4].Expr}
 		}
-	case 67:
+	case 65:
 		yyDollar = yyS[yypt-6 : yypt+1]
-		//line parser/parser.go.y:235
+		//line parser/parser.go.y:227
 		{
 			yyVAL.Expr = &ast.ForExpr{yyDollar[2].Expr, nil, yyDollar[5].Expr, yyDollar[6].Expr}
 		}
-	case 68:
+	case 66:
 		yyDollar = yyS[yypt-3 : yypt+1]
-		//line parser/parser.go.y:242
+		//line parser/parser.go.y:234
 		{
 			yyVAL.Expr = &ast.IFExpr{yyDollar[2].Expr, yyDollar[3].Expr, nil}
 		}
-	case 69:
+	case 67:
 		yyDollar = yyS[yypt-3 : yypt+1]
-		//line parser/parser.go.y:246
+		//line parser/parser.go.y:238
 		{
 			(yyDollar[1].Expr.(*ast.IFExpr)).Expr2 = yyDollar[3].Expr
 
 			yyVAL.Expr = yyDollar[1].Expr
 		}
-	case 71:
+	case 69:
 		yyDollar = yyS[yypt-3 : yypt+1]
-		//line parser/parser.go.y:255
+		//line parser/parser.go.y:249
 		{
 			yyVAL.Expr = &ast.ANDExpr{yyDollar[1].Expr, yyDollar[3].Expr}
 		}
-	case 72:
+	case 70:
 		yyDollar = yyS[yypt-3 : yypt+1]
-		//line parser/parser.go.y:259
+		//line parser/parser.go.y:253
 		{
 			yyVAL.Expr = &ast.ORExpr{yyDollar[1].Expr, yyDollar[3].Expr}
 		}
-	case 73:
+	case 71:
 		yyDollar = yyS[yypt-3 : yypt+1]
-		//line parser/parser.go.y:263
+		//line parser/parser.go.y:257
 		{
 			yyVAL.Expr = &ast.AddExpr{yyDollar[1].Expr, yyDollar[3].Expr}
 		}
-	case 74:
+	case 72:
 		yyDollar = yyS[yypt-3 : yypt+1]
-		//line parser/parser.go.y:267
+		//line parser/parser.go.y:261
 		{
 			yyVAL.Expr = &ast.SubExpr{yyDollar[1].Expr, yyDollar[3].Expr}
 		}
-	case 75:
+	case 73:
 		yyDollar = yyS[yypt-3 : yypt+1]
-		//line parser/parser.go.y:271
+		//line parser/parser.go.y:265
 		{
 			yyVAL.Expr = &ast.MultiExpr{yyDollar[1].Expr, yyDollar[3].Expr}
 		}
-	case 76:
+	case 74:
 		yyDollar = yyS[yypt-3 : yypt+1]
-		//line parser/parser.go.y:275
+		//line parser/parser.go.y:269
 		{
 			yyVAL.Expr = &ast.DivExpr{yyDollar[1].Expr, yyDollar[3].Expr}
 		}
-	case 77:
+	case 75:
 		yyDollar = yyS[yypt-3 : yypt+1]
-		//line parser/parser.go.y:279
+		//line parser/parser.go.y:273
 		{
 			yyVAL.Expr = &ast.GreaterThanExpr{yyDollar[1].Expr, yyDollar[3].Expr}
 		}
-	case 78:
+	case 76:
 		yyDollar = yyS[yypt-3 : yypt+1]
-		//line parser/parser.go.y:283
+		//line parser/parser.go.y:277
 		{
 			yyVAL.Expr = &ast.GreaterEqualExpr{yyDollar[1].Expr, yyDollar[3].Expr}
 		}
-	case 79:
+	case 77:
 		yyDollar = yyS[yypt-3 : yypt+1]
-		//line parser/parser.go.y:287
+		//line parser/parser.go.y:281
 		{
 			yyVAL.Expr = &ast.LessThanExpr{yyDollar[1].Expr, yyDollar[3].Expr}
 		}
-	case 80:
+	case 78:
 		yyDollar = yyS[yypt-3 : yypt+1]
-		//line parser/parser.go.y:291
+		//line parser/parser.go.y:285
 		{
 			yyVAL.Expr = &ast.LessEqualExpr{yyDollar[1].Expr, yyDollar[3].Expr}
 		}
+	case 85:
+		yyDollar = yyS[yypt-3 : yypt+1]
+		//line parser/parser.go.y:292
+		{
+			yyVAL.Expr = &ast.BlockExpr{yyDollar[2].Exprs}
+		}
+	case 86:
+		yyDollar = yyS[yypt-2 : yypt+1]
+		//line parser/parser.go.y:296
+		{
+			yyVAL.Expr = &ast.BlockExpr{}
+		}
 	case 87:
 		yyDollar = yyS[yypt-1 : yypt+1]
-		//line parser/parser.go.y:298
+		//line parser/parser.go.y:301
 		{
 			yyVAL.Expr = &ast.Variable{yyDollar[1].String}
 		}
