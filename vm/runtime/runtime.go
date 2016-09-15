@@ -71,11 +71,6 @@ func (r *Runtime)SetVarible(n string,v reflect.Value) {
 }
 
 
-type functionNode struct {
-	name string
-	function interface{}
-}
-
 func (r*Runtime)SetFunction(n string,f interface{}){
 	F:=reflect.ValueOf(f)
 
