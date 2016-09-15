@@ -8,13 +8,14 @@ import (
 
 type Runtime struct {
 	scopes List
-	functions List
+	functions map[string]interface{}
 }
 
 func NewRuntime() (r *Runtime) {
 	return &Runtime{scopes:List{EqualFun:func(e1 interface{},e2 interface{}) bool {
 		return e1.(*Scope)==e2.(*Scope)
-	}}}
+	}},
+	functions:make(map[string]interface{})}
 }
 
 
@@ -79,7 +80,7 @@ func (r*Runtime)SetFunction(n string,f interface{}){
 	F:=reflect.ValueOf(f)
 
 	if F.Kind()==reflect.Func {
-		r.functions.Add(functionNode{n,f})
+		r.functions[n]=f
 
 	} else {
 		panic(errors.New("The SetFunction() need a value of function"))
@@ -88,18 +89,7 @@ func (r*Runtime)SetFunction(n string,f interface{}){
 
 
 func (r*Runtime)GetFunction(n string) interface{}  {
-	elm:=r.functions.FindByLambda(func(e interface{}) bool {
-		if e.(functionNode).name==n {
-			return true
-		}
-		return false
-	})
-
-
-	if elm==nil {
-		panic(errors.New("Can't Find the "+n+" function"))
-	}
-
-	return elm.(functionNode).function
+	f:=r.functions[n]
+	return f
 }
 
