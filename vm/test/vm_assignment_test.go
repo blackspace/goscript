@@ -10,14 +10,14 @@ func TestAsignExpr(t *testing.T) {
 
 	if val,err :=vm.Run("a=1"); err!=nil {
 		t.Error(err)
-	} else if val.IsValid() &&val.Int()!=1 {
+	} else if val!=nil &&val.(int64)!=1 {
 		t.Fail()
 
 	}
 
 	if val,err :=vm.Run("a=1+1*1+1/1"); err!=nil {
 		t.Error(err)
-	} else if val.IsValid() &&val.Int()!=3 {
+	} else if val!=nil &&val.(int64)!=3 {
 		t.Fail()
 
 	}
@@ -25,14 +25,14 @@ func TestAsignExpr(t *testing.T) {
 
 	if val,err :=vm.Run("b=3"); err!=nil {
 		t.Error(err)
-	} else if val.IsValid() &&val.Int()!=3 {
+	} else if val!=nil &&val.(int64)!=3 {
 		t.Fail()
 
 	}
 
 	if val,err :=vm.Run("b+3"); err!=nil {
 		t.Error(err)
-	} else if val.IsValid() &&val.Int()!=6 {
+	} else if val!=nil &&val.(int64)!=6 {
 		t.Fail()
 
 	}

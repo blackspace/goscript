@@ -11,7 +11,7 @@ func TestScope(t *testing.T) {
 	vm.Run("a=1")
 
 	if v,err:=vm.Run("a++");err==nil {
-		if v.Int()!=2 {
+		if v.(int64)!=2 {
 			t.Fail()
 		}
 	} else {
@@ -43,7 +43,7 @@ func TestScope1(t *testing.T) {
 
 
 	if err==nil {
-		if v.Int()!=3 {
+		if v.(int64)!=3 {
 			t.Fail()
 		}
 	} else {
@@ -77,7 +77,7 @@ func TestScope2(t *testing.T) {
 
 
 	if err==nil {
-		if v.Int()!=3 {
+		if v.(int64)!=3 {
 			t.Fail()
 		}
 	} else {

@@ -2,7 +2,6 @@ package vm
 
 import (
 	"goscript/parser"
-	"reflect"
 	"goscript/runtime"
 )
 
@@ -16,7 +15,7 @@ func NewVM() (v *VM) {
 	return
 }
 
-func (v * VM)Run(src string) (result reflect.Value,err error) {
+func (v * VM)Run(src string) (result interface{},err error) {
 	if exprs,err :=parser.ParseString(src);err==nil {
 		for _,e:= range exprs {
 			result,_=e.Eval(v.Runtime)

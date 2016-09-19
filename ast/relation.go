@@ -1,7 +1,6 @@
 package ast
 
 import (
-	"reflect"
 	"goscript/runtime"
 )
 
@@ -11,11 +10,11 @@ type LessThanExpr struct {
 }
 
 
-func (e * LessThanExpr)Eval(r *runtime.Runtime,args ...interface{}) (reflect.Value,int){
+func (e * LessThanExpr)Eval(r *runtime.Runtime,args ...interface{}) (interface{},int){
 	v1,_:=e.Expr1.Eval(r)
 	v2,_:=e.Expr2.Eval(r)
 
-	return  reflect.ValueOf(v1.Int()<v2.Int()),0
+	return  v1.(int64)<v2.(int64),0
 
 }
 
@@ -25,11 +24,11 @@ type LessEqualExpr struct {
 }
 
 
-func (e * LessEqualExpr)Eval(r *runtime.Runtime,args ...interface{}) (reflect.Value,int){
+func (e * LessEqualExpr)Eval(r *runtime.Runtime,args ...interface{}) (interface{},int){
 	v1,_:=e.Expr1.Eval(r)
 	v2,_:=e.Expr2.Eval(r)
 
-	return  reflect.ValueOf(v1.Int()<=v2.Int()),0
+	return  v1.(int64)<=v2.(int64),0
 
 }
 
@@ -39,11 +38,11 @@ type GreaterThanExpr struct {
 }
 
 
-func (e * GreaterThanExpr)Eval(r *runtime.Runtime,args ...interface{}) (reflect.Value,int){
+func (e * GreaterThanExpr)Eval(r *runtime.Runtime,args ...interface{}) (interface{},int){
 	v1,_:=e.Expr1.Eval(r)
 	v2,_:=e.Expr2.Eval(r)
 
-	return  reflect.ValueOf(v1.Int()>v2.Int()),0
+	return  v1.(int64)>v2.(int64),0
 }
 
 
@@ -53,10 +52,10 @@ type GreaterEqualExpr struct {
 }
 
 
-func (e * GreaterEqualExpr)Eval(r *runtime.Runtime,args ...interface{}) (reflect.Value,int){
+func (e * GreaterEqualExpr)Eval(r *runtime.Runtime,args ...interface{}) (interface{},int){
 	v1,_:=e.Expr1.Eval(r)
 	v2,_:=e.Expr2.Eval(r)
 
-	return  reflect.ValueOf(v1.Int()>=v2.Int()),0
+	return  v1.(int64)>=v2.(int64),0
 
 }

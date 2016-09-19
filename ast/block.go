@@ -1,7 +1,6 @@
 package ast
 
 import (
-	"reflect"
 	"goscript/runtime"
 )
 
@@ -12,7 +11,7 @@ type BlockExpr struct {
 }
 
 
-func (b * BlockExpr)Eval(r *runtime.Runtime,args ...interface{}) (v reflect.Value,status int) {
+func (b * BlockExpr)Eval(r *runtime.Runtime,args ...interface{}) (v interface{},status int) {
 
 	s:=r.BeginScope()
 
@@ -22,11 +21,7 @@ func (b * BlockExpr)Eval(r *runtime.Runtime,args ...interface{}) (v reflect.Valu
 		switch status {
 		case BREAK:
 			if status==BREAK {
-				if !v.IsValid() {
-					return reflect.ValueOf(nil),status
-				} else {
-					return v,status
-				}
+				return v,status
 			}
 		case RETURN:
 			return tv,OK

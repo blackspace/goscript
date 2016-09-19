@@ -2,7 +2,6 @@ package ast
 
 import (
 	"goscript/runtime"
-	"reflect"
 )
 
 type SubfixDoubleSubExpr struct {
@@ -10,15 +9,17 @@ type SubfixDoubleSubExpr struct {
 }
 
 
-func (e *SubfixDoubleSubExpr)Eval(r *runtime.Runtime,args ...interface{}) (v reflect.Value,status int) {
+func (e *SubfixDoubleSubExpr)Eval(r *runtime.Runtime,args ...interface{}) (interface{},int) {
 
 	name :=e.Expr0.(*Variable).Name
 
 	if v,ok:=r.GetVarible(name);ok{
-		n:=v.Int()
+		n:=v.(int64)
 		n--
-		r.SetVarible(name,reflect.ValueOf(n))
+		r.SetVarible(name,n)
 	}
-	v,_=r.GetVarible(name);
-	return v,0
+
+	v,_:=r.GetVarible(name)
+
+	return v,OK
 }

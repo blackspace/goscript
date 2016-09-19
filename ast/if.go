@@ -1,7 +1,6 @@
 package ast
 
 import  (
-	"reflect"
 	"goscript/runtime"
 )
 
@@ -12,11 +11,11 @@ type IFExpr struct {
 }
 
 
-func (e * IFExpr)Eval(r *runtime.Runtime,args ...interface{}) (v reflect.Value,status int){
+func (e * IFExpr)Eval(r *runtime.Runtime,args ...interface{}) (v interface{},status int){
 
 	v0,_ :=e.Expr0.Eval(r)
 
-	if v0.Bool() {
+	if v0.(bool) {
 		s:=r.BeginScope()
 		v,status=e.Expr1.Eval(r)
 		r.EndScope(s)

@@ -3,7 +3,13 @@
 
 package main
 
+import (
+	"goscript/vm"
+)
 
 func main() {
+	var vm = vm.NewVM()
 
+	vm.Run("for a=1;a<10;a++ { a }" )
 }
+

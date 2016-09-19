@@ -18,8 +18,8 @@ func TestDoubleAddExpress(t *testing.T) {
 
 	val, err = vm.Run("a++" )
 
-	if val.IsValid() {
-		if val.Int() != 3 {
+	if val!=nil {
+		if val.(int64) != 3 {
 			t.Fail()
 		}
 	} else {

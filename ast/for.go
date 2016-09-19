@@ -2,43 +2,40 @@ package ast
 
 import (
 	"goscript/runtime"
-	"reflect"
 )
 
 type ForExpr struct {
-	Expr0 Expr
-	Expr1 Expr
-	Expr2 Expr
-	Expr3 Expr
+	InitExpr Expr
+	Expr1    Expr
+	StepExpr Expr
+	BodyExpr Expr
 }
 
 
-func (e *ForExpr)Eval(r *runtime.Runtime,args ...interface{}) (v reflect.Value,status int) {
-	f1:=e.Expr0
+func (e *ForExpr)Eval(r *runtime.Runtime,args ...interface{}) (v interface{},status int) {
 	f2:=e.Expr1
-	f3:=e.Expr2
 
 	s:=r.BeginScope()
 
-	if f1!=nil {
-		f1.Eval(r)
+	if e.InitExpr!=nil {
+		e.InitExpr.Eval(r)
 	}
 
 	for  {
 		if f2!=nil {
-			if v,_:=f2.Eval(r);!v.Bool() {
+			if lv,_:=f2.Eval(r);!lv.(bool) {
 				break
 			}
 		}
 
-		v,status=e.Expr3.Eval(r)
+		v,status=e.BodyExpr.Eval(r)
 
 		if status==BREAK {
-			return
+			return nil,OK
 		}
 
-		if f3!=nil {
-			f3.Eval(r)
+		if e.StepExpr!=nil {
+			e.StepExpr.Eval(r)
 		}
 
 	}

@@ -1,8 +1,4 @@
 package runtime
 
-import (
-	"reflect"
-)
-
-type Function func(in []reflect.Value) (reflect.Value,int)
+type Function func(in []interface{}) (interface{},int)
 

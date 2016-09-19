@@ -1,7 +1,7 @@
 package runtime
 
 type ObjectMethod func(*Object,[]interface{}) interface{}
-type ClassMethod func(*Class, []interface {}) interface {}
+type ClassMethod func(*Class, []interface {}) interface{}
 
 type Class struct {
 	ObjectMembers         map[string]interface{}

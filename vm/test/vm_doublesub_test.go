@@ -18,8 +18,8 @@ func TestDoubleSubExpress(t *testing.T) {
 
 	val, err = vm.Run("a--" )
 
-	if val.IsValid() {
-		if val.Int() != 0 {
+	if val!=nil {
+		if val.(int64) != 0 {
 			t.Fail()
 		}
 	} else {

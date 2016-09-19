@@ -1,7 +1,6 @@
 package ast
 
 import (
-	"reflect"
 	"goscript/runtime"
 )
 
@@ -12,7 +11,7 @@ const (
 )
 
 type Expr interface {
-      	Eval(r *runtime.Runtime,args ...interface{}) (reflect.Value,int)
+      	Eval(r *runtime.Runtime,args ...interface{}) (interface{},int)
 }
 
 

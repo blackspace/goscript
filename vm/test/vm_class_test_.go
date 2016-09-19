@@ -8,20 +8,18 @@ import (
 func TestClassDefineMethod(t *testing.T) {
 	vm:=vm.NewVM()
 
-	v,_:=vm.Run(`class A {
-		a=1
+	vm.Run(`class A {
+		def hello() {
+			this.b=1
+		}
+	}`)
 
-		a++
+	vm.Run("a=A.new()")
 
-		def hello() { 1 }
 
-	}
+	v,_:=vm.Run("a.b")
 
-	a=A.new()
-
-	a.hello()`)
-
-	if v.Int()!=1 {
+	if v.(int)!=2 {
 		t.Fail()
 	}
 }

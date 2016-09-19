@@ -14,8 +14,9 @@ func TestFor(t *testing.T) {
 		t.Error(err)
 	}
 
-	if val.IsValid() {
-		if val.Int() != 9 {
+
+	if val!=nil {
+		if val.(int64) != 9 {
 			t.Fail()
 		}
 	} else {

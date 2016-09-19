@@ -9,7 +9,7 @@ func TestRelation(t *testing.T) {
 	vm:=vm.NewVM()
 
 	if v,err:=vm.Run("1<2");err==nil {
-		if v.Bool()!=true {
+		if v.(bool)!=true {
 			t.Fail()
 		}
 	}else {
@@ -17,7 +17,7 @@ func TestRelation(t *testing.T) {
 	}
 
 	if v,err:=vm.Run("2<=2");err==nil {
-		if v.Bool()!=true {
+		if v.(bool)!=true {
 			t.Fail()
 		}
 	}else {
@@ -25,7 +25,7 @@ func TestRelation(t *testing.T) {
 	}
 
 	if v,err:=vm.Run("3>2");err==nil {
-		if v.Bool()!=true {
+		if v.(bool)!=true {
 			t.Fail()
 		}
 	}else {
@@ -33,7 +33,7 @@ func TestRelation(t *testing.T) {
 	}
 
 	if v,err:=vm.Run("2<=2");err==nil {
-		if v.Bool()!=true {
+		if v.(bool)!=true {
 			t.Fail()
 		}
 	}else {

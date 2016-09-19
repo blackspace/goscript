@@ -24,7 +24,8 @@ var ParseResult []ast.Expr
 
 %type <Expr> func_define_expr  func_call_expr value_expr
 %type <Expr> class_expr inclass_expr inmethod_expr
-%type <Expr> method_call_expr attribute_set_expr method_define_expr
+%type <Expr> method_call_expr method_define_expr
+%type <Expr> attribute_set_expr attribute_expr
 %type <String> func_name class_name method_name attribute_name object_name
 %type <String> param
 %type <Strings> params
@@ -92,19 +93,19 @@ inclass_exprs: inclass_expr
 
 method_define_expr: DEF method_name '(' ')' '{' inmethod_exprs '}'
     {
-        $$=&ast.ObjectMethod{$2,nil,$6}
+        $$=&ast.ObjectMethodDefineExpr{$2,nil,$6}
     }
     |DEF method_name '(' ')' '{'  '}'
     {
-        $$=&ast.ObjectMethod{$2,nil,nil}
+        $$=&ast.ObjectMethodDefineExpr{$2,nil,nil}
     }
     |DEF method_name '(' params ')' '{' inmethod_exprs '}'
     {
-        $$=&ast.ObjectMethod{$2,$4,$7}
+        $$=&ast.ObjectMethodDefineExpr{$2,$4,$7}
     }
     |DEF method_name '(' params ')' '{'  '}'
     {
-        $$=&ast.ObjectMethod{$2,$4,nil}
+        $$=&ast.ObjectMethodDefineExpr{$2,$4,nil}
     };
 
 inmethod_expr:simple_expr|stmt_expr|assign_expr|attribute_set_expr
@@ -130,7 +131,12 @@ method_call_expr:  object_name '.' method_name '('   ')'
     };
 attribute_set_expr: object_name '.' attribute_name '=' expr
     {
+        $$=&ast.AttributeSetExpr{$1,$3,$5}
+    };
 
+attribute_expr: object_name '.' attribute_name
+    {
+        $$=&ast.AttributeExpr{$1,$3}
     };
 
 class_name: WORD;
@@ -255,7 +261,7 @@ if_expr : IF simple_expr block_expr
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-simple_expr: BOOL|NUMBER|STRING | var_expr | func_call_expr | method_call_expr
+simple_expr: BOOL|NUMBER|STRING | var_expr | func_call_expr | method_call_expr | attribute_expr
     |simple_expr AND simple_expr
     {
         $$=&ast.ANDExpr{$1,$3}

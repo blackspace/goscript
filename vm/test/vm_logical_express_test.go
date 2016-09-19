@@ -14,8 +14,8 @@ func TestBool(t *testing.T) {
 		t.Error(err)
 	}
 
-	if val.IsValid() {
-		if val.Bool()!=true {
+	if val!=nil {
+		if val.(bool)!=true {
 			t.Fail()
 		}
 	} else {
@@ -28,8 +28,8 @@ func TestBool(t *testing.T) {
 		t.Error(err)
 	}
 
-	if val.IsValid() {
-		if val.Bool()!=false {
+	if val!=nil {
+		if val.(bool)!=false {
 			t.Fail()
 		}
 	} else {
@@ -46,8 +46,8 @@ func TestBoolExpress(t *testing.T) {
 		t.Error(err)
 	}
 
-	if val.IsValid() {
-		if val.Bool()!=false {
+	if val!=nil {
+		if val.(bool)!=false {
 			t.Fail()
 		}
 	} else {
@@ -60,8 +60,8 @@ func TestBoolExpress(t *testing.T) {
 		t.Error(err)
 	}
 
-	if val.IsValid() {
-		if val.Bool()!=true {
+	if val!=nil {
+		if val.(bool)!=true {
 			t.Fail()
 		}
 	} else {
@@ -74,8 +74,8 @@ func TestBoolExpress(t *testing.T) {
 		t.Error(err)
 	}
 
-	if val.IsValid() {
-		if val.Bool()!=true {
+	if val!=nil {
+		if val.(bool)!=true {
 			t.Fail()
 		}
 	} else {

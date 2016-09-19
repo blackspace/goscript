@@ -14,8 +14,8 @@ func TestExecuteAddExpress(t *testing.T) {
 		t.Error(err)
 	}
 
-	if val.IsValid() {
-		if val.Int()!=2 {
+	if val!=nil {
+		if val.(int64)!=2 {
 			t.Fail()
 		}
 	} else {
@@ -29,8 +29,8 @@ func TestExecuteAddExpress(t *testing.T) {
 		t.Error(err)
 	}
 
-	if val.IsValid() {
-		if val.Int()!=3 {
+	if val!=nil {
+		if val.(int64)!=3 {
 			t.Fail()
 		}
 	} else {
@@ -44,8 +44,8 @@ func TestExecuteAddExpress(t *testing.T) {
 		t.Error(err)
 	}
 
-	if val.IsValid() {
-		if val.Int()!=580 {
+	if val!=nil {
+		if val.(int64)!=580 {
 			t.Fail()
 		}
 	} else {
@@ -58,8 +58,8 @@ func TestExecuteAddExpress(t *testing.T) {
 		t.Error(err)
 	}
 
-	if val.IsValid() {
-		if val.Int()!=580 {
+	if val!=nil {
+		if val.(int64)!=580 {
 			t.Fail()
 		}
 	} else {
@@ -77,8 +77,8 @@ func TestExecuteSubExpress(t *testing.T) {
 		t.Error(err)
 	}
 
-	if val.IsValid() {
-		if val.Int()!=0 {
+	if val!=nil {
+		if val.(int64)!=0 {
 			t.Fail()
 		}
 	} else {
@@ -91,8 +91,8 @@ func TestExecuteSubExpress(t *testing.T) {
 		t.Error(err)
 	}
 
-	if val.IsValid() {
-		if val.Int()!=99 {
+	if val!=nil {
+		if val.(int64)!=99 {
 			t.Fail()
 		}
 	} else {
@@ -109,8 +109,8 @@ func TestExecuteMultiExpress(t *testing.T) {
 		t.Error(err)
 	}
 
-	if val.IsValid() {
-		if val.Int()!=1 {
+	if val!=nil {
+		if val.(int64)!=1 {
 			t.Fail()
 		}
 	} else {
@@ -123,8 +123,8 @@ func TestExecuteMultiExpress(t *testing.T) {
 		t.Error(err)
 	}
 
-	if val.IsValid() {
-		if val.Int()!=10000 {
+	if val!=nil {
+		if val.(int64)!=10000 {
 			t.Fail()
 		}
 	} else {
@@ -141,8 +141,8 @@ func TestExecuteDivExpress(t *testing.T) {
 		t.Error(err)
 	}
 
-	if val.IsValid() {
-		if val.Int()!=1 {
+	if val!=nil {
+		if val.(int64)!=1 {
 			t.Fail()
 		}
 	} else {
@@ -155,8 +155,8 @@ func TestExecuteDivExpress(t *testing.T) {
 		t.Error(err)
 	}
 
-	if val.IsValid() {
-		if val.Int()!=100 {
+	if val!=nil {
+		if val.(int64)!=100 {
 			t.Fail()
 		}
 	} else {
@@ -174,8 +174,8 @@ func TestExecuteArithmetic(t *testing.T) {
 		t.Error(err)
 	}
 
-	if val.IsValid() {
-		if val.Int()!=3 {
+	if val!=nil {
+		if val.(int64)!=3 {
 			t.Fail()
 		}
 	} else {
@@ -188,8 +188,8 @@ func TestExecuteArithmetic(t *testing.T) {
 		t.Error(err)
 	}
 
-	if val.IsValid() {
-		if val.Int()!=111 {
+	if val!=nil {
+		if val.(int64)!=111 {
 			t.Fail()
 		}
 	} else {

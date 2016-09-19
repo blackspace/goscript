@@ -1,9 +1,9 @@
 package runtime
 
 import (
-	"reflect"
 	. "goscript/mycontainer"
 	"errors"
+	"reflect"
 )
 
 type Runtime struct {
@@ -35,7 +35,7 @@ func (r *Runtime)EndScope(s *Scope) {
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-func (r *Runtime)GetVarible(n string) (v reflect.Value,ok bool) {
+func (r *Runtime)GetVarible(n string) (v interface{},ok bool) {
 	e:=r.scopes.FindByLambda(func (e interface{}) bool {
 		if _,ok=e.(*Scope).Get(n);ok {
 			return true
@@ -52,7 +52,7 @@ func (r *Runtime)GetVarible(n string) (v reflect.Value,ok bool) {
 	return	e.(*Scope).Get(n)
 }
 
-func (r *Runtime)SetVarible(n string,v reflect.Value) {
+func (r *Runtime)SetVarible(n string,v interface{}) {
 
 	e:=r.scopes.FindByLambda(func (e interface{}) bool {
 		if _,ok:=e.(*Scope).Get(n);ok {

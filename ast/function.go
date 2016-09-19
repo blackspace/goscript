@@ -1,7 +1,6 @@
 package ast
 
 import (
-	"reflect"
 	"goscript/runtime"
 )
 
@@ -12,9 +11,9 @@ type FuncDefineExpr struct {
 }
 
 
-func (f * FuncDefineExpr)Eval(r *runtime.Runtime,args ...interface{}) (reflect.Value,int){
+func (f * FuncDefineExpr)Eval(r *runtime.Runtime,args ...interface{}) (interface{},int){
 	r.SetFunction(f.Name,func(f * FuncDefineExpr) runtime.Function {
-		return func(in []reflect.Value) (reflect.Value,int) {
+		return func(in []interface{}) (interface{},int) {
 			s:=r.BeginScope()
 
 			if f.Params!=nil {
@@ -33,7 +32,7 @@ func (f * FuncDefineExpr)Eval(r *runtime.Runtime,args ...interface{}) (reflect.V
 		}
 	}(f))
 
-	return reflect.Value{},OK
+	return nil,OK
 }
 
 type FuncCallExpr struct {
@@ -41,20 +40,20 @@ type FuncCallExpr struct {
 	Params []Expr
 }
 
-func (f * FuncCallExpr)Eval(r *runtime.Runtime,args ...interface{}) (v reflect.Value,status int){
+func (f * FuncCallExpr)Eval(r *runtime.Runtime,args ...interface{}) (v interface{},status int){
 	F:=r.GetFunction(f.Name)
 
 
 	if f.Params==nil {
 
-		in:=make([]reflect.Value,0,10)
+		in:=make([]interface{},0,10)
 
 		v,status=F(in)
 
 		return
 	} else {
 
-		vs:=make([]reflect.Value,0,10)
+		vs:=make([]interface{},0,10)
 
 		for _,p:=range f.Params {
 			v,_:=p.Eval(r)

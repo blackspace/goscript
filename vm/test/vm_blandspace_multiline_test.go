@@ -9,7 +9,7 @@ func TestBlankspace(t *testing.T) {
 
 	if val,err :=vm.Run("3   +   3"); err!=nil {
 		t.Error(err)
-	} else if val.IsValid() &&val.Int()!=6 {
+	} else if val!=nil &&val.(int64)!=6 {
 		t.Fail()
 
 	}
@@ -32,7 +32,7 @@ a+2
 `
 	if val,err :=vm.Run(s); err!=nil {
 		t.Error(err)
-	} else if val.IsValid() &&val.Int()!=6 {
+	} else if val!=nil &&val.(int64)!=6 {
 		t.Fail()
 
 	}

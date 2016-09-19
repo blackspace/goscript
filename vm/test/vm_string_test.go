@@ -14,8 +14,8 @@ func TestString(t *testing.T) {
 		t.Error(err)
 	}
 
-	if val.IsValid() {
-		if val.String()!="123" {
+	if val!=nil {
+		if val.(string)!="123" {
 			t.Fail()
 		}
 	} else {
@@ -32,8 +32,8 @@ func TestStringConcate(t *testing.T) {
 		t.Error(err)
 	}
 
-	if val.IsValid() {
-		if val.String()!="12a3123" {
+	if val!=nil {
+		if val.(string)!="12a3123" {
 			t.Fail()
 		}
 	} else {

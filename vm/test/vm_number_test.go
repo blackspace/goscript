@@ -14,8 +14,8 @@ func TestExecuteSigleDigitNumber(t *testing.T) {
 		t.Error(err)
 	}
 
-	if val.IsValid() {
-		if val.Int()!=1 {
+	if val!=nil {
+		if val.(int64)!=1 {
 			t.Fail()
 		}
 	} else {
@@ -33,8 +33,8 @@ func TestExecuteMultiDigitNumber(t *testing.T) {
 		t.Error(err)
 	}
 
-	if val.IsValid() {
-		if val.Int()!=123 {
+	if val!=nil {
+		if val.(int64)!=123 {
 			t.Fail()
 		}
 	} else {

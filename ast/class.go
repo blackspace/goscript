@@ -1,7 +1,6 @@
 package ast
 
 import  (
-	"reflect"
 	"goscript/runtime"
 	"errors"
 )
@@ -12,7 +11,7 @@ type Class struct  {
 }
 
 
-func (c * Class)Eval(r *runtime.Runtime,args ...interface{}) (v reflect.Value,status int) {
+func (c * Class)Eval(r *runtime.Runtime,args ...interface{}) (v interface{},status int) {
 	class := runtime.NewClass()
 
 	r.SetClass(c.Name,class)
@@ -26,73 +25,108 @@ func (c * Class)Eval(r *runtime.Runtime,args ...interface{}) (v reflect.Value,st
 }
 
 
-type ClassAttribute struct  {
-	Name string
-	Value interface{}
-}
-
-func (m * ClassAttribute)Eval(r *runtime.Runtime,args ...interface{}) (v reflect.Value,status int) {
-	return
-}
-
-type ObjectMethod struct  {
+type ObjectMethodDefineExpr struct  {
 	Name string
 	Params []string
 	Body  []Expr
 }
 
-func (m * ObjectMethod)Eval(r *runtime.Runtime,args ...interface{}) (v reflect.Value,status int) {
+func (m *ObjectMethodDefineExpr)Eval(r *runtime.Runtime,args ...interface{}) (v interface{},status int) {
 	class:=args[0].(*runtime.Class)
 
 	class.SetObjectMembers(m.Name, runtime.ObjectMethod(func(o *runtime.Object,in []interface{}) interface{} {
-			return &runtime.Object{}
-		}))
+
+		s:=r.BeginScope()
+
+		s.Set("this",o)
+
+		var result interface{}
+
+		for _, e := range m.Body {
+			result, _ = e.Eval(r,o)
+		}
+
+		r.EndScope(s)
+
+		return result
+
+	}))
 
 	return
 }
 
 
-type ObjectAttribute struct  {
-	Name string
-	Value interface{}
+type AttributeSetExpr struct {
+	ObjectName string
+	AttributeName string
+	ValueExpr Expr
 }
 
-func (m * ObjectAttribute)Eval(r *runtime.Runtime,args ...interface{}) (v reflect.Value,status int) {
+func (ase * AttributeSetExpr)Eval(r *runtime.Runtime,args ...interface{}) (v interface{},status int) {
+
+	if po,ok:=r.GetVarible(ase.ObjectName);ok {
+		o:= po.(*runtime.Object)
+
+		v,_:=ase.ValueExpr.Eval(r)
+
+		o.SetAttribute(ase.AttributeName,v)
+	}
+
 	return
 }
+
+
+type AttributeExpr struct {
+	ObjectName string
+	AttributeName string
+}
+
+func (ae * AttributeExpr)Eval(r *runtime.Runtime,args ...interface{}) (v interface{},status int) {
+
+	if po,ok:=r.GetVarible(ae.ObjectName);ok {
+		o := po.(*runtime.Object)
+
+		a := o.GetAttribute(ae.AttributeName)
+
+		return a,OK
+	}
+
+	return
+}
+
 
 type MethodCalledExpr struct {
-	Name       string
+	ObjectName string
 	MethodName string
 	Params     []Expr
 }
 
-func (m * MethodCalledExpr)Eval(r *runtime.Runtime,args ...interface{}) (v reflect.Value,status int) {
-	if v,ok:=r.GetVarible(m.Name);ok {
-		o:=v.Interface().(*runtime.Object)
+func (m * MethodCalledExpr)Eval(r *runtime.Runtime,args ...interface{}) (v interface{},status int) {
+	if v,ok:=r.GetVarible(m.ObjectName);ok {
+		o:= (v).(*runtime.Object)
 
 		m:=o.GetAttribute(m.MethodName)
 
 		if m!=nil {
 			F:=m.(runtime.ObjectMethod)
-			F(o,nil)
-			return reflect.ValueOf(1),OK
+			result:=F(o,nil)
+			return result,OK
 		}
 	}
 
 
-	if c:=r.FindClass(m.Name);c!=nil {
+	if c:=r.FindClass(m.ObjectName);c!=nil {
 		m:=c.GetClassMembers(m.MethodName)
 
 		if m!=nil {
 			F:=m.(runtime.ClassMethod)
 			result:=F(c,nil)
-			return reflect.ValueOf(result),OK
+			return result,OK
 		}
 	}
 
 
-	panic(errors.New("Can't find the "+m.MethodName+" method of "+" "+m.Name))
+	panic(errors.New("Can't find the "+m.MethodName+" method of "+" "+m.ObjectName))
 }
 
 

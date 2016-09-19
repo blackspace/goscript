@@ -13,7 +13,7 @@ func TestFunctionSimple(t *testing.T) {
 	v,_:=vm.Run("a()")
 
 
-	if v.Int()!=3 {
+	if v.(int64)!=3 {
 		t.Fail()
 	}
 }
@@ -27,7 +27,7 @@ func TestFunctionHasParams(t *testing.T) {
 	v,_:=vm.Run("a(3,4)")
 
 
-	if v.Int()!=4 {
+	if v.(int64)!=4 {
 		t.Fail()
 	}
 }
@@ -39,7 +39,7 @@ func TestFunctionBreak(t *testing.T) {
 
 	v,_:=vm.Run("a(3,4,5)")
 
-	if v.Int()!=4 {
+	if v.(int64)!=4 {
 		t.Fail()
 	}
 }
@@ -51,7 +51,7 @@ func TestFunctionReturn(t *testing.T) {
 
 	v,_:=vm.Run("a(3,4,5)")
 
-	if v.Int()!=5 {
+	if v.(int64)!=5 {
 		t.Fail()
 	}
 }
@@ -66,7 +66,7 @@ func TestFunctionEmbedCall(t *testing.T) {
 
 	v,_:=vm.Run("b()")
 
-	if v.Int()!=6 {
+	if v.(int64)!=6 {
 		t.Fail()
 	}
 }
