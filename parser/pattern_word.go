@@ -65,6 +65,8 @@ func ParseWord(w string) (Token int,v interface{},ok bool) {
 		return END,nil,true
 	case "do":
 		return DO,nil,true
+	case "class":
+		return CLASS,nil,true
 	}
 
 	return

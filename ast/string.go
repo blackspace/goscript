@@ -9,7 +9,7 @@ type String struct {
 	S string
 }
 
-func (s * String)Eval(r *runtime.Runtime) (reflect.Value,int) {
+func (s * String)Eval(r *runtime.Runtime,args ...interface{}) (reflect.Value,int) {
 	return reflect.ValueOf(s.S),0
 }
 

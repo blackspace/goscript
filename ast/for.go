@@ -13,7 +13,7 @@ type ForExpr struct {
 }
 
 
-func (e *ForExpr)Eval(r *runtime.Runtime) (v reflect.Value,status int) {
+func (e *ForExpr)Eval(r *runtime.Runtime,args ...interface{}) (v reflect.Value,status int) {
 	f1:=e.Expr0
 	f2:=e.Expr1
 	f3:=e.Expr2

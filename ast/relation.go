@@ -11,7 +11,7 @@ type LessThanExpr struct {
 }
 
 
-func (e * LessThanExpr)Eval(r *runtime.Runtime) (reflect.Value,int){
+func (e * LessThanExpr)Eval(r *runtime.Runtime,args ...interface{}) (reflect.Value,int){
 	v1,_:=e.Expr1.Eval(r)
 	v2,_:=e.Expr2.Eval(r)
 
@@ -25,7 +25,7 @@ type LessEqualExpr struct {
 }
 
 
-func (e * LessEqualExpr)Eval(r *runtime.Runtime) (reflect.Value,int){
+func (e * LessEqualExpr)Eval(r *runtime.Runtime,args ...interface{}) (reflect.Value,int){
 	v1,_:=e.Expr1.Eval(r)
 	v2,_:=e.Expr2.Eval(r)
 
@@ -39,7 +39,7 @@ type GreaterThanExpr struct {
 }
 
 
-func (e * GreaterThanExpr)Eval(r *runtime.Runtime) (reflect.Value,int){
+func (e * GreaterThanExpr)Eval(r *runtime.Runtime,args ...interface{}) (reflect.Value,int){
 	v1,_:=e.Expr1.Eval(r)
 	v2,_:=e.Expr2.Eval(r)
 
@@ -53,7 +53,7 @@ type GreaterEqualExpr struct {
 }
 
 
-func (e * GreaterEqualExpr)Eval(r *runtime.Runtime) (reflect.Value,int){
+func (e * GreaterEqualExpr)Eval(r *runtime.Runtime,args ...interface{}) (reflect.Value,int){
 	v1,_:=e.Expr1.Eval(r)
 	v2,_:=e.Expr2.Eval(r)
 

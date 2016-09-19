@@ -12,7 +12,7 @@ const (
 )
 
 type Expr interface {
-      	Eval(r *runtime.Runtime) (reflect.Value,int)
+      	Eval(r *runtime.Runtime,args ...interface{}) (reflect.Value,int)
 }
 
 

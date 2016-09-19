@@ -91,6 +91,8 @@ t:
 			return p.GetToken()
 		case ',':
 			return p.GetToken()
+		case '.':
+			return p.GetToken()
 		case '@':
 			r, _, err := l.Reader.ReadRune()
 
@@ -160,6 +162,8 @@ t:
 					return FUNCTION
 				case CLASS:
 					return CLASS
+				case DEF:
+					return DEF
 
 				}
 			} else {

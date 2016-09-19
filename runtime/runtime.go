@@ -8,9 +8,8 @@ import (
 
 type Runtime struct {
 	scopes List
-
 	functions map[string]Function
-
+	classes map[string]*Class
 }
 
 func NewRuntime() (r *Runtime) {
@@ -18,7 +17,8 @@ func NewRuntime() (r *Runtime) {
 		return e1.(*Scope)==e2.(*Scope)
 	}},
 
-	functions:make(map[string]Function)}
+	functions:make(map[string]Function),
+	classes:make(map[string]*Class)}
 
 }
 
@@ -46,7 +46,7 @@ func (r *Runtime)GetVarible(n string) (v reflect.Value,ok bool) {
 	})
 
 	if e==nil {
-		panic(errors.New("Can't get the varible:"+n))
+		return reflect.Value{},false
 	}
 
 	return	e.(*Scope).Get(n)
@@ -89,4 +89,31 @@ func (r*Runtime)GetFunction(n string) Function  {
 	return f
 }
 
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+func (r *Runtime)SetClass(n string,c *Class) {
+	r.classes[n]=c
+}
+
+func (r *Runtime)GetClass(n string) *Class {
+	if c,ok:=r.classes[n];ok {
+		return c
+	} else {
+		panic(errors.New("There isn't the "+n+" Class"))
+	}
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+func (r *Runtime)FindObject(n string) *Object {
+	return nil
+}
+
+func (r *Runtime)FindClass(n string) *Class {
+	if c,ok:=r.classes[n];ok{
+		return c
+	} else {
+		return nil
+	}
+}
 

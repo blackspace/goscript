@@ -5,8 +5,6 @@ import (
 	"goscript/runtime"
 )
 
-type Params []Variable
-
 type FuncDefineExpr struct {
 	Name string
 	Params []string
@@ -14,7 +12,7 @@ type FuncDefineExpr struct {
 }
 
 
-func (f * FuncDefineExpr)Eval(r *runtime.Runtime) (reflect.Value,int){
+func (f * FuncDefineExpr)Eval(r *runtime.Runtime,args ...interface{}) (reflect.Value,int){
 	r.SetFunction(f.Name,func(f * FuncDefineExpr) runtime.Function {
 		return func(in []reflect.Value) (reflect.Value,int) {
 			s:=r.BeginScope()
@@ -43,7 +41,7 @@ type FuncCallExpr struct {
 	Params []Expr
 }
 
-func (f * FuncCallExpr)Eval(r *runtime.Runtime) (v reflect.Value,status int){
+func (f * FuncCallExpr)Eval(r *runtime.Runtime,args ...interface{}) (v reflect.Value,status int){
 	F:=r.GetFunction(f.Name)
 
 

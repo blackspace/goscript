@@ -12,7 +12,7 @@ type BlockExpr struct {
 }
 
 
-func (b * BlockExpr)Eval(r *runtime.Runtime) (v reflect.Value,status int) {
+func (b * BlockExpr)Eval(r *runtime.Runtime,args ...interface{}) (v reflect.Value,status int) {
 
 	s:=r.BeginScope()
 

@@ -11,7 +11,7 @@ type AddExpr struct {
 	Expr2 Expr
 }
 
-func (a  * AddExpr)Eval(r *runtime.Runtime) (v reflect.Value,status int){
+func (a  * AddExpr)Eval(r *runtime.Runtime,args ...interface{}) (v reflect.Value,status int){
 	v1,_ :=a.Expr1.Eval(r)
 	v2,_ :=a.Expr2.Eval(r)
 
@@ -47,7 +47,7 @@ type SubExpr struct {
 }
 
 
-func (s * SubExpr)Eval(r *runtime.Runtime) (reflect.Value,int){
+func (s * SubExpr)Eval(r *runtime.Runtime,args ...interface{}) (reflect.Value,int){
 	v1,_ :=s.Expr1.Eval(r)
 	v2,_ :=s.Expr2.Eval(r)
 	return  reflect.ValueOf(v1.Int()-v2.Int()),0
@@ -59,7 +59,7 @@ type MultiExpr struct {
 }
 
 
-func (s * MultiExpr)Eval(r *runtime.Runtime) (reflect.Value,int){
+func (s * MultiExpr)Eval(r *runtime.Runtime,args ...interface{}) (reflect.Value,int){
 	v1,_ :=s.Expr1.Eval(r)
 	v2,_ :=s.Expr2.Eval(r)
 	return  reflect.ValueOf(v1.Int()*v2.Int()),0
@@ -72,7 +72,7 @@ type DivExpr struct {
 }
 
 
-func (s * DivExpr)Eval(r *runtime.Runtime) (reflect.Value,int){
+func (s * DivExpr)Eval(r *runtime.Runtime,args ...interface{}) (reflect.Value,int){
 	v1,_ :=s.Expr1.Eval(r)
 	v2,_ :=s.Expr2.Eval(r)
 	return  reflect.ValueOf(v1.Int()/v2.Int()),0

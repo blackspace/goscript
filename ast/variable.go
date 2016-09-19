@@ -10,7 +10,7 @@ type Variable struct {
 	Name string
 }
 
-func (s *Variable)Eval(r *runtime.Runtime) (reflect.Value,int) {
+func (s *Variable)Eval(r *runtime.Runtime,args ...interface{}) (reflect.Value,int) {
 	if v,ok:=r.GetVarible(s.Name);ok {
 		return v,OK
 	} else {

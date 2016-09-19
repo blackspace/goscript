@@ -8,7 +8,7 @@ import (
 type BreakExpr struct  {
 }
 
-func (n * BreakExpr)Eval(r *runtime.Runtime) (reflect.Value,int) {
+func (n * BreakExpr)Eval(r *runtime.Runtime,args ...interface{}) (reflect.Value,int) {
 	return reflect.Value{},BREAK
 }
 
