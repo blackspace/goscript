@@ -88,7 +88,13 @@ func (ae * AttributeExpr)Eval(r *runtime.Runtime,args ...interface{}) (v interfa
 
 		a := o.GetAttribute(ae.AttributeName)
 
-		return a,OK
+		if a!=nil {
+			return a,OK
+		} else {
+			panic(errors.New("The "+ae.ObjectName+" hasn't "+"the "+ae.AttributeName+" attribute"))
+		}
+
+
 	}
 
 	return

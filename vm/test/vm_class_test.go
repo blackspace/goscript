@@ -10,16 +10,19 @@ func TestClassDefineMethod(t *testing.T) {
 
 	vm.Run(`class A {
 		def hello() {
-			this.b=1
+			this.b=2
 		}
 	}`)
 
 	vm.Run("a=A.new()")
 
 
+	vm.Run("a.hello()")
+
+
 	v,_:=vm.Run("a.b")
 
-	if v.(int)!=2 {
+	if v.(int64)!=2 {
 		t.Fail()
 	}
 }
