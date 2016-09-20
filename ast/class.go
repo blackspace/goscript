@@ -33,119 +33,83 @@ func (c * Class)Eval(r *runtime.Runtime,args ...interface{}) (v interface{},stat
 type MethodDefineExpr struct  {
 	ObjectName string
 	MethodName string
-	Params     []string
+	Params []string
 	Body       []Expr
+}
+
+
+func MakeObjectMethod(r *runtime.Runtime,params []string,body []Expr) runtime.ObjectMethod {
+	return func(o *runtime.Object,in []interface{}) interface{} {
+		s:=r.BeginScope()
+
+		s.Set("this",o)
+
+		var result interface{}
+
+		for _, e := range body {
+			result, status := e.Eval(r,o)
+
+			switch status {
+			case RETURN:
+				return result
+			}
+		}
+
+		r.EndScope(s)
+
+		return result
+
+	}
+}
+
+func MakeClassMethod(r *runtime.Runtime,params []string,body []Expr) runtime.ClassMethod {
+	return func(c *runtime.Class,in []interface{}) interface{} {
+
+		s:=r.BeginScope()
+
+		s.Set("this",c)
+
+		var result interface{}
+		var status int
+
+		for _, e := range body {
+			result, status = e.Eval(r,c)
+
+			switch status {
+			case RETURN:
+				return result
+			}
+		}
+
+		r.EndScope(s)
+
+		return result
+
+	}
 }
 
 func (m *MethodDefineExpr)Eval(r *runtime.Runtime,args ...interface{}) (v interface{},status int) {
 	if m.ObjectName=="" {
 		class:=args[0].(*runtime.Class)
 
-		class.SetObjectMembers(m.MethodName, runtime.ObjectMethod(func(o *runtime.Object,in []interface{}) interface{} {
-
-			s:=r.BeginScope()
-
-			s.Set("this",o)
-
-			var result interface{}
-
-			for _, e := range m.Body {
-				result, status := e.Eval(r,o)
-
-				switch status {
-				case RETURN:
-					return result
-				}
-			}
-
-			r.EndScope(s)
-
-			return result
-
-		}))
+		class.SetObjectMembers(m.MethodName, MakeObjectMethod(r,m.Params,m.Body))
 	} else {
 		if pc:=r.GetClass(m.ObjectName);pc!=nil {
-			pc.SetClassMembers(m.MethodName, runtime.ClassMethod(func(c *runtime.Class,in []interface{}) interface{} {
-
-				s:=r.BeginScope()
-
-				s.Set("this",c)
-
-				var result interface{}
-
-				for _, e := range m.Body {
-					result, status := e.Eval(r,c)
-
-					switch status {
-					case RETURN:
-						return result
-					}
-				}
-
-				r.EndScope(s)
-
-				return result
-
-			}))
+			pc.SetClassMembers(m.MethodName, MakeClassMethod(r,m.Params,m.Body))
 		}
 
 
 		if po:=r.GetVarible(m.ObjectName);po!=nil {
 			switch v:=po.(type) {
 			case *runtime.Object:
-				v.SetAttribute(m.MethodName, runtime.ObjectMethod(func(o *runtime.Object,in []interface{}) interface{} {
-
-					s:=r.BeginScope()
-
-					s.Set("this",o)
-
-					var result interface{}
-
-					for _, e := range m.Body {
-						result, status := e.Eval(r,o)
-
-						switch status {
-						case RETURN:
-							return result
-						}
-					}
-
-					r.EndScope(s)
-
-					return result
-
-				}))
+				v.SetAttribute(m.MethodName, MakeObjectMethod(r,m.Params,m.Body))
 			case *runtime.Class:
-				v.SetClassMembers(m.MethodName, runtime.ClassMethod(func(c *runtime.Class,in []interface{}) interface{} {
-
-					s:=r.BeginScope()
-
-					s.Set("this",c)
-
-					var result interface{}
-
-					for _, e := range m.Body {
-						result, status = e.Eval(r,c)
-
-						switch status {
-						case RETURN:
-							return result
-						}
-					}
-
-					r.EndScope(s)
-
-					return result
-
-				}))
+				v.SetClassMembers(m.MethodName, MakeClassMethod(r,m.Params,m.Body))
 			}
 
 		}
 
 	}
-
-
-
 
 	return
 }
