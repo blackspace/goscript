@@ -38,7 +38,7 @@ type MethodDefineExpr struct  {
 }
 
 
-func MakeObjectMethod(r *runtime.Runtime,params []string,body []Expr) runtime.ObjectMethod {
+func _MakeObjectMethod(r *runtime.Runtime,params []string,body []Expr) runtime.ObjectMethod {
 	return func(o *runtime.Object,in []interface{}) interface{} {
 		s:=r.BeginScope()
 
@@ -62,7 +62,7 @@ func MakeObjectMethod(r *runtime.Runtime,params []string,body []Expr) runtime.Ob
 	}
 }
 
-func MakeClassMethod(r *runtime.Runtime,params []string,body []Expr) runtime.ClassMethod {
+func _MakeClassMethod(r *runtime.Runtime,params []string,body []Expr) runtime.ClassMethod {
 	return func(c *runtime.Class,in []interface{}) interface{} {
 
 		s:=r.BeginScope()
@@ -92,23 +92,21 @@ func (m *MethodDefineExpr)Eval(r *runtime.Runtime,args ...interface{}) (v interf
 	if m.ObjectName=="" {
 		class:=args[0].(*runtime.Class)
 
-		class.SetObjectMembers(m.MethodName, MakeObjectMethod(r,m.Params,m.Body))
+		class.SetObjectMembers(m.MethodName, _MakeObjectMethod(r,m.Params,m.Body))
 	} else {
 		if pc:=r.GetClass(m.ObjectName);pc!=nil {
-			pc.SetClassMembers(m.MethodName, MakeClassMethod(r,m.Params,m.Body))
+			pc.SetClassMembers(m.MethodName, _MakeClassMethod(r,m.Params,m.Body))
 		}
 
 
 		if po:=r.GetVarible(m.ObjectName);po!=nil {
 			switch v:=po.(type) {
 			case *runtime.Object:
-				v.SetAttribute(m.MethodName, MakeObjectMethod(r,m.Params,m.Body))
+				v.SetAttribute(m.MethodName, _MakeObjectMethod(r,m.Params,m.Body))
 			case *runtime.Class:
-				v.SetClassMembers(m.MethodName, MakeClassMethod(r,m.Params,m.Body))
+				v.SetClassMembers(m.MethodName, _MakeClassMethod(r,m.Params,m.Body))
 			}
-
 		}
-
 	}
 
 	return
@@ -121,21 +119,33 @@ type AttributeSetExpr struct {
 	ValueExpr Expr
 }
 
-func (ase * AttributeSetExpr)Eval(r *runtime.Runtime,args ...interface{}) (v interface{},status int) {
+func (ase * AttributeSetExpr)Eval(r *runtime.Runtime,args ...interface{}) (interface{},int) {
+	pc:=r.GetClass(ase.ObjectName)
+	po:=r.GetVarible(ase.ObjectName)
 
-	v,_=ase.ValueExpr.Eval(r)
+	if pc!=nil && po!=nil {
+		panic(errors.New("The name has both a variable and a class"))
+	}
 
-	if po:=r.GetVarible(ase.ObjectName);po!=nil {
-		switch o:=po.(type) {
-		case (*runtime.Object):
-			o.SetAttribute(ase.AttributeName,v)
-		case (*runtime.Class):
-			o.SetClassMembers(ase.AttributeName,v)
+	v,status:=ase.ValueExpr.Eval(r)
+
+	if pc!=nil {
+		pc.SetClassMembers(ase.AttributeName,v)
+	}
+
+
+	if po!=nil {
+		switch lo:=po.(type) {
+		case *runtime.Object:
+			lo.SetAttribute(ase.AttributeName,v)
+		case *runtime.Class: //these lines is for "this" variable in a class define,
+			             // when it is ,it is a variable not a class
+			lo.SetClassMembers(ase.AttributeName,v)
 		}
 
 	}
 
-	return
+	return v,status
 }
 
 
@@ -145,7 +155,14 @@ type AttributeExpr struct {
 }
 
 func (ae * AttributeExpr)Eval(r *runtime.Runtime,args ...interface{}) (v interface{},status int) {
-	if pc:=r.GetClass(ae.ObjectName);pc!=nil {
+	pc:=r.GetClass(ae.ObjectName)
+	po:=r.GetVarible(ae.ObjectName)
+
+	if pc!=nil && po!=nil {
+		panic(errors.New("The name has both a variable and a class"))
+	}
+
+	if pc!=nil {
 		a := pc.GetClassMembers(ae.AttributeName)
 
 		if a!=nil {
@@ -157,13 +174,13 @@ func (ae * AttributeExpr)Eval(r *runtime.Runtime,args ...interface{}) (v interfa
 	}
 
 
-	if po:=r.GetVarible(ae.ObjectName);po!=nil {
+	if po!=nil {
 		a := po.(*runtime.Object).GetObjectAttribute(ae.AttributeName)
 
 		if a!=nil {
 			return a,OK
 		} else {
-			panic(errors.New("The "+ae.ObjectName+"object hasn't "+"the "+ae.AttributeName+" attribute"))
+			panic(errors.New("The "+ae.ObjectName+" object hasn't "+"the "+ae.AttributeName+" attribute"))
 		}
 	}
 
@@ -177,9 +194,17 @@ type MethodCalledExpr struct {
 	Params     []Expr
 }
 
-func (m * MethodCalledExpr)Eval(r *runtime.Runtime,args ...interface{}) (v interface{},status int) {
-	if v:=r.GetVarible(m.ObjectName);v!=nil {
-		o:= (v).(*runtime.Object)
+func (m * MethodCalledExpr)Eval(r *runtime.Runtime,args ...interface{}) (interface{},int) {
+	v:=r.GetVarible(m.ObjectName)
+	c:=r.FindClass(m.ObjectName)
+
+	if (v!=nil&&c!=nil) {
+		panic(errors.New("The name has both a variable and a class"))
+	}
+
+
+	if v!=nil {
+		o:= v.(*runtime.Object)
 
 		m:=o.GetObjectAttribute(m.MethodName)
 
@@ -191,7 +216,7 @@ func (m * MethodCalledExpr)Eval(r *runtime.Runtime,args ...interface{}) (v inter
 	}
 
 
-	if c:=r.FindClass(m.ObjectName);c!=nil {
+	if c!=nil {
 		m:=c.GetClassMembers(m.MethodName)
 
 		if m!=nil {
