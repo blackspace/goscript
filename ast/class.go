@@ -16,10 +16,15 @@ func (c * Class)Eval(r *runtime.Runtime,args ...interface{}) (v interface{},stat
 
 	r.SetClass(c.Name,class)
 
+	s:=r.BeginScope()
+
+	s.Set("this",class)
 
 	for _,e:=range c.Exprs {
 		e.Eval(r,class)
 	}
+
+	r.EndScope(s)
 
 	return
 }
@@ -43,7 +48,12 @@ func (m *ObjectMethodDefineExpr)Eval(r *runtime.Runtime,args ...interface{}) (v 
 		var result interface{}
 
 		for _, e := range m.Body {
-			result, _ = e.Eval(r,o)
+			result, status := e.Eval(r,o)
+
+			switch status {
+			case RETURN:
+				return result
+			}
 		}
 
 		r.EndScope(s)
@@ -64,12 +74,16 @@ type AttributeSetExpr struct {
 
 func (ase * AttributeSetExpr)Eval(r *runtime.Runtime,args ...interface{}) (v interface{},status int) {
 
+	v,_=ase.ValueExpr.Eval(r)
+
 	if po,ok:=r.GetVarible(ase.ObjectName);ok {
-		o:= po.(*runtime.Object)
+		switch o:=po.(type) {
+		case (*runtime.Object):
+			o.SetAttribute(ase.AttributeName,v)
+		case (*runtime.Class):
+			o.SetClassMembers(ase.AttributeName,v)
+		}
 
-		v,_:=ase.ValueExpr.Eval(r)
-
-		o.SetAttribute(ase.AttributeName,v)
 	}
 
 	return
@@ -82,19 +96,26 @@ type AttributeExpr struct {
 }
 
 func (ae * AttributeExpr)Eval(r *runtime.Runtime,args ...interface{}) (v interface{},status int) {
-
-	if po,ok:=r.GetVarible(ae.ObjectName);ok {
-		o := po.(*runtime.Object)
-
-		a := o.GetAttribute(ae.AttributeName)
+	if pc:=r.GetClass(ae.ObjectName);pc!=nil {
+		a := pc.GetClassMembers(ae.AttributeName)
 
 		if a!=nil {
 			return a,OK
 		} else {
-			panic(errors.New("The "+ae.ObjectName+" hasn't "+"the "+ae.AttributeName+" attribute"))
+			panic(errors.New("The "+ae.ObjectName+"class hasn't "+"the "+ae.AttributeName+" attribute"))
 		}
 
+	}
 
+
+	if po,ok:=r.GetVarible(ae.ObjectName);ok {
+		a := po.(*runtime.Object).GetObjectAttribute(ae.AttributeName)
+
+		if a!=nil {
+			return a,OK
+		} else {
+			panic(errors.New("The "+ae.ObjectName+"object hasn't "+"the "+ae.AttributeName+" attribute"))
+		}
 	}
 
 	return
@@ -111,7 +132,7 @@ func (m * MethodCalledExpr)Eval(r *runtime.Runtime,args ...interface{}) (v inter
 	if v,ok:=r.GetVarible(m.ObjectName);ok {
 		o:= (v).(*runtime.Object)
 
-		m:=o.GetAttribute(m.MethodName)
+		m:=o.GetObjectAttribute(m.MethodName)
 
 		if m!=nil {
 			F:=m.(runtime.ObjectMethod)

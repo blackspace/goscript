@@ -66,7 +66,7 @@ func (o *Object)SetAttribute(n string,v interface{}) {
 	o.Attributes[n]=v
 }
 
-func (o *Object)GetAttribute(n string) interface{} {
+func (o *Object)GetObjectAttribute(n string) interface{} {
 	if a,ok:=o.Attributes[n];ok {
 		return a
 	} else {
