@@ -13,13 +13,13 @@ func (e *SubfixDoubleSubExpr)Eval(r *runtime.Runtime,args ...interface{}) (inter
 
 	name :=e.Expr0.(*Variable).Name
 
-	if v,ok:=r.GetVarible(name);ok{
+	if v:=r.GetVarible(name);v!=nil{
 		n:=v.(int64)
 		n--
 		r.SetVarible(name,n)
 	}
 
-	v,_:=r.GetVarible(name)
+	v:=r.GetVarible(name)
 
 	return v,OK
 }

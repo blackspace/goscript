@@ -10,7 +10,7 @@ type Variable struct {
 }
 
 func (s *Variable)Eval(r *runtime.Runtime,args ...interface{}) (interface{},int) {
-	if v,ok:=r.GetVarible(s.Name);ok {
+	if v:=r.GetVarible(s.Name);v!=nil {
 		return v,OK
 	} else {
 		panic(errors.New("The "+s.Name+" varible is not existing"))

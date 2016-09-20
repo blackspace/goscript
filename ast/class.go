@@ -90,7 +90,7 @@ func (m *MethodDefineExpr)Eval(r *runtime.Runtime,args ...interface{}) (v interf
 		}
 
 
-		if po,ok:=r.GetVarible(m.ObjectName);ok {
+		if po:=r.GetVarible(m.ObjectName);po!=nil {
 			switch v:=po.(type) {
 			case *runtime.Object:
 				v.SetAttribute(m.MethodName, runtime.ObjectMethod(func(o *runtime.Object,in []interface{}) interface{} {
@@ -161,7 +161,7 @@ func (ase * AttributeSetExpr)Eval(r *runtime.Runtime,args ...interface{}) (v int
 
 	v,_=ase.ValueExpr.Eval(r)
 
-	if po,ok:=r.GetVarible(ase.ObjectName);ok {
+	if po:=r.GetVarible(ase.ObjectName);po!=nil {
 		switch o:=po.(type) {
 		case (*runtime.Object):
 			o.SetAttribute(ase.AttributeName,v)
@@ -193,7 +193,7 @@ func (ae * AttributeExpr)Eval(r *runtime.Runtime,args ...interface{}) (v interfa
 	}
 
 
-	if po,ok:=r.GetVarible(ae.ObjectName);ok {
+	if po:=r.GetVarible(ae.ObjectName);po!=nil {
 		a := po.(*runtime.Object).GetObjectAttribute(ae.AttributeName)
 
 		if a!=nil {
@@ -214,7 +214,7 @@ type MethodCalledExpr struct {
 }
 
 func (m * MethodCalledExpr)Eval(r *runtime.Runtime,args ...interface{}) (v interface{},status int) {
-	if v,ok:=r.GetVarible(m.ObjectName);ok {
+	if v:=r.GetVarible(m.ObjectName);v!=nil {
 		o:= (v).(*runtime.Object)
 
 		m:=o.GetObjectAttribute(m.MethodName)
