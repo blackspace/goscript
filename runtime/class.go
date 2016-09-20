@@ -15,7 +15,15 @@ func NewClass() *Class {
 	}
 
 	class.SetClassMembers("new",ClassMethod(func(c *Class,in []interface{}) interface{} {
-		return class.NewObject()
+		o:=class.NewObject()
+
+		if F:=o.GetObjectAttribute("init");F!=nil {
+			initFun:=F.(ObjectMethod)
+
+			initFun(o,nil)
+		}
+
+		return o
 	}))
 
 	return class
