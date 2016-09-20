@@ -42,3 +42,21 @@ func TestClassAttributeMember(t *testing.T) {
 		t.Fail()
 	}
 }
+
+func TestClassMethodMember(t *testing.T) {
+	vm:=vm.NewVM()
+
+	vm.Run(`class A {
+
+		def this.hello() {
+			5
+		}
+
+	}`)
+
+	v,_:=vm.Run("A.hello()")
+
+	if v.(int64)!=5 {
+		t.Fail()
+	}
+}

@@ -30,37 +30,97 @@ func (c * Class)Eval(r *runtime.Runtime,args ...interface{}) (v interface{},stat
 }
 
 
-type ObjectMethodDefineExpr struct  {
-	Name string
-	Params []string
-	Body  []Expr
+type MethodDefineExpr struct  {
+	ObjectName string
+	MethodName string
+	Params     []string
+	Body       []Expr
 }
 
-func (m *ObjectMethodDefineExpr)Eval(r *runtime.Runtime,args ...interface{}) (v interface{},status int) {
-	class:=args[0].(*runtime.Class)
+func (m *MethodDefineExpr)Eval(r *runtime.Runtime,args ...interface{}) (v interface{},status int) {
+	if m.ObjectName=="" {
+		class:=args[0].(*runtime.Class)
 
-	class.SetObjectMembers(m.Name, runtime.ObjectMethod(func(o *runtime.Object,in []interface{}) interface{} {
+		class.SetObjectMembers(m.MethodName, runtime.ObjectMethod(func(o *runtime.Object,in []interface{}) interface{} {
 
-		s:=r.BeginScope()
+			s:=r.BeginScope()
 
-		s.Set("this",o)
+			s.Set("this",o)
 
-		var result interface{}
+			var result interface{}
 
-		for _, e := range m.Body {
-			result, status := e.Eval(r,o)
+			for _, e := range m.Body {
+				result, status := e.Eval(r,o)
 
-			switch status {
-			case RETURN:
-				return result
+				switch status {
+				case RETURN:
+					return result
+				}
 			}
+
+			r.EndScope(s)
+
+			return result
+
+		}))
+	} else {
+		if pc:=r.GetClass(m.ObjectName);pc!=nil {
+			pc.SetClassMembers(m.MethodName, runtime.ClassMethod(func(c *runtime.Class,in []interface{}) interface{} {
+
+				s:=r.BeginScope()
+
+				s.Set("this",c)
+
+				var result interface{}
+
+				for _, e := range m.Body {
+					result, status := e.Eval(r,c)
+
+					switch status {
+					case RETURN:
+						return result
+					}
+				}
+
+				r.EndScope(s)
+
+				return result
+
+			}))
 		}
 
-		r.EndScope(s)
 
-		return result
+		if po,ok:=r.GetVarible(m.ObjectName);ok {
+			v:=po.(*runtime.Object)
 
-	}))
+			v.SetAttribute(m.MethodName, runtime.ObjectMethod(func(o *runtime.Object,in []interface{}) interface{} {
+
+				s:=r.BeginScope()
+
+				s.Set("this",o)
+
+				var result interface{}
+
+				for _, e := range m.Body {
+					result, status := e.Eval(r,o)
+
+					switch status {
+					case RETURN:
+						return result
+					}
+				}
+
+				r.EndScope(s)
+
+				return result
+
+			}))
+		}
+
+	}
+
+
+
 
 	return
 }

@@ -93,19 +93,35 @@ inclass_exprs: inclass_expr
 
 method_define_expr: DEF method_name '(' ')' '{' inmethod_exprs '}'
     {
-        $$=&ast.ObjectMethodDefineExpr{$2,nil,$6}
+        $$=&ast.MethodDefineExpr{"",$2,nil,$6}
     }
     |DEF method_name '(' ')' '{'  '}'
     {
-        $$=&ast.ObjectMethodDefineExpr{$2,nil,nil}
+        $$=&ast.MethodDefineExpr{"",$2,nil,nil}
     }
     |DEF method_name '(' params ')' '{' inmethod_exprs '}'
     {
-        $$=&ast.ObjectMethodDefineExpr{$2,$4,$7}
+        $$=&ast.MethodDefineExpr{"",$2,$4,$7}
     }
     |DEF method_name '(' params ')' '{'  '}'
     {
-        $$=&ast.ObjectMethodDefineExpr{$2,$4,nil}
+        $$=&ast.MethodDefineExpr{"",$2,$4,nil}
+    }
+    |DEF object_name '.' method_name '(' ')' '{' inmethod_exprs '}'
+    {
+        $$=&ast.MethodDefineExpr{$2,$4,nil,$8}
+    }
+    |DEF object_name '.' method_name '(' ')' '{'  '}'
+    {
+        $$=&ast.MethodDefineExpr{$2,$4,nil,nil}
+    }
+    |DEF object_name '.'method_name '(' params ')' '{' inmethod_exprs '}'
+    {
+        $$=&ast.MethodDefineExpr{$2,$4,$6,$9}
+    }
+    |DEF object_name '.'method_name '(' params ')' '{'  '}'
+    {
+        $$=&ast.MethodDefineExpr{$2,$4,$6,nil}
     };
 
 inmethod_expr:simple_expr|stmt_expr|assign_expr|attribute_set_expr
