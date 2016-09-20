@@ -32,7 +32,7 @@ func TestClassAttributeMember(t *testing.T) {
 
 	vm.Run(`class A {
 
-		this.a=5
+		A.a=5
 
 		A.b=3
 	}`)
@@ -51,7 +51,7 @@ func TestClassMethodMember(t *testing.T) {
 
 	vm.Run(`class A {
 
-		def this.hello() {
+		def A.hello() {
 			6
 		}
 

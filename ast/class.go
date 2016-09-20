@@ -18,8 +18,6 @@ func (c * Class)Eval(r *runtime.Runtime,args ...interface{}) (v interface{},stat
 
 	s:=r.BeginScope()
 
-	s.Set("this",class)
-
 	for _,e:=range c.Exprs {
 		e.Eval(r,class)
 	}
@@ -135,15 +133,9 @@ func (ase * AttributeSetExpr)Eval(r *runtime.Runtime,args ...interface{}) (inter
 
 
 	if po!=nil {
-		switch lo:=po.(type) {
-		case *runtime.Object:
-			lo.SetAttribute(ase.AttributeName,v)
-		case *runtime.Class: //these lines is for "this" variable in a class define,
-			             // when it is  ,it is a variable not a class
-			lo.SetClassMembers(ase.AttributeName,v)
-		}
-
+		po.(*runtime.Object).SetAttribute(ase.AttributeName, v)
 	}
+
 
 	return v,status
 }
