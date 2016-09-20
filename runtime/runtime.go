@@ -2,7 +2,6 @@ package runtime
 
 import (
 	. "goscript/mycontainer"
-	"errors"
 	"reflect"
 )
 
@@ -99,7 +98,7 @@ func (r *Runtime)GetClass(n string) *Class {
 	if c,ok:=r.classes[n];ok {
 		return c
 	} else {
-		panic(errors.New("There isn't the "+n+" Class"))
+		return nil
 	}
 }
 

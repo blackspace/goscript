@@ -91,30 +91,55 @@ func (m *MethodDefineExpr)Eval(r *runtime.Runtime,args ...interface{}) (v interf
 
 
 		if po,ok:=r.GetVarible(m.ObjectName);ok {
-			v:=po.(*runtime.Object)
+			switch v:=po.(type) {
+			case *runtime.Object:
+				v.SetAttribute(m.MethodName, runtime.ObjectMethod(func(o *runtime.Object,in []interface{}) interface{} {
 
-			v.SetAttribute(m.MethodName, runtime.ObjectMethod(func(o *runtime.Object,in []interface{}) interface{} {
+					s:=r.BeginScope()
 
-				s:=r.BeginScope()
+					s.Set("this",o)
 
-				s.Set("this",o)
+					var result interface{}
 
-				var result interface{}
+					for _, e := range m.Body {
+						result, status := e.Eval(r,o)
 
-				for _, e := range m.Body {
-					result, status := e.Eval(r,o)
-
-					switch status {
-					case RETURN:
-						return result
+						switch status {
+						case RETURN:
+							return result
+						}
 					}
-				}
 
-				r.EndScope(s)
+					r.EndScope(s)
 
-				return result
+					return result
 
-			}))
+				}))
+			case *runtime.Class:
+				v.SetClassMembers(m.MethodName, runtime.ClassMethod(func(c *runtime.Class,in []interface{}) interface{} {
+
+					s:=r.BeginScope()
+
+					s.Set("this",c)
+
+					var result interface{}
+
+					for _, e := range m.Body {
+						result, status = e.Eval(r,c)
+
+						switch status {
+						case RETURN:
+							return result
+						}
+					}
+
+					r.EndScope(s)
+
+					return result
+
+				}))
+			}
+
 		}
 
 	}

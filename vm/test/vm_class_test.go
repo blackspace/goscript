@@ -5,7 +5,7 @@ import (
 	"goscript/vm"
 )
 
-func TestObjectMember(t *testing.T) {
+func TestClassObjectMember(t *testing.T) {
 	vm:=vm.NewVM()
 
 	vm.Run(`class A {
@@ -49,14 +49,14 @@ func TestClassMethodMember(t *testing.T) {
 	vm.Run(`class A {
 
 		def this.hello() {
-			5
+			6
 		}
 
 	}`)
 
 	v,_:=vm.Run("A.hello()")
 
-	if v.(int64)!=5 {
+	if v.(int64)!=6 {
 		t.Fail()
 	}
 }
