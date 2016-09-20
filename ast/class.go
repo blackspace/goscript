@@ -139,7 +139,7 @@ func (ase * AttributeSetExpr)Eval(r *runtime.Runtime,args ...interface{}) (inter
 		case *runtime.Object:
 			lo.SetAttribute(ase.AttributeName,v)
 		case *runtime.Class: //these lines is for "this" variable in a class define,
-			             // when it is ,it is a variable not a class
+			             // when it is  ,it is a variable not a class
 			lo.SetClassMembers(ase.AttributeName,v)
 		}
 
@@ -199,7 +199,7 @@ func (m * MethodCalledExpr)Eval(r *runtime.Runtime,args ...interface{}) (interfa
 	c:=r.FindClass(m.ObjectName)
 
 	if (v!=nil&&c!=nil) {
-		panic(errors.New("The name has both a variable and a class"))
+		panic(errors.New("The name "+m.ObjectName+" has both a variable and a class"))
 	}
 
 
@@ -229,7 +229,4 @@ func (m * MethodCalledExpr)Eval(r *runtime.Runtime,args ...interface{}) (interfa
 
 	panic(errors.New("Can't find the "+m.MethodName+" method of "+" "+m.ObjectName))
 }
-
-
-
 

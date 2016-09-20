@@ -34,11 +34,14 @@ func TestClassAttributeMember(t *testing.T) {
 
 		this.a=5
 
+		A.b=3
 	}`)
 
-	v,_:=vm.Run("A.a")
+	vm.Run("A.c=2")
 
-	if v.(int64)!=5 {
+	v,_:=vm.Run("A.a+A.b+A.c")
+
+	if v.(int64)!=10 {
 		t.Fail()
 	}
 }
