@@ -24,21 +24,21 @@ func main() {
 
 	source:=""
 
-
 	for {
-		lr,_,err:=r.ReadRune()
+		buf:=make([]byte,1024)
+
+
+		n,err:=r.Read(buf)
 
 		if err==io.EOF {
 			break
 		}
 
-		source+=string(lr)
+		source+=string(buf[:n])
 	}
 
 	vm:=vm.NewVM()
 
 	vm.Run(source)
-
-
 }
 
