@@ -18,7 +18,7 @@ func NewRuntime() (r *Runtime) {
 	functions:make(map[string]Function),
 	classes:make(map[string]*Class)}
 
-	r.SetFunction("Print",Print)
+	r.SetFunction("print",Print)
 
 	return r
 
