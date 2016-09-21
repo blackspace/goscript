@@ -1,24 +1,44 @@
 #! /usr/bin/env goscript
 
-console.Println("hello")
+console.Println("hello world")
 
+
+//integer adding
 a=1+1
 
 console.Println(a)
 
+
+//if statement
 if 1>2 {
     console.Println("a")
 } else {
     console.Println("b")
 }
 
+
+//for statement
 for i=1;i<10;i++ {
     console.Println(i)
 }
 
+
+//to define a function
 func A(a) {
     console.Println(a)
 }
 
 A(1)
 
+//to define a class
+class C {
+    def hello() {
+        this.a="hello class"
+    }
+}
+
+c=C.new()
+
+c.hello()
+
+console.Println(c.a)
