@@ -41,7 +41,7 @@ t:
 		}
 
 		switch t:=p.GetToken();t {
-		case LINECOMMENT:
+		case POUNDCOMMENT:
 			l.Buf=""
 			goto t
 		case NUMBER:
@@ -82,7 +82,32 @@ t:
 				l.PreRune=r
 				return '-'
 			}
-		case '*','/','=':
+		case  '/':
+			r, _, err := l.Reader.ReadRune()
+			if err == io.EOF {
+				return '/'
+			}
+
+			if r=='/' {
+				l.Buf = l.Buf + string(r)
+
+				if p := FindPattern(l.Buf); p != nil {
+					_, pr, h := p.BuildFun(l.Buf, l.Reader)
+
+					if h {
+						l.PreRune = pr
+						l.HasPreRune=true
+					}
+
+					l.Buf=""
+					goto t
+				}
+			} else {
+				l.HasPreRune=true
+				l.PreRune=r
+				return '/'
+			}
+		case '*','=':
 			return p.GetToken()
 		case '{','}':
 			return p.GetToken()

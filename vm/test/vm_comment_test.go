@@ -13,6 +13,8 @@ func TestCommentLine(t *testing.T) {
 	#sssssss
 	#ffffff
 
+	//ddddddddd
+
 	234 #ddddd`)
 
 	if v.(int64)!=234 {

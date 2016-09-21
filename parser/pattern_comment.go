@@ -6,11 +6,11 @@ import (
 	"io"
 )
 
-type LineCommentPattern struct {
+type PoundCommentPattern struct {
 	PatternBase
 }
 
-func (n * LineCommentPattern)BuildFun(prefix string,r *bufio.Reader) (v interface{},pre rune,has_prerune bool) {
+func (n *PoundCommentPattern)BuildFun(prefix string,r *bufio.Reader) (v interface{},pre rune,has_prerune bool) {
 	s:=prefix
 	for {
 		r,_,err:=r.ReadRune()
@@ -21,20 +21,54 @@ func (n * LineCommentPattern)BuildFun(prefix string,r *bufio.Reader) (v interfac
 			if n.Match(s) {
 				continue
 			} else {
-				return nil,r,true
+				return s,r,true
 			}
 		} else if err==io.EOF{
-			return nil,0,false
+			return s,0,false
 		}
 	}
 
-	return nil,0,false
+	return s,0,false
 
 }
-func init() {
-	var r=regexp.MustCompile(`^#.*(\n|\r\n)$`)
 
-	Patterns=append(Patterns,&LineCommentPattern{PatternBase{Regexp:r,Token:LINECOMMENT}})
+
+type DoubleSlashCommentPattern struct {
+	PatternBase
+}
+
+func (n *DoubleSlashCommentPattern)BuildFun(prefix string,r *bufio.Reader) (v interface{},pre rune,has_prerune bool) {
+	s:=prefix
+	for {
+		r,_,err:=r.ReadRune()
+
+		s+=string(r)
+
+		if err==nil {
+			if n.Match(s) {
+				continue
+			} else {
+				return s,r,true
+			}
+		} else if err==io.EOF{
+			return s,0,false
+		}
+	}
+
+	return s,0,false
+
+}
+
+
+func init() {
+	var pr=regexp.MustCompile(`^#.*(\n|\r\n)?$`)
+
+	Patterns=append(Patterns,&PoundCommentPattern{PatternBase{Regexp:pr,Token:POUNDCOMMENT}})
+
+
+	var dr=regexp.MustCompile(`^//.*(\n|\r\n)?$`)
+
+	Patterns=append(Patterns,&DoubleSlashCommentPattern{PatternBase{Regexp:dr,Token:DOUBLESLASHCOMMENT}})
 }
 
 
