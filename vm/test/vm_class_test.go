@@ -92,12 +92,17 @@ func TestClassInitWithoutParams(t *testing.T) {
 	vm.Run(`class A {
 		def init() {
 			this.a=6
+			this.b=3
 		}
 	}`)
 
 	vm.Run("a=A.new()")
 
 	if v,_:=vm.Run("a.a");v.(int64)!=6 {
+		t.Fail()
+	}
+
+	if v,_:=vm.Run("a.b");v.(int64)!=3 {
 		t.Fail()
 	}
 }
