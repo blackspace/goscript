@@ -13,7 +13,9 @@ func TestCommentLine(t *testing.T) {
 	#sssssss
 	#ffffff
 
-	//ddddddddd
+	223 //ddddddddd
+
+	/*dddd*/
 
 	234 #ddddd`)
 

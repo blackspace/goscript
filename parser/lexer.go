@@ -32,7 +32,9 @@ t:
 		l.Buf = l.Buf + string(r)
 	}
 
-	if p := FindPattern(l.Buf); p != nil {
+	if p := FindPattern(l.Buf); p == nil {
+		goto t
+	} else 	{
 		v, pr, h := p.BuildFun(l.Buf, l.Reader)
 
 		if h {
@@ -53,6 +55,9 @@ t:
 		case STRING:
 			lval.Expr = v.(*ast.String)
 			return STRING
+		case MULTILINECOMMENT:
+			l.Buf=""
+			goto t
 		case '+':
 			r, _, err := l.Reader.ReadRune()
 
@@ -102,6 +107,9 @@ t:
 					l.Buf=""
 					goto t
 				}
+			} else if r=='*' {
+				l.Buf = l.Buf + string(r)
+				goto t
 			} else {
 				l.HasPreRune=true
 				l.PreRune=r
@@ -207,9 +215,6 @@ t:
 			goto t
 		}
 
-	} else {
-
-		goto t
 	}
 
 	return 0
