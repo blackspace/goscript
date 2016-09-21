@@ -46,6 +46,9 @@ t:
 		case POUNDCOMMENT:
 			l.Buf=""
 			goto t
+		case MULTILINECOMMENT:
+			l.Buf=""
+			goto t
 		case NUMBER:
 			lval.Expr = v.(*ast.Number)
 			return NUMBER
@@ -55,9 +58,6 @@ t:
 		case STRING:
 			lval.Expr = v.(*ast.String)
 			return STRING
-		case MULTILINECOMMENT:
-			l.Buf=""
-			goto t
 		case '+':
 			r, _, err := l.Reader.ReadRune()
 
