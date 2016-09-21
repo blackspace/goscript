@@ -8,7 +8,7 @@ import (
 func TestCommentLine(t *testing.T) {
 	vm:=vm.NewVM()
 
-	v,_:=vm.Run(`
+	v,_:=vm.Run(`#! /bin/goscript
 	############ddddd
 	#sssssss
 	#ffffff

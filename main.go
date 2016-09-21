@@ -11,22 +11,34 @@ import (
 )
 
 func main() {
-	stdin:=bufio.NewReader(os.Stdin)
+	var r * bufio.Reader
+	if len(os.Args)==1 {
+		r=bufio.NewReader(os.Stdin)
+	} else {
+		f_name:=os.Args[1]
+
+		f,_:=os.Open(f_name)
+
+		r=bufio.NewReader(f)
+	}
 
 	source:=""
 
+
 	for {
-		l,_,err:=stdin.ReadLine()
+		lr,_,err:=r.ReadRune()
 
 		if err==io.EOF {
 			break
 		}
 
-		source+=string(l)
+		source+=string(lr)
 	}
 
 	vm:=vm.NewVM()
 
 	vm.Run(source)
+
+
 }
 
