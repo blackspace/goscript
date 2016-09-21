@@ -195,6 +195,14 @@ func (m * MethodCalledExpr)Eval(r *runtime.Runtime,args ...interface{}) (interfa
 	}
 
 
+	vs:=make([]interface{},0,len(m.Params))
+
+	for _,p:=range m.Params {
+		lv,_:=p.Eval(r)
+
+		vs=append(vs,lv)
+	}
+
 	if v!=nil {
 		o:= v.(*runtime.Object)
 
@@ -202,7 +210,7 @@ func (m * MethodCalledExpr)Eval(r *runtime.Runtime,args ...interface{}) (interfa
 
 		if m!=nil {
 			F:=m.(runtime.ObjectMethod)
-			result:=F(o,nil)
+			result:=F(o,vs)
 			return result,OK
 		}
 	}
@@ -213,7 +221,7 @@ func (m * MethodCalledExpr)Eval(r *runtime.Runtime,args ...interface{}) (interfa
 
 		if m!=nil {
 			F:=m.(runtime.ClassMethod)
-			result:=F(c,nil)
+			result:=F(c,vs)
 			return result,OK
 		}
 	}

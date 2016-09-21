@@ -2,7 +2,6 @@ package runtime
 
 import (
 	. "goscript/mycontainer"
-	"goscript/runtime/buildin"
 )
 
 type Runtime struct {
@@ -19,8 +18,10 @@ func NewRuntime() (r *Runtime) {
 	functions:make(map[string]Function),
 	classes:make(map[string]*Class)}
 
-	r.SetFunction("print",buildin.Print)
+	r.SetFunction("print",Print)
 
+	r.BeginScope()
+	r.SetVarible("console",Console)
 	return r
 
 }
@@ -109,10 +110,6 @@ func (r *Runtime)GetClass(n string) *Class {
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-func (r *Runtime)FindObject(n string) *Object {
-	return nil
-}
 
 func (r *Runtime)FindClass(n string) *Class {
 	if c,ok:=r.classes[n];ok{

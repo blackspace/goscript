@@ -11,7 +11,6 @@ type VM struct {
 
 func NewVM() (v *VM) {
 	v=&VM{Runtime:runtime.NewRuntime()}
-	v.Runtime.BeginScope()
 	return
 }
 
