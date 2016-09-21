@@ -160,7 +160,7 @@ func (ae * AttributeExpr)Eval(r *runtime.Runtime,args ...interface{}) (v interfa
 		if a!=nil {
 			return a,OK
 		} else {
-			panic(errors.New("The "+ae.ObjectName+"class hasn't "+"the "+ae.AttributeName+" attribute"))
+			panic(errors.New("The "+ae.ObjectName+"class hasn't "+"the "+ae.AttributeName+" attribute,you must set it at first."))
 		}
 
 	}
@@ -172,7 +172,7 @@ func (ae * AttributeExpr)Eval(r *runtime.Runtime,args ...interface{}) (v interfa
 		if a!=nil {
 			return a,OK
 		} else {
-			panic(errors.New("The "+ae.ObjectName+" object hasn't "+"the "+ae.AttributeName+" attribute"))
+			panic(errors.New("The "+ae.ObjectName+" object hasn't "+"the "+ae.AttributeName+" attribute,you must set it at first."))
 		}
 	}
 

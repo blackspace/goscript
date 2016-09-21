@@ -30,7 +30,7 @@ func A(a) {
 
 A(1)
 
-//to define a class
+//to define a class,and read a attribute of object
 class C {
     def hello() {
         this.a="hello class"
