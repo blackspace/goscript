@@ -41,6 +41,9 @@ t:
 		}
 
 		switch t:=p.GetToken();t {
+		case LINECOMMENT:
+			l.Buf=""
+			goto t
 		case NUMBER:
 			lval.Expr = v.(*ast.Number)
 			return NUMBER

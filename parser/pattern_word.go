@@ -32,7 +32,6 @@ func (n * WordPattern)BuildFun(prefix string,r *bufio.Reader) (v interface{},pre
 	}
 
 	return nil,0,false
-
 }
 
 func init() {

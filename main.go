@@ -3,7 +3,30 @@
 
 package main
 
+import (
+	"os"
+	"bufio"
+	"io"
+	"goscript/vm"
+)
 
 func main() {
+	stdin:=bufio.NewReader(os.Stdin)
+
+	source:=""
+
+	for {
+		l,_,err:=stdin.ReadLine()
+
+		if err==io.EOF {
+			break
+		}
+
+		source+=string(l)
+	}
+
+	vm:=vm.NewVM()
+
+	vm.Run(source)
 }
 
