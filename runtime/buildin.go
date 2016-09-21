@@ -23,7 +23,3 @@ func init() {
 	console =c.NewObject()
 }
 
-func Print(in []interface{}) (interface{},int) {
-	fmt.Println(in...)
-	return nil,0
-}
