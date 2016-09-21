@@ -11,12 +11,16 @@ type Runtime struct {
 }
 
 func NewRuntime() (r *Runtime) {
-	return &Runtime{scopes:List{EqualFun:func(e1 interface{},e2 interface{}) bool {
+	r=&Runtime{scopes:List{EqualFun:func(e1 interface{},e2 interface{}) bool {
 		return e1.(*Scope)==e2.(*Scope)
 	}},
 
 	functions:make(map[string]Function),
 	classes:make(map[string]*Class)}
+
+	r.SetFunction("Print",Print)
+
+	return r
 
 }
 
