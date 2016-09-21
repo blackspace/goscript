@@ -21,7 +21,7 @@ func NewRuntime() (r *Runtime) {
 	r.SetFunction("print",Print)
 
 	r.BeginScope()
-	r.SetVarible("console",Console)
+	r.SetVarible("console", console)
 	return r
 
 }

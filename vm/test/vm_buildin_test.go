@@ -7,7 +7,8 @@ func ExamplePrint() {
 
 	vm.Run(`print("hello goscript")`)
 	vm.Run(`console.Print("hello goscript")`)
+	vm.Run(`console.Println("hello goscript")`)
 
 	//Output:hello goscript
-	//hello goscript
+	//hello goscripthello goscript
 }

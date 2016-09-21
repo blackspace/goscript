@@ -4,7 +4,7 @@ import (
 	"fmt"
 )
 
-var Console * Object
+var console * Object
 
 func init() {
 	c:=NewClass()
@@ -14,11 +14,14 @@ func init() {
 		return nil
 	}))
 
-	Console=c.NewObject()
+
+	c.SetObjectMembers("Println",ObjectMethod(func(r *Object,args []interface{}) interface{} {
+		fmt.Println(args...)
+		return nil
+	}))
+
+	console =c.NewObject()
 }
-
-
-
 
 func Print(in []interface{}) (interface{},int) {
 	fmt.Println(in...)
