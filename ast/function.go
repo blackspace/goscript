@@ -2,6 +2,7 @@ package ast
 
 import (
 	"goscript/runtime"
+	"errors"
 )
 
 type FuncDefineExpr struct {
@@ -43,6 +44,10 @@ type FuncCallExpr struct {
 func (f * FuncCallExpr)Eval(r *runtime.Runtime,args ...interface{}) (v interface{},status int){
 	F:=r.GetFunction(f.Name)
 
+
+	if F==nil {
+		panic(errors.New("Can't find the "+f.Name+" function"))
+	}
 
 	if f.Params==nil {
 

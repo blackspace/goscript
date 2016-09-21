@@ -2,6 +2,7 @@ package runtime
 
 import (
 	. "goscript/mycontainer"
+	"goscript/runtime/buildin"
 )
 
 type Runtime struct {
@@ -18,7 +19,7 @@ func NewRuntime() (r *Runtime) {
 	functions:make(map[string]Function),
 	classes:make(map[string]*Class)}
 
-	r.SetFunction("print",Print)
+	r.SetFunction("print",buildin.Print)
 
 	return r
 
