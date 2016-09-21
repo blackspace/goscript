@@ -1,3 +1,7 @@
+一个简单的脚本语言
+
+例子：
+
 #! /usr/bin/env goscript
 
 Print("hello")
@@ -15,3 +19,4 @@ if 1>2 {
 for i=1;i<10;i++ {
    Print(i)
 }
+
