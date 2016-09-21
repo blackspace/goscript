@@ -1,23 +1,23 @@
 #! /usr/bin/env goscript
 
-print("hello")
+console.Println("hello")
 
 a=1+1
 
-print(a)
+console.Println(a)
 
 if 1>2 {
-    print("a")
+    console.Println("a")
 } else {
-    print("b")
+    console.Println("b")
 }
 
 for i=1;i<10;i++ {
-   print(i)
+    console.Println(i)
 }
 
 func A(a) {
- print(a)
+    console.Println(a)
 }
 
 A(1)
