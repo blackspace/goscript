@@ -15,3 +15,9 @@ if 1>2 {
 for i=1;i<10;i++ {
    Print(i)
 }
+
+func A(a) {
+ Print(a)
+}
+
+A(1)

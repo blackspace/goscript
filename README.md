@@ -1,9 +1,9 @@
 goscript
 ------------------------------------------
 
-一个简单的脚本语言
+This is a simple script language.
 
-例子：
+Example：
 
 ~~~
 #! /usr/bin/env goscript
@@ -23,5 +23,11 @@ if 1>2 {
 for i=1;i<10;i++ {
    Print(i)
 }
+
+func A(a) {
+ Print(a)
+}
+
+A(1)
 ~~~
 
