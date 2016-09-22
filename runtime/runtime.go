@@ -17,9 +17,6 @@ func NewRuntime() (r *Runtime) {
 
 	functions:make(map[string]Function),
 	classes:make(map[string]*Class)}
-
-	r.BeginScope()
-	r.SetVarible("console", console)
 	return r
 
 }

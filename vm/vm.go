@@ -3,6 +3,7 @@ package vm
 import (
 	"goscript/parser"
 	"goscript/runtime"
+	"goscript/buildin"
 )
 
 type VM struct {
@@ -11,6 +12,9 @@ type VM struct {
 
 func NewVM() (v *VM) {
 	v=&VM{Runtime:runtime.NewRuntime()}
+
+	v.Runtime.BeginScope()
+	v.Runtime.SetVarible("console",buildin.Console)
 	return
 }
 
