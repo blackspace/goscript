@@ -6,7 +6,7 @@ import (
 )
 
 func TestExecuteAddExpress(t *testing.T) {
-	var vm = NewVM()
+	var vm = NewVM().Init()
 
 	val,err :=vm.Run("1+1")
 
@@ -69,7 +69,7 @@ func TestExecuteAddExpress(t *testing.T) {
 }
 
 func TestExecuteSubExpress(t *testing.T) {
-	var vm = NewVM()
+	var vm = NewVM().Init()
 
 	val,err :=vm.Run("1-1")
 
@@ -101,7 +101,7 @@ func TestExecuteSubExpress(t *testing.T) {
 }
 
 func TestExecuteMultiExpress(t *testing.T) {
-	var vm = NewVM()
+	var vm = NewVM().Init()
 
 	val,err :=vm.Run("1*1")
 
@@ -133,7 +133,7 @@ func TestExecuteMultiExpress(t *testing.T) {
 }
 
 func TestExecuteDivExpress(t *testing.T) {
-	var vm = NewVM()
+	var vm = NewVM().Init()
 
 	val,err :=vm.Run("1/1")
 
@@ -166,7 +166,7 @@ func TestExecuteDivExpress(t *testing.T) {
 
 
 func TestExecuteArithmetic(t *testing.T) {
-	var vm = NewVM()
+	var vm = NewVM().Init()
 
 	val,err :=vm.Run("1+1/1+1*1")
 

@@ -6,7 +6,7 @@ import (
 )
 
 func TestFunctionSimple(t *testing.T) {
-	vm:=vm.NewVM()
+	vm:=vm.NewVM().Init()
 
 	vm.Run("func a() {  a=1 a++ a++  }")
 
@@ -20,7 +20,7 @@ func TestFunctionSimple(t *testing.T) {
 
 
 func TestFunctionHasParams(t *testing.T) {
-	vm:=vm.NewVM()
+	vm:=vm.NewVM().Init()
 
 	vm.Run("func a(a,b,c) {  b  }")
 
@@ -33,7 +33,7 @@ func TestFunctionHasParams(t *testing.T) {
 }
 
 func TestFunctionBreak(t *testing.T) {
-	vm:=vm.NewVM()
+	vm:=vm.NewVM().Init()
 
 	vm.Run("func a(a,b,c) {  a b break c  }")
 
@@ -45,7 +45,7 @@ func TestFunctionBreak(t *testing.T) {
 }
 
 func TestFunctionReturn(t *testing.T) {
-	vm:=vm.NewVM()
+	vm:=vm.NewVM().Init()
 
 	vm.Run("func a(a,b,c) {  a b return c  }")
 
@@ -57,7 +57,7 @@ func TestFunctionReturn(t *testing.T) {
 }
 
 func TestFunctionEmbedCall(t *testing.T) {
-	vm:=vm.NewVM()
+	vm:=vm.NewVM().Init()
 
 	vm.Run("func a(a,b,c) {  a b return c  }")
 

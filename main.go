@@ -37,7 +37,7 @@ func main() {
 		source+=string(buf[:n])
 	}
 
-	vm:=vm.NewVM()
+	vm:=vm.NewVM().Init()
 
 	vm.Run(source)
 }

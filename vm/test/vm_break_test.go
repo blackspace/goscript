@@ -6,7 +6,7 @@ import (
 )
 
 func TestBreakBlock(t *testing.T) {
-	vm:=vm.NewVM()
+	vm:=vm.NewVM().Init()
 
 	if v,err:=vm.Run("{ 1 2 3  break 4 5 }");err==nil {
 		if v.(int64)!=3 {
@@ -18,7 +18,7 @@ func TestBreakBlock(t *testing.T) {
 }
 
 func TestBreakIF(t *testing.T) {
-	vm:=vm.NewVM()
+	vm:=vm.NewVM().Init()
 
 	if v,err:=vm.Run("if true { 1 break }");err==nil {
 		if v!=nil {
@@ -35,7 +35,7 @@ func TestBreakIF(t *testing.T) {
 
 
 func TestBreakIF1(t *testing.T) {
-	vm:=vm.NewVM()
+	vm:=vm.NewVM().Init()
 
 	if v,err:=vm.Run("if true { 3 break }");err==nil {
 		if v.(int64)!=3 {
@@ -47,7 +47,7 @@ func TestBreakIF1(t *testing.T) {
 }
 
 func TestBreakFor(t *testing.T) {
-	vm:=vm.NewVM()
+	vm:=vm.NewVM().Init()
 
 	if v,err:=vm.Run("for a=1;;a++ { if a>3 { break }  }");err==nil {
 		if v!=nil {

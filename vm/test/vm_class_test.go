@@ -6,7 +6,7 @@ import (
 )
 
 func TestClassObjectMember(t *testing.T) {
-	vm:=vm.NewVM()
+	vm:=vm.NewVM().Init()
 
 	vm.Run(`class A {
 		def hello() {
@@ -28,7 +28,7 @@ func TestClassObjectMember(t *testing.T) {
 }
 
 func TestClassAttributeMember(t *testing.T) {
-	vm:=vm.NewVM()
+	vm:=vm.NewVM().Init()
 
 	vm.Run(`class A {
 		A.a=5
@@ -46,7 +46,7 @@ func TestClassAttributeMember(t *testing.T) {
 }
 
 func TestClassMethodMember(t *testing.T) {
-	vm:=vm.NewVM()
+	vm:=vm.NewVM().Init()
 
 	vm.Run(`class A {
 		def A.hello() {
@@ -62,7 +62,7 @@ func TestClassMethodMember(t *testing.T) {
 }
 
 func TestClassReturn(t *testing.T) {
-	vm:=vm.NewVM()
+	vm:=vm.NewVM().Init()
 
 	vm.Run(`class A {
 		def A.hello() {
@@ -87,7 +87,7 @@ func TestClassReturn(t *testing.T) {
 }
 
 func TestClassInitWithoutParams(t *testing.T) {
-	vm:=vm.NewVM()
+	vm:=vm.NewVM().Init()
 
 	vm.Run(`class A {
 		def init() {

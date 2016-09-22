@@ -6,7 +6,7 @@ import (
 )
 
 func TestString(t *testing.T) {
-	var vm = NewVM()
+	var vm = NewVM().Init()
 
 	val,err :=vm.Run(`"123"`)
 
@@ -24,7 +24,7 @@ func TestString(t *testing.T) {
 }
 
 func TestStringConcate(t *testing.T) {
-	var vm = NewVM()
+	var vm = NewVM().Init()
 
 	val,err :=vm.Run(`"12a3"+"123"`)
 

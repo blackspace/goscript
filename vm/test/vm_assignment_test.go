@@ -6,7 +6,7 @@ import (
 )
 
 func TestAsignExpr(t *testing.T) {
-	var vm = NewVM()
+	var vm = NewVM().Init()
 
 	if val,err :=vm.Run("a=1"); err!=nil {
 		t.Error(err)

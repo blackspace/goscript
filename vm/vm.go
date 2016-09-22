@@ -13,9 +13,13 @@ type VM struct {
 func NewVM() (v *VM) {
 	v=&VM{Runtime:runtime.NewRuntime()}
 
+	return
+}
+
+func (v *VM)Init()(rv *VM)  {
 	v.Runtime.BeginScope()
 	v.Runtime.SetVarible("console",buildin.Console)
-	return
+	return v
 }
 
 func (v * VM)Run(src string) (result interface{},err error) {

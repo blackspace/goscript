@@ -6,7 +6,7 @@ import (
 )
 
 func TestRelation(t *testing.T) {
-	vm:=vm.NewVM()
+	vm:=vm.NewVM().Init()
 
 	if v,err:=vm.Run("1<2");err==nil {
 		if v.(bool)!=true {

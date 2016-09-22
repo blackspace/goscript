@@ -6,7 +6,7 @@ import (
 )
 
 func TestDoubleSubExpress(t *testing.T) {
-	var vm = NewVM()
+	var vm = NewVM().Init()
 
 	val, err := vm.Run("a=2" )
 

@@ -5,7 +5,7 @@ import (
 	. "goscript/vm"
 )
 func TestBlankspace(t *testing.T) {
-	var vm = NewVM()
+	var vm = NewVM().Init()
 
 	if val,err :=vm.Run("3   +   3"); err!=nil {
 		t.Error(err)
@@ -18,7 +18,7 @@ func TestBlankspace(t *testing.T) {
 
 
 func TestMultiExprExpr(t *testing.T) {
-	var vm = NewVM()
+	var vm = NewVM().Init()
 
 	s:=`
 	a=1

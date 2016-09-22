@@ -6,7 +6,7 @@ import (
 )
 
 func TestBool(t *testing.T) {
-	var vm = NewVM()
+	var vm = NewVM().Init()
 
 	val,err :=vm.Run("true")
 
@@ -38,7 +38,7 @@ func TestBool(t *testing.T) {
 }
 
 func TestBoolExpress(t *testing.T) {
-	var vm = NewVM()
+	var vm = NewVM().Init()
 
 	val,err :=vm.Run("true&&false")
 

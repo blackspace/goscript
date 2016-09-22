@@ -6,7 +6,7 @@ import (
 )
 
 func TestScope(t *testing.T) {
-	vm :=vm.NewVM()
+	vm :=vm.NewVM().Init()
 
 	vm.Run("a=1")
 
@@ -22,7 +22,7 @@ func TestScope(t *testing.T) {
 }
 
 func TestScope1(t *testing.T) {
-	vm :=vm.NewVM()
+	vm :=vm.NewVM().Init()
 
 
 	v,err:=vm.Run(`
@@ -54,7 +54,7 @@ func TestScope1(t *testing.T) {
 }
 
 func TestScope2(t *testing.T) {
-	vm :=vm.NewVM()
+	vm :=vm.NewVM().Init()
 
 
 	s:=`

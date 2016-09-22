@@ -6,7 +6,7 @@ import (
 )
 
 func TestBlock(t *testing.T) {
-	vm:=vm.NewVM()
+	vm:=vm.NewVM().Init()
 
 	if v,err:=vm.Run("{ 1 2 3  4 5 }");err==nil {
 		if v.(int64)!=5 {
