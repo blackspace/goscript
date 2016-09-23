@@ -11,7 +11,7 @@ type FuncDefineExpr struct {
 }
 
 
-func MakeFunc(r *runtime.Runtime,params []string,body []Expr) runtime.Function {
+func MakeFunction(r *runtime.Runtime,params []string,body []Expr) runtime.Function {
 	return func(r *runtime.Runtime,params []string,body []Expr) runtime.Function {
 		return func(in []interface{}) (result interface{},status int) {
 			s:=r.BeginScope()
@@ -40,7 +40,7 @@ func MakeFunc(r *runtime.Runtime,params []string,body []Expr) runtime.Function {
 
 
 func (f * FuncDefineExpr)Eval(r *runtime.Runtime,args ...interface{}) (interface{},int){
-	r.SetFunction(f.Name,MakeFunc(r,f.Params,f.Body))
+	r.SetFunction(f.Name, MakeFunction(r,f.Params,f.Body))
 
 	return nil,OK
 }

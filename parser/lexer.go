@@ -184,22 +184,8 @@ t:
 				case BOOL:
 					lval.Expr = v.(*ast.Bool)
 					return BOOL
-				case IF:
-					return IF
-				case ELSE:
-					return ELSE
-				case FOR:
-					return FOR
-				case BREAK:
-					return BREAK
-				case RETURN:
-					return RETURN
-				case FUNCTION:
-					return FUNCTION
-				case CLASS:
-					return CLASS
-				case DEF:
-					return DEF
+				default:
+					return t
 
 				}
 			} else {

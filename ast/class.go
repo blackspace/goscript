@@ -35,9 +35,10 @@ func MakeObjectMethod(r *runtime.Runtime,params []string,body []Expr) runtime.Ob
 		s.Set("this",o)
 
 		var result interface{}
+		var status int
 
 		for _, e := range body {
-			result, status := e.Eval(r,o)
+			result,status= e.Eval(r,o)
 
 			switch status {
 			case RETURN:

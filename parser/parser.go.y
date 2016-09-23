@@ -24,7 +24,7 @@ var ParseResult []ast.Expr
 
 %type <Expr>  get_expr set_expr
 
-%type <Expr> func_define_expr
+%type <Expr> func_define_expr lambda_define_expr
 %type <Expr> class_expr inclass_expr inmethod_expr
 %type <Expr> call_expr method_define_expr
 
@@ -41,7 +41,7 @@ var ParseResult []ast.Expr
 %token <Expr> NUMBER BOOL STRING BREAK RETURN
 %token <String> WORD
 %token BLANKSPACE LFCR  IF FOR SWITCH  DOUBLEAT
-%token FUNCTION CLASS DEF END DO POUNDCOMMENT DOUBLESLASHCOMMENT MULTILINECOMMENT
+%token FUNCTION CLASS DEF END DO POUNDCOMMENT DOUBLESLASHCOMMENT MULTILINECOMMENT LAMBDA
 
 
 %nonassoc '>' GREATEREQUAL '<' LESSEQUAL
@@ -169,13 +169,14 @@ func_define_expr : FUNCTION  func_name '(' ')' '{' exprs '}'
     {
         $$=&ast.FuncDefineExpr{$2,$4,$7}
     }
-    |FUNCTION  '(' params ')' '{' exprs '}'
+
+lambda_define_expr:LAMBDA  '(' params ')' '{' exprs '}'
     {
-        $$=&ast.FuncDefineExpr{"",$3,$6}
+        $$=&ast.LambdaDefineExpr{$3,$6}
     }
-    |FUNCTION  '('')' '{' exprs '}'
+    |LAMBDA  '('')' '{' exprs '}'
     {
-       $$=&ast.FuncDefineExpr{"",nil,$5}
+       $$=&ast.LambdaDefineExpr{nil,$5}
     };
 
 func_name: WORD;
@@ -208,6 +209,7 @@ expr : simple_expr
     |set_expr
     |increment_decrement_expr
     |func_define_expr
+    |lambda_define_expr
     |block_expr
     |class_expr;
 

@@ -11,6 +11,7 @@ type CalledExpr struct {
 }
 
 func (ce * CalledExpr)Eval(r *runtime.Runtime,args ...interface{}) (result interface{},status int) {
+
 	ns:=r.PathToNodes(ce.Path)
 
 	if len(ns)==len(ce.Path) {
@@ -29,6 +30,7 @@ func (ce * CalledExpr)Eval(r *runtime.Runtime,args ...interface{}) (result inter
 		}
 
 		var m interface{}
+
 		if len(ns)==0 {
 			m=r.GetFunction(name)
 		} else {
@@ -47,6 +49,8 @@ func (ce * CalledExpr)Eval(r *runtime.Runtime,args ...interface{}) (result inter
 			o:=ns[len(ns)-1].(interface{}).(*runtime.Object)
 			result=F(o,vs)
 		}
+
+		return
 
 	}
 

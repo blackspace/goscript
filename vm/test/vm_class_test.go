@@ -54,7 +54,7 @@ func TestClassMethodMember(t *testing.T) {
 		A.b=100
 	}`)
 
-	vm.Run(`A.hello=func() { A.b }`)
+	vm.Run(`A.hello=lambda() { A.b }`)
 
 	v,_:=vm.Run("A.hello()")
 

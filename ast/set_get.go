@@ -23,16 +23,17 @@ func (se * SetExpr)Eval(r *runtime.Runtime,args ...interface{}) (result interfac
 		name:=se.Path[len(se.Path)-1]
 
 
-		if FDE,ok:=se.Expr2.(*FuncDefineExpr);ok {
+		if LDE,ok:=se.Expr2.(*LambdaDefineExpr);ok {
 			if len(ns)==0 {
-				r.SetFunction(name,MakeFunc(r,FDE.Params,FDE.Body))
+				F,_:= LDE.Eval(r)
+				r.SetFunction(name, F.(runtime.Function))
 			} else {
 				n:=ns[len(ns)-1]
 				switch co:=n.(type) {
 				case *runtime.Class:
-					co.SetClassMember(name,MakeClassMethod(r,FDE.Params,FDE.Body))
+					co.SetClassMember(name,MakeClassMethod(r, LDE.Params, LDE.Body))
 				case *runtime.Object:
-					co.SetMember(name,MakeObjectMethod(r,FDE.Params,FDE.Body))
+					co.SetMember(name,MakeObjectMethod(r, LDE.Params, LDE.Body))
 				}
 
 			}
