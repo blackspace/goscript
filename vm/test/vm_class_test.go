@@ -45,14 +45,14 @@ func TestClassAttributeMember(t *testing.T) {
 	}
 }
 
+
+/*
 func TestClassMethodMember(t *testing.T) {
 	vm:=vm.NewVM().Init()
 
-	vm.Run(`class A {
-		def A.hello() {
-			6
-		}
-	}`)
+	vm.Run(`class A {}`)
+
+	vm.Run(`A.hello=func() {6}`)
 
 	v,_:=vm.Run("A.hello()")
 
@@ -60,25 +60,20 @@ func TestClassMethodMember(t *testing.T) {
 		t.Fail()
 	}
 }
+*/
 
 func TestClassReturn(t *testing.T) {
 	vm:=vm.NewVM().Init()
 
 	vm.Run(`class A {
-		def A.hello() {
-			return 6
-		}
-
 		def hi() {
 			return 7
 		}
 	}`)
 
-	if v,_:=vm.Run("A.hello()"); v.(int64)!=6 {
-		t.Fail()
-	}
-
 	vm.Run("a=A.new()")
+
+	vm.Run(`A.hello=func() {6}`)
 
 
 	if v,_:=vm.Run("a.hi()");v.(int64)!=7 {

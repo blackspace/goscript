@@ -32,17 +32,6 @@ func TestFunctionHasParams(t *testing.T) {
 	}
 }
 
-func TestFunctionBreak(t *testing.T) {
-	vm:=vm.NewVM().Init()
-
-	vm.Run("func a(a,b,c) {  a b break c  }")
-
-	v,_:=vm.Run("a(3,4,5)")
-
-	if v.(int64)!=4 {
-		t.Fail()
-	}
-}
 
 func TestFunctionReturn(t *testing.T) {
 	vm:=vm.NewVM().Init()

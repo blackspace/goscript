@@ -2,22 +2,50 @@ package ast
 
 import (
 	"goscript/runtime"
+	"errors"
 )
 
 type SubfixDoubleAddExpr struct {
-	Expr0  Expr
+	Path []string
 }
 
 
-func (e *SubfixDoubleAddExpr)Eval(r *runtime.Runtime,args ...interface{}) (interface{},int) {
-	name :=e.Expr0.(*Variable).Name
+func (e *SubfixDoubleAddExpr)Eval(r *runtime.Runtime,args ...interface{}) (result interface{},status int) {
 
-	if v:=r.GetVarible(name);v!=nil{
-		n:=v.(int64)
-		n++
-		r.SetVarible(name,n)
+	ns:=r.PathToNodes(e.Path)
+
+	if len(ns)==len(e.Path) {
+		panic(errors.New("Nodes can't be assigned"))
 	}
-	v:=r.GetVarible(name);
 
-	return v,OK
+	if len(ns)==len(e.Path)-1 {
+		if len(ns)==0 {
+			mn:=e.Path[len(e.Path)-1]
+			v:=r.GetMember(mn)
+
+			temp:=v.(int64)
+			result=temp+1
+			r.SetMember(mn,result)
+
+
+		} else {
+			n:=ns[len(ns)-1]
+			mn:=e.Path[len(e.Path)-1]
+
+			v:=n.GetMember(mn)
+
+			temp:=v.(int64)
+			result=temp+1
+
+			n.SetMember(mn,result)
+
+		}
+
+	}
+
+	if len(ns)<len(e.Path)-1 {
+		panic(errors.New("This path is illegal"))
+	}
+
+	return result,OK
 }

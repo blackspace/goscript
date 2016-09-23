@@ -18,26 +18,29 @@ var ParseResult []ast.Expr
     Strings []string
 }
 
-%type <Expr> expr assign_expr simple_expr var_expr
+%type <Expr> expr literal_expr simple_expr
 %type <Expr> if_expr for_expr stmt_expr block_expr increment_decrement_expr
 
 
-%type <Expr> func_define_expr  func_call_expr value_expr
+%type <Expr>  get_expr set_expr
+
+%type <Expr> func_define_expr
 %type <Expr> class_expr inclass_expr inmethod_expr
-%type <Expr> method_call_expr method_define_expr
-%type <Expr> attribute_set_expr attribute_expr
-%type <String> func_name class_name method_name attribute_name object_name
+%type <Expr> call_expr method_define_expr
+
+%type <String> func_name method_name
 %type <String> param
-%type <Strings> params
+%type <Strings> params member_path
 
 
 %type <Exprs> exprs  top
-%type <Exprs> values_expr inclass_exprs inmethod_exprs
+%type <Exprs> values_expr
+%type <Exprs> inclass_exprs inmethod_exprs
 
 
 %token <Expr> NUMBER BOOL STRING BREAK RETURN
 %token <String> WORD
-%token BLANKSPACE LFCR  IF FOR SWITCH DOUBLEADD DOUBLESUB DOUBLEAT
+%token BLANKSPACE LFCR  IF FOR SWITCH  DOUBLEAT
 %token FUNCTION CLASS DEF END DO POUNDCOMMENT DOUBLESLASHCOMMENT MULTILINECOMMENT
 
 
@@ -47,9 +50,12 @@ var ParseResult []ast.Expr
 
 %left AND OR
 
+%nonassoc DOUBLEADD DOUBLESUB
+
 %right '='
 %left '+' '-'
-%left '*' '/'
+%left '*' '/' '.'
+
 
 %%
 
@@ -69,17 +75,17 @@ exprs :expr
 
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-class_expr : CLASS class_name '{'  inclass_exprs '}'
+class_expr : CLASS WORD  '{'  inclass_exprs '}'
     {
         $$=&ast.Class{$2,$4}
     }
-    |CLASS class_name '{' '}'
-     {
-         $$=&ast.Class{$2,nil}
-     };
+    |CLASS WORD  '{' '}'
+    {
+        $$=&ast.Class{$2,nil}
+    };
 
-inclass_expr: simple_expr|stmt_expr|assign_expr|attribute_set_expr
-            |increment_decrement_expr|func_define_expr |block_expr
+inclass_expr: simple_expr|stmt_expr|set_expr
+            |increment_decrement_expr
             |class_expr | method_define_expr
 
 inclass_exprs: inclass_expr
@@ -93,38 +99,25 @@ inclass_exprs: inclass_expr
 
 method_define_expr: DEF method_name '(' ')' '{' inmethod_exprs '}'
     {
-        $$=&ast.MethodDefineExpr{"",$2,nil,$6}
+        $$=&ast.MethodDefineExpr{$2,nil,$6}
     }
     |DEF method_name '(' ')' '{'  '}'
     {
-        $$=&ast.MethodDefineExpr{"",$2,nil,nil}
+        $$=&ast.MethodDefineExpr{$2,nil,nil}
     }
     |DEF method_name '(' params ')' '{' inmethod_exprs '}'
     {
-        $$=&ast.MethodDefineExpr{"",$2,$4,$7}
+        $$=&ast.MethodDefineExpr{$2,$4,$7}
     }
     |DEF method_name '(' params ')' '{'  '}'
     {
-        $$=&ast.MethodDefineExpr{"",$2,$4,nil}
+        $$=&ast.MethodDefineExpr{$2,$4,nil}
     }
-    |DEF object_name '.' method_name '(' ')' '{' inmethod_exprs '}'
-    {
-        $$=&ast.MethodDefineExpr{$2,$4,nil,$8}
-    }
-    |DEF object_name '.' method_name '(' ')' '{'  '}'
-    {
-        $$=&ast.MethodDefineExpr{$2,$4,nil,nil}
-    }
-    |DEF object_name '.'method_name '(' params ')' '{' inmethod_exprs '}'
-    {
-        $$=&ast.MethodDefineExpr{$2,$4,$6,$9}
-    }
-    |DEF object_name '.'method_name '(' params ')' '{'  '}'
-    {
-        $$=&ast.MethodDefineExpr{$2,$4,$6,nil}
-    };
 
-inmethod_expr:simple_expr|stmt_expr|assign_expr|attribute_set_expr
+method_name: WORD
+
+
+inmethod_expr:simple_expr|stmt_expr|set_expr
         |increment_decrement_expr |block_expr
 
 inmethod_exprs:inmethod_expr
@@ -137,61 +130,48 @@ inmethod_exprs:inmethod_expr
     };
 
 
-method_call_expr:  object_name '.' method_name '('   ')'
+call_expr:  member_path '('   ')'
     {
-        $$=&ast.MethodCalledExpr{$1,$3,nil}
+        $$=&ast.CalledExpr{$1,nil}
     }
-    | object_name '.' method_name '(' values_expr  ')'
+    | member_path '(' values_expr  ')'
     {
-        $$=&ast.MethodCalledExpr{$1,$3,$5}
-    };
-attribute_set_expr: object_name '.' attribute_name '=' expr
-    {
-        $$=&ast.AttributeSetExpr{$1,$3,$5}
+        $$=&ast.CalledExpr{$1,$3}
     };
 
-attribute_expr: object_name '.' attribute_name
+get_expr: member_path
     {
-        $$=&ast.AttributeExpr{$1,$3}
+        $$=&ast.GetExpr{$1}
     };
 
-class_name: WORD;
-method_name: WORD;
-attribute_name: WORD;
-object_name: WORD;
-
-
-////////////////////////////////////////////////////////////////////////////////////////
-
-expr : simple_expr
-    |stmt_expr
-    |assign_expr
-    |attribute_set_expr
-    |increment_decrement_expr
-    |func_define_expr
-    |block_expr
-    |class_expr;
-
-func_define_expr : FUNCTION  func_name '(' ')' block_expr
+set_expr: member_path '=' expr
     {
-        $$=&ast.FuncDefineExpr{$2,nil,$5}
+        $$=&ast.SetExpr{$1,$3}
+    };
+
+
+member_path: WORD
+    {
+        $$=append(make([]string,0,16),$1)
     }
-    |FUNCTION  func_name '(' params ')' block_expr
+    |member_path '.' WORD
     {
-        $$=&ast.FuncDefineExpr{$2,$4,$6}
-    };
-
-func_call_expr : func_name '(' ')'
-    {
-        $$=&ast.FuncCallExpr{$1,nil}
+        $$=append($1,$3)
     }
-    |func_name '(' values_expr ')'
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+func_define_expr : FUNCTION  func_name '(' ')' '{' exprs '}'
     {
-        $$=&ast.FuncCallExpr{$1,$3}
+        $$=&ast.FuncDefineExpr{$2,nil,$6}
+    }
+    |FUNCTION  func_name '(' params ')' '{' exprs '}'
+    {
+        $$=&ast.FuncDefineExpr{$2,$4,$7}
     };
 
 func_name: WORD;
-
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 params: param
     {
         $$=append(make([]string,0),$1)
@@ -203,23 +183,31 @@ params: param
 
 param:WORD;
 
-values_expr: value_expr
+values_expr: simple_expr
     {
 
         $$=append(make([]ast.Expr,0),$1)
     }
-    | values_expr ',' value_expr
+    | values_expr ',' simple_expr
     {
         $$=append($1,$3)
     };
 
-value_expr: simple_expr;
+////////////////////////////////////////////////////////////////////////////////////////
+
+expr : simple_expr
+    |stmt_expr
+    |set_expr
+    |increment_decrement_expr
+    |func_define_expr
+    |block_expr
+    |class_expr;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 stmt_expr: BREAK
-       {
-           $$=&ast.BreakExpr{}
-       }
+    {
+        $$=&ast.BreakExpr{}
+    }
     |RETURN simple_expr
     {
         $$=&ast.ReturnExpr{$2}
@@ -227,23 +215,7 @@ stmt_expr: BREAK
     |if_expr
     |for_expr;
 
-
-assign_expr: var_expr '=' expr
-    {
-        $$=&ast.AssignExpr{$1,$3}
-    };
-
-increment_decrement_expr: var_expr DOUBLEADD
-    {
-        $$=&ast.SubfixDoubleAddExpr{$1}
-    }
-    |var_expr DOUBLESUB
-    {
-           $$=&ast.SubfixDoubleSubExpr{$1}
-    };
-
-
-for_expr : FOR assign_expr ';' simple_expr ';' increment_decrement_expr block_expr
+for_expr : FOR set_expr ';' simple_expr ';' increment_decrement_expr block_expr
     {
         $$=&ast.ForExpr{$2,$4,$6,$7}
     }
@@ -259,7 +231,7 @@ for_expr : FOR assign_expr ';' simple_expr ';' increment_decrement_expr block_ex
     {
           $$=&ast.ForExpr{nil,nil,nil,$4}
     }
-    |FOR  assign_expr ';' ';' increment_decrement_expr  block_expr
+    |FOR  set_expr ';' ';' increment_decrement_expr  block_expr
     {
            $$=&ast.ForExpr{$2,nil,$5,$6}
     };
@@ -275,9 +247,20 @@ if_expr : IF simple_expr block_expr
         $$=$1
     };
 
+////////////////////////////////////////////////////////////////////////////////////////
+increment_decrement_expr: member_path DOUBLEADD
+{
+    $$=&ast.SubfixDoubleAddExpr{$1}
+}
+|member_path DOUBLESUB
+{
+    $$=&ast.SubfixDoubleSubExpr{$1}
+};
+
+
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-simple_expr: BOOL|NUMBER|STRING | var_expr | func_call_expr | method_call_expr | attribute_expr
+simple_expr: literal_expr| call_expr | get_expr
     |simple_expr AND simple_expr
     {
         $$=&ast.ANDExpr{$1,$3}
@@ -319,6 +302,8 @@ simple_expr: BOOL|NUMBER|STRING | var_expr | func_call_expr | method_call_expr |
         $$=&ast.LessEqualExpr{$1,$3}
     };
 
+literal_expr:BOOL|NUMBER|STRING
+
 block_expr : '{' exprs '}'
     {
         $$=&ast.BlockExpr{$2}
@@ -326,11 +311,6 @@ block_expr : '{' exprs '}'
     | '{' '}'
     {
         $$=&ast.BlockExpr{}
-    };
-
-var_expr : WORD
-    {
-        $$=&ast.Variable{$1}
     };
 %%
 

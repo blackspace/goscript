@@ -18,7 +18,8 @@ func NewVM() (v *VM) {
 
 func (v *VM)Init()(rv *VM)  {
 	v.Runtime.BeginScope()
-	v.Runtime.SetVarible("console",buildin.Console)
+
+	v.Runtime.LoadModule(buildin.Console)
 	return v
 }
 

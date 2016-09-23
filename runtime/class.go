@@ -1,6 +1,6 @@
 package runtime
 
-type ObjectMethod func(*Object,[]interface{}) interface{}
+
 type ClassMethod func(*Class, []interface {}) interface{}
 
 type Class struct {
@@ -14,10 +14,10 @@ func NewClass() *Class {
 		ClassMembers:make(map[string]interface{}),
 	}
 
-	class.SetClassMembers("new",ClassMethod(func(c *Class,in []interface{}) interface{} {
+	class.SetClassMember("new",ClassMethod(func(c *Class,in []interface{}) interface{} {
 		o:=class.NewObject()
 
-		if F:=o.GetObjectAttribute("init");F!=nil {
+		if F:=o.GetMember("init");F!=nil {
 			initFun:=F.(ObjectMethod)
 
 			initFun(o,nil)
@@ -41,11 +41,11 @@ func (c *Class)GetObjectMembers(n string) interface {} {
 	}
 }
 
-func (c *Class)SetClassMembers(n string,v interface{}) {
+func (c *Class)SetClassMember(n string,v interface{}) {
 	c.ClassMembers[n]=v
 }
 
-func (c *Class)GetClassMembers(n string) interface {} {
+func (c *Class)GetClassMember(n string) interface {} {
 	if m,ok:=c.ClassMembers[n];ok {
 		return m
 	} else {
@@ -53,34 +53,38 @@ func (c *Class)GetClassMembers(n string) interface {} {
 	}
 }
 
+
+func (c *Class)GetChildNode(name string) Node {
+	member:=c.GetClassMember(name)
+
+	if n,ok:=member.(Node);ok {
+		return n
+	} else {
+		return nil
+	}
+	return nil
+}
+
+func (c *Class)GetMember(name string) interface{} {
+	return c.GetClassMember(name)
+}
+
+func (c *Class)SetMember(name string,value interface{}) {
+	c.SetClassMember(name,value)
+}
+
 func (c * Class)NewObject() *Object {
 	o:=Object{class:c,
-		Attributes:make(map[string]interface{}),
+		Members:make(map[string]interface{}),
 	}
 
 	for n,v:=range c.ObjectMembers {
-		o.SetAttribute(n,v)
+		o.SetMember(n,v)
 	}
 
 	return &o
 }
 
-type Object struct {
-	class        *Class
-	Attributes   map[string]interface{}
-}
-
-func (o *Object)SetAttribute(n string,v interface{}) {
-	o.Attributes[n]=v
-}
-
-func (o *Object)GetObjectAttribute(n string) interface{} {
-	if a,ok:=o.Attributes[n];ok {
-		return a
-	} else {
-		return nil
-	}
-}
 
 
 
