@@ -168,6 +168,14 @@ func_define_expr : FUNCTION  func_name '(' ')' '{' exprs '}'
     |FUNCTION  func_name '(' params ')' '{' exprs '}'
     {
         $$=&ast.FuncDefineExpr{$2,$4,$7}
+    }
+    |FUNCTION  '(' params ')' '{' exprs '}'
+    {
+        $$=&ast.FuncDefineExpr{"",$3,$6}
+    }
+    |FUNCTION  '('')' '{' exprs '}'
+    {
+       $$=&ast.FuncDefineExpr{"",nil,$5}
     };
 
 func_name: WORD;
