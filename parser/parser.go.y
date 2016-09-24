@@ -18,15 +18,19 @@ var ParseResult []ast.Expr
     Strings []string
 }
 
-%type <Expr> expr literal_expr simple_expr
-%type <Expr> if_expr for_expr stmt_expr block_expr increment_decrement_expr
+%type <Expr> expr literal_expr simple_expr array_get_expr array_set_expr
+%type <Expr> if_expr for_expr stmt_expr  increment_decrement_expr
 
 
 %type <Expr>  get_expr set_expr
 
 %type <Expr> func_define_expr lambda_define_expr
-%type <Expr> class_expr inclass_expr inmethod_expr
-%type <Expr> call_expr method_define_expr
+%type <Expr> block_expr empty_block_expr not_empty_block_expr
+%type <Expr> class_expr inclass_expr inmethod_expr method_define_expr
+%type <Expr> call_expr
+%type <Expr> array_expr empty_array not_empty_array
+%type <Expr> object_expr empty_object_expr not_empty_object_expr
+%type <Expr> key_value_expr
 
 %type <String> func_name method_name
 %type <String> param
@@ -34,7 +38,7 @@ var ParseResult []ast.Expr
 
 
 %type <Exprs> exprs  top
-%type <Exprs> values_expr
+%type <Exprs> values_expr array_element_list object_element_list
 %type <Exprs> inclass_exprs inmethod_exprs
 
 
@@ -56,7 +60,6 @@ var ParseResult []ast.Expr
 %left '+' '-'
 %left '*' '/' '.'
 
-
 %%
 
 top: exprs
@@ -73,6 +76,17 @@ exprs :expr
         $$=append($1,$2)
     };
 
+////////////////////////////////////////////////////////////////////////////////////////
+
+expr : simple_expr
+    |stmt_expr
+    |set_expr
+    |array_set_expr
+    |increment_decrement_expr
+    |func_define_expr
+    |lambda_define_expr
+    |class_expr
+
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 class_expr : CLASS WORD  '{'  inclass_exprs '}'
@@ -84,7 +98,7 @@ class_expr : CLASS WORD  '{'  inclass_exprs '}'
         $$=&ast.Class{$2,nil}
     };
 
-inclass_expr: simple_expr|stmt_expr|set_expr
+inclass_expr: stmt_expr|set_expr
             |increment_decrement_expr
             |class_expr | method_define_expr
 
@@ -116,9 +130,8 @@ method_define_expr: DEF method_name '(' ')' '{' inmethod_exprs '}'
 
 method_name: WORD
 
-
 inmethod_expr:simple_expr|stmt_expr|set_expr
-        |increment_decrement_expr |block_expr
+        |increment_decrement_expr
 
 inmethod_exprs:inmethod_expr
     {
@@ -192,26 +205,6 @@ params: param
 
 param:WORD;
 
-values_expr: simple_expr
-    {
-
-        $$=append(make([]ast.Expr,0),$1)
-    }
-    | values_expr ',' simple_expr
-    {
-        $$=append($1,$3)
-    };
-
-////////////////////////////////////////////////////////////////////////////////////////
-
-expr : simple_expr
-    |stmt_expr
-    |set_expr
-    |increment_decrement_expr
-    |func_define_expr
-    |lambda_define_expr
-    |block_expr
-    |class_expr;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 stmt_expr: BREAK
@@ -223,7 +216,8 @@ stmt_expr: BREAK
         $$=&ast.ReturnExpr{$2}
     }
     |if_expr
-    |for_expr;
+    |for_expr
+    |not_empty_block_expr;
 
 for_expr : FOR set_expr ';' simple_expr ';' increment_decrement_expr block_expr
     {
@@ -241,7 +235,7 @@ for_expr : FOR set_expr ';' simple_expr ';' increment_decrement_expr block_expr
     {
           $$=&ast.ForExpr{nil,nil,nil,$4}
     }
-    |FOR  set_expr ';' ';' increment_decrement_expr  block_expr
+    |FOR  set_expr ';' ';' increment_decrement_expr block_expr
     {
            $$=&ast.ForExpr{$2,nil,$5,$6}
     };
@@ -257,6 +251,19 @@ if_expr : IF simple_expr block_expr
         $$=$1
     };
 
+block_expr: empty_block_expr|not_empty_block_expr
+
+
+empty_block_expr: '{' '}'
+    {
+        $$=&ast.BlockExpr{nil}
+    }
+not_empty_block_expr: '{' exprs '}'
+    {
+        $$=&ast.BlockExpr{$2}
+    }
+
+
 ////////////////////////////////////////////////////////////////////////////////////////
 increment_decrement_expr: member_path DOUBLEADD
 {
@@ -270,7 +277,7 @@ increment_decrement_expr: member_path DOUBLEADD
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-simple_expr: literal_expr| call_expr | get_expr
+simple_expr: literal_expr| call_expr | get_expr | array_get_expr
     |simple_expr AND simple_expr
     {
         $$=&ast.ANDExpr{$1,$3}
@@ -312,18 +319,72 @@ simple_expr: literal_expr| call_expr | get_expr
         $$=&ast.LessEqualExpr{$1,$3}
     };
 
-literal_expr:BOOL|NUMBER|STRING
+literal_expr:BOOL|NUMBER|STRING|array_expr|object_expr
 
-block_expr : '{' exprs '}'
+
+array_expr: empty_array | not_empty_array
+
+empty_array: '[' ']'
     {
-        $$=&ast.BlockExpr{$2}
+        $$=&ast.ArrayExpr{nil}
     }
-    | '{' '}'
+not_empty_array: '[' array_element_list ']'
     {
-        $$=&ast.BlockExpr{}
+        $$=&ast.ArrayExpr{$2}
+    }
+array_element_list: simple_expr
+    {
+        $$=append(make([]ast.Expr,0,1024),$1)
+    }
+    |array_element_list ',' simple_expr
+    {
+        $$=append($1,$3)
+    }
+
+array_get_expr: member_path '[' NUMBER ']'
+    {
+        $$=&ast.ArrayGetExpr{$1,$3}
+    }
+
+array_set_expr: member_path '[' NUMBER ']' '=' simple_expr
+    {
+        $$=&ast.ArraySetExpr{$1,$3,$6}
+    }
+
+object_expr: empty_object_expr | not_empty_object_expr
+
+empty_object_expr: '{' '}'
+{
+    $$=&ast.ObjectExpr{nil}
+}
+
+not_empty_object_expr:'{' object_element_list '}'
+{
+    $$=&ast.ObjectExpr{$2}
+}
+
+object_element_list: key_value_expr
+    {
+        $$=append(make([]ast.Expr,0,1024),$1)
+    }
+    |object_element_list ',' key_value_expr
+    {
+        $$=append($1,$3)
+    }
+
+
+key_value_expr : WORD ':' simple_expr
+    {
+        $$=&ast.KeyValueExpr{$1,$3}
+    }
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+values_expr: simple_expr
+    {
+
+        $$=append(make([]ast.Expr,0),$1)
+    }
+    | values_expr ',' simple_expr
+    {
+        $$=append($1,$3)
     };
 %%
-
-
-
-

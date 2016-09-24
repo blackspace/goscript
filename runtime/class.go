@@ -1,7 +1,7 @@
 package runtime
 
 
-type ClassMethod func(*Class, []interface {}) interface{}
+type ClassMethod func(*Class, ...interface {}) interface{}
 
 type Class struct {
 	ObjectMembers         map[string]interface{}
@@ -14,7 +14,7 @@ func NewClass() *Class {
 		ClassMembers:make(map[string]interface{}),
 	}
 
-	class.SetClassMember("new",ClassMethod(func(c *Class,in []interface{}) interface{} {
+	class.SetClassMember("new",ClassMethod(func(c *Class,in ...interface{}) interface{} {
 		o:=class.NewObject()
 
 		if F:=o.GetMember("init");F!=nil {

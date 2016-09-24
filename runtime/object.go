@@ -1,6 +1,6 @@
 package runtime
 
-type ObjectMethod func(*Object,[]interface{}) interface{}
+type ObjectMethod func(*Object,...interface{}) interface{}
 
 type Object struct {
 	class   *Class

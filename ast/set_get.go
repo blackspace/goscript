@@ -41,6 +41,7 @@ func (se * SetExpr)Eval(r *runtime.Runtime,args ...interface{}) (result interfac
 
 		} else {
 			value,_:=se.Expr2.Eval(r)
+
 			if len(ns)==0 {
 				r.SetVarible(name,value)
 			} else {

@@ -29,7 +29,7 @@ func (c * Class)Eval(r *runtime.Runtime,args ...interface{}) (v interface{},stat
 
 
 func MakeObjectMethod(r *runtime.Runtime,params []string,body []Expr) runtime.ObjectMethod {
-	return func(o *runtime.Object,in []interface{}) interface{} {
+	return func(o *runtime.Object,in ...interface{}) interface{} {
 		s:=r.BeginScope()
 
 		s.Set("this",o)
@@ -54,7 +54,7 @@ func MakeObjectMethod(r *runtime.Runtime,params []string,body []Expr) runtime.Ob
 }
 
 func MakeClassMethod(r *runtime.Runtime,params []string,body []Expr) runtime.ClassMethod {
-	return func(c *runtime.Class,in []interface{}) interface{} {
+	return func(c *runtime.Class,in ...interface{}) interface{} {
 
 		s:=r.BeginScope()
 
