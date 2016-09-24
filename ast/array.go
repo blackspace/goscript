@@ -3,7 +3,6 @@ package ast
 import (
 	"goscript/runtime"
 	"goscript/buildin"
-	"errors"
 )
 
 type ArrayExpr struct {
@@ -24,29 +23,21 @@ func (ae * ArrayExpr)Eval(r *runtime.Runtime,args ...interface{}) (result interf
 }
 
 type ArrayGetExpr struct {
-	Path []string
-	Index Expr
+	Path      []string
+	IndexExpr Expr
 }
 
 
 func (age * ArrayGetExpr)Eval(r *runtime.Runtime,args ...interface{}) (result interface{},status int) {
-	ns:=r.PathToNodes(age.Path)
+	path:=runtime.NewPath(r,age.Path)
+	ns:=path.GetNodes()
 	
 	if len(ns)==len(age.Path) {
-		name:=age.Path[len(age.Path)-1]
-
-
-		var o interface{}
-
-		if len(ns)==1 {
-			o=r.GetVarible(name)
-		} else {
-			o=ns[len(ns)-1].GetMember(name)
-		}
+		o:=ns[len(ns)-1]
 
 		v:=o.(*runtime.Object).GetMember("_")
 
-		i,_:=age.Index.Eval(r)
+		i,_:=age.IndexExpr.Eval(r)
 
 		array:=v.(buildin.LArray)
 
@@ -56,28 +47,39 @@ func (age * ArrayGetExpr)Eval(r *runtime.Runtime,args ...interface{}) (result in
 		return result,OK
 
 	}
-
-	if len(ns)==len(age.Path)-1 {
-
-	}
-
-	if len(ns)<len(age.Path)-1 {
-		panic(errors.New("This path  is illegal"))
-	}
-
 	return 
 }
 
 
 type ArraySetExpr struct {
-	Path []string
-	Index Expr
-	Value interface{}
+	Path      []string
+	IndexExpr Expr
+	ValueExpr Expr
 }
 
 
-func (age * ArraySetExpr)Eval(r *runtime.Runtime,args ...interface{}) (result interface{},status int) {
+func (ase * ArraySetExpr)Eval(r *runtime.Runtime,args ...interface{}) (result interface{},status int) {
+	path:=runtime.NewPath(r,ase.Path)
+	ns:=path.GetNodes()
 
+	if len(ns)==len(ase.Path) {
+
+		o:=ns[len(ns)-1]
+
+		v:=o.(*runtime.Object).GetMember("_")
+
+		i,_:= ase.IndexExpr.Eval(r)
+		value,_:= ase.ValueExpr.Eval(r)
+
+		array:=v.(buildin.LArray)
+
+
+		array[i.(int64)]=value
+
+
+		return o,OK
+
+	}
 
 
 	return 

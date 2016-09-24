@@ -189,20 +189,3 @@ func (r *Runtime)GetMember(name string) interface{}  {
 func (r *Runtime)SetMember(name string,value interface{})  {
 	r.SetVarible(name,value)
 }
-
-func (r *Runtime)PathToNodes(path []string) []Node {
-	var n Node=r
-
-	var ns=make([]Node,0,len(path))
-
-	for _,p :=range path {
-		n=n.GetChildNode(p)
-
-		if n==nil {
-			break
-		}
-
-		ns=append(ns,n)
-	}
-	return ns
-}

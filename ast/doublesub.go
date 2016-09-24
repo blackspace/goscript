@@ -11,9 +11,8 @@ type SubfixDoubleSubExpr struct {
 
 
 func (e *SubfixDoubleSubExpr)Eval(r *runtime.Runtime,args ...interface{}) (result interface{},status int) {
-
-
-	ns:=r.PathToNodes(e.Path)
+	path:=runtime.NewPath(r,e.Path)
+	ns:=path.GetNodes()
 
 	if len(ns)==len(e.Path) {
 		panic(errors.New("Nodes can't be assigned"))
@@ -43,10 +42,6 @@ func (e *SubfixDoubleSubExpr)Eval(r *runtime.Runtime,args ...interface{}) (resul
 		}
 
 
-	}
-
-	if len(ns)<len(e.Path)-1 {
-		panic(errors.New("This path is illegal"))
 	}
 
 	return result,OK

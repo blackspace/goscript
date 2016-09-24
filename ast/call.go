@@ -11,11 +11,11 @@ type CalledExpr struct {
 }
 
 func (ce * CalledExpr)Eval(r *runtime.Runtime,args ...interface{}) (result interface{},status int) {
-
-	ns:=r.PathToNodes(ce.Path)
+	path:=runtime.NewPath(r,ce.Path)
+	ns:=path.GetNodes()
 
 	if len(ns)==len(ce.Path) {
-		panic(errors.New("Nodes can't be assigned"))
+		panic(errors.New("Nodes can't be called"))
 	}
 
 	if len(ns)==len(ce.Path)-1 {
@@ -54,9 +54,6 @@ func (ce * CalledExpr)Eval(r *runtime.Runtime,args ...interface{}) (result inter
 
 	}
 
-	if len(ns)<len(ce.Path)-1 {
-		panic(errors.New("This path  is illegal"))
-	}
 
 	return result,status
 

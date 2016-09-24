@@ -12,8 +12,8 @@ type SetExpr struct {
 
 
 func (se * SetExpr)Eval(r *runtime.Runtime,args ...interface{}) (result interface{},status int){
-
-	ns:=r.PathToNodes(se.Path)
+	path:=runtime.NewPath(r,se.Path)
+	ns:=path.GetNodes()
 
 	if len(ns)==len(se.Path) {
 		panic(errors.New("Nodes can't be assigned"))
@@ -53,11 +53,6 @@ func (se * SetExpr)Eval(r *runtime.Runtime,args ...interface{}) (result interfac
 
 
 	}
-
-	if len(ns)<len(se.Path)-1 {
-		panic(errors.New("This path  is illegal"))
-	}
-
 	return
 }
 
@@ -67,9 +62,8 @@ type GetExpr struct {
 }
 
 func (ge * GetExpr)Eval(r *runtime.Runtime,args ...interface{}) (result interface{},status int) {
-
-	ns:=r.PathToNodes(ge.Path)
-
+	path:=runtime.NewPath(r,ge.Path)
+	ns:=path.GetNodes()
 
 	if len(ns)==len(ge.Path) {
 		return ns[len(ns)-1],OK
@@ -83,10 +77,6 @@ func (ge * GetExpr)Eval(r *runtime.Runtime,args ...interface{}) (result interfac
 			return ns[len(ns)-1].GetMember(name),OK
 		}
 
-	}
-
-	if len(ns)<len(ge.Path)-1 {
-		panic(errors.New("This path is illegal"))
 	}
 
 

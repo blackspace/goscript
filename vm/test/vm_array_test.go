@@ -17,4 +17,12 @@ func TestArray(t *testing.T) {
 	if v.(int64)!=7 {
 		t.Fail()
 	}
+
+	vm.Run("b[2]=8")
+
+	v,_=vm.Run("b[2]+1")
+
+	if v.(int64)!=9 {
+		t.Fail()
+	}
 }

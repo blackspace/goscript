@@ -18,7 +18,7 @@ var ParseResult []ast.Expr
     Strings []string
 }
 
-%type <Expr> expr literal_expr simple_expr array_get_expr array_set_expr
+%type <Expr> expr literal_expr simple_expr
 %type <Expr> if_expr for_expr stmt_expr  increment_decrement_expr
 
 
@@ -28,7 +28,7 @@ var ParseResult []ast.Expr
 %type <Expr> block_expr empty_block_expr not_empty_block_expr
 %type <Expr> class_expr inclass_expr inmethod_expr method_define_expr
 %type <Expr> call_expr
-%type <Expr> array_expr empty_array not_empty_array
+%type <Expr> array_expr empty_array not_empty_array array_set_expr
 %type <Expr> object_expr empty_object_expr not_empty_object_expr
 %type <Expr> key_value_expr
 
@@ -44,21 +44,20 @@ var ParseResult []ast.Expr
 
 %token <Expr> NUMBER BOOL STRING BREAK RETURN
 %token <String> WORD
-%token BLANKSPACE LFCR  IF FOR SWITCH  DOUBLEAT
+%token BLANKSPACE LFCR   FOR SWITCH  DOUBLEAT
 %token FUNCTION CLASS DEF END DO POUNDCOMMENT DOUBLESLASHCOMMENT MULTILINECOMMENT LAMBDA
+%token DOUBLEADD DOUBLESUB
+%token IF ELSE
+%token '='
 
-
-%nonassoc '>' GREATEREQUAL '<' LESSEQUAL
-
-%right ELSE
 
 %left AND OR
-
-%nonassoc DOUBLEADD DOUBLESUB
-
-%right '='
 %left '+' '-'
-%left '*' '/' '.'
+%left '*' '/'
+
+%nonassoc '>' GREATEREQUAL '<' LESSEQUAL
+%nonassoc LOWER_SQUARE
+%nonassoc '[' ']'
 
 %%
 
@@ -152,10 +151,14 @@ call_expr:  member_path '('   ')'
         $$=&ast.CalledExpr{$1,$3}
     };
 
-get_expr: member_path
+get_expr: member_path %prec LOWER_SQUARE
     {
         $$=&ast.GetExpr{$1}
-    };
+    }
+    |member_path '[' NUMBER ']'
+    {
+        $$=&ast.ArrayGetExpr{$1,$3}
+    }
 
 set_expr: member_path '=' expr
     {
@@ -204,8 +207,6 @@ params: param
     };
 
 param:WORD;
-
-
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 stmt_expr: BREAK
     {
@@ -277,7 +278,7 @@ increment_decrement_expr: member_path DOUBLEADD
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-simple_expr: literal_expr| call_expr | get_expr | array_get_expr
+simple_expr: literal_expr| call_expr | get_expr
     |simple_expr AND simple_expr
     {
         $$=&ast.ANDExpr{$1,$3}
@@ -339,11 +340,6 @@ array_element_list: simple_expr
     |array_element_list ',' simple_expr
     {
         $$=append($1,$3)
-    }
-
-array_get_expr: member_path '[' NUMBER ']'
-    {
-        $$=&ast.ArrayGetExpr{$1,$3}
     }
 
 array_set_expr: member_path '[' NUMBER ']' '=' simple_expr
