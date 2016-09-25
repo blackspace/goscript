@@ -62,12 +62,12 @@ a=[1,2,3,4]
 
 console.Println(a[3])
 
-func Factorial(n) {
+func Fac(n) {
 	  if n==1 {
 	  	return 1
 	  }  else {
-	  	return n*Factorial(n-1)
+	  	return n*Fac(n-1)
 	  }
 }
 
-console.Println(Factorial(10))
+console.Println(Fac(10))
