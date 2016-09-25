@@ -50,6 +50,14 @@ console.Println(c.a)
 
 console.Println(c.b)
 
-C.hi=lambda() { console.Println("hello lambda") }
+c.hi=lambda() { console.Println(this.a) }
 
-C.hi()
+c.hi()
+
+o={a:1,b:2,c:3}
+
+console.Println(o.c)
+
+a=[1,2,3,4]
+
+console.Println(a[3])
