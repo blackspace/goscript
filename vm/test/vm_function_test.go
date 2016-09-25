@@ -60,5 +60,32 @@ func TestFunctionEmbedCall(t *testing.T) {
 	}
 }
 
+func TestFunctionRecursion(t *testing.T) {
+	vm:=vm.NewVM().Init()
+	vm.Run(`func a(n) {
+	  if n==1 {
+	  	return 1
+	  }  else {
+	  	return n*a(n-1)
+	  }
+	}`)
+
+	v,_:=vm.Run("a(1)")
+
+	if v.(int64)!=1 {
+		t.Fail()
+	}
+
+	v,_=vm.Run("a(9)")
+
+	if v.(int64)!=362880 {
+		t.Fail()
+	}
+
+
+
+}
+
+
 
 

@@ -59,3 +59,18 @@ func (e * GreaterEqualExpr)Eval(r *runtime.Runtime,args ...interface{}) (interfa
 	return  v1.(int64)>=v2.(int64),0
 
 }
+
+
+type EqualExpr struct {
+	Expr1 Expr
+	Expr2 Expr
+}
+
+
+func (e * EqualExpr)Eval(r *runtime.Runtime,args ...interface{}) (interface{},int){
+	v1,_:=e.Expr1.Eval(r)
+	v2,_:=e.Expr2.Eval(r)
+
+	return  v1.(int64)==v2.(int64),0
+
+}

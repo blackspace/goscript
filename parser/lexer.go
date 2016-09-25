@@ -115,7 +115,20 @@ t:
 				l.PreRune=r
 				return '/'
 			}
-		case '*','=':
+		case '=':
+			r, _, err := l.Reader.ReadRune()
+			if err == io.EOF {
+				return '='
+			}
+
+			if r=='=' {
+				return DOUBLEEQUAL
+			}  else {
+				l.HasPreRune=true
+				l.PreRune=r
+				return '='
+			}
+		case '*':
 			return p.GetToken()
 		case '{','}':
 			return p.GetToken()

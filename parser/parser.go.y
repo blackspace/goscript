@@ -55,7 +55,7 @@ var ParseResult []ast.Expr
 %left '+' '-'
 %left '*' '/'
 
-%nonassoc '>' GREATEREQUAL '<' LESSEQUAL
+%nonassoc '>' GREATEREQUAL '<' LESSEQUAL DOUBLEEQUAL
 %nonassoc LOWER_SQUARE
 %nonassoc '[' ']'
 
@@ -318,6 +318,10 @@ simple_expr: literal_expr| call_expr | get_expr
     |simple_expr LESSEQUAL simple_expr
     {
         $$=&ast.LessEqualExpr{$1,$3}
+    }
+    |simple_expr DOUBLEEQUAL  simple_expr
+    {
+        $$=&ast.EqualExpr{$1,$3}
     };
 
 literal_expr:BOOL|INT|STRING|array_expr|object_expr
