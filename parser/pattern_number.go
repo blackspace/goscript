@@ -25,11 +25,11 @@ func (n * NumberPattern)BuildFun(prefix string,r *bufio.Reader) (v interface{},p
 			} else {
 				s=s[:len(s)-1]
 				i,_:=strconv.Atoi(s)
-				return &ast.Number{Int:int64(i)},r,true
+				return &ast.Int{int64(i)},r,true
 			}
 		} else if err==io.EOF{
 			i,_:=strconv.Atoi(s)
-			return &ast.Number{Int:int64(i)},0,false
+			return &ast.Int{int64(i)},0,false
 		}
 
 	}

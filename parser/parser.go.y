@@ -42,7 +42,7 @@ var ParseResult []ast.Expr
 %type <Exprs> inclass_exprs inmethod_exprs
 
 
-%token <Expr> NUMBER BOOL STRING BREAK RETURN
+%token <Expr> INT BOOL STRING BREAK RETURN
 %token <String> WORD
 %token BLANKSPACE LFCR   FOR SWITCH  DOUBLEAT
 %token FUNCTION CLASS DEF END DO POUNDCOMMENT DOUBLESLASHCOMMENT MULTILINECOMMENT LAMBDA
@@ -155,7 +155,7 @@ get_expr: member_path %prec LOWER_SQUARE
     {
         $$=&ast.GetExpr{$1}
     }
-    |member_path '[' NUMBER ']'
+    |member_path '[' INT ']'
     {
         $$=&ast.ArrayGetExpr{$1,$3}
     }
@@ -320,7 +320,7 @@ simple_expr: literal_expr| call_expr | get_expr
         $$=&ast.LessEqualExpr{$1,$3}
     };
 
-literal_expr:BOOL|NUMBER|STRING|array_expr|object_expr
+literal_expr:BOOL|INT|STRING|array_expr|object_expr
 
 
 array_expr: empty_array | not_empty_array
@@ -342,7 +342,7 @@ array_element_list: simple_expr
         $$=append($1,$3)
     }
 
-array_set_expr: member_path '[' NUMBER ']' '=' simple_expr
+array_set_expr: member_path '[' INT ']' '=' simple_expr
     {
         $$=&ast.ArraySetExpr{$1,$3,$6}
     }

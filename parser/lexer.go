@@ -50,7 +50,7 @@ t:
 			l.Buf=""
 			goto t
 		case NUMBER:
-			lval.Expr = v.(*ast.Number)
+			lval.Expr = v.(*ast.Int)
 			return NUMBER
 		case BOOL:
 			lval.Expr = v.(*ast.Bool)

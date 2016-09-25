@@ -6,10 +6,10 @@ import (
 
 
 
-type Number struct  {
-	Int int64
+type Int struct  {
+	V int64
 }
 
-func (n * Number)Eval(r *runtime.Runtime,args ...interface{}) (interface{},int) {
-	return n.Int,0
+func (i * Int)Eval(r *runtime.Runtime,args ...interface{}) (interface{},int) {
+	return i.V,OK
 }
