@@ -1,6 +1,9 @@
 package runtime
 
-import "errors"
+import (
+	"errors"
+	"fmt"
+)
 
 type Node interface {
 	GetChildNode(string) Node
@@ -43,7 +46,7 @@ func (p *Path)_ToNodes() []Node{
 	}
 
 	if len(ns)<len(p.path)-1 {
-		panic(errors.New("This path  is illegal"))
+		panic(errors.New(fmt.Sprintf("This path %v is illegal",p.path)))
 	}
 
 	return ns
