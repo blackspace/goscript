@@ -61,3 +61,13 @@ console.Println(o.c)
 a=[1,2,3,4]
 
 console.Println(a[3])
+
+func Factorial(n) {
+	  if n==1 {
+	  	return 1
+	  }  else {
+	  	return n*Factorial(n-1)
+	  }
+}
+
+console.Println(Factorial(10))
