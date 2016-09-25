@@ -8,11 +8,11 @@ import (
 	"regexp"
 )
 
-type NumberPattern struct {
+type IntPattern struct {
 	PatternBase
 }
 
-func (n * NumberPattern)BuildFun(prefix string,r *bufio.Reader) (v interface{},pre_rune rune,has_prerune bool) {
+func (n * IntPattern)BuildFun(prefix string,r *bufio.Reader) (v interface{},pre_rune rune,has_prerune bool) {
 	s:=prefix
 	for {
 		r,_,err:=r.ReadRune()
@@ -41,6 +41,6 @@ func (n * NumberPattern)BuildFun(prefix string,r *bufio.Reader) (v interface{},p
 func init() {
 	var numberRegexp=regexp.MustCompile(`^[0-9]+$`)
 
-	Patterns=append(Patterns,&NumberPattern{PatternBase{Regexp:numberRegexp,Token:NUMBER}})
+	Patterns=append(Patterns,&IntPattern{PatternBase{Regexp:numberRegexp,Token:INT}})
 }
 

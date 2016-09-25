@@ -19,7 +19,7 @@ type yySymType struct {
 	Strings []string
 }
 
-const NUMBER = 57346
+const INT = 57346
 const BOOL = 57347
 const STRING = 57348
 const BREAK = 57349
@@ -53,7 +53,7 @@ var yyToknames = [...]string{
 	"$end",
 	"error",
 	"$unk",
-	"NUMBER",
+	"INT",
 	"BOOL",
 	"STRING",
 	"BREAK",

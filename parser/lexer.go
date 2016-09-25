@@ -49,9 +49,9 @@ t:
 		case MULTILINECOMMENT:
 			l.Buf=""
 			goto t
-		case NUMBER:
+		case INT:
 			lval.Expr = v.(*ast.Int)
-			return NUMBER
+			return INT
 		case BOOL:
 			lval.Expr = v.(*ast.Bool)
 			return BOOL
